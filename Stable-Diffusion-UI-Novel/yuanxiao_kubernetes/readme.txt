@@ -1,0 +1,2 @@
+放在外层的yaml是公共的
+房子内层的比如sd15表示每一个模型都需要建立单独的deployment和service和hpa
