@@ -12,7 +12,7 @@ spec:
           name: kubernetes.io|node|accelerator|duty_cycle
           selector:
             matchLabels:
-              resource.labels.namespace_name: default
+              resource.labels.cluster_name: sd-web-ui-gke2
         target:
           type: AverageValue
           averageValue: 80
