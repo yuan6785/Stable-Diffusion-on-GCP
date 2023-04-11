@@ -1,5 +1,5 @@
 # Stable-Diffusion on Google Cloud Quick Start Guide
-
+# 我自己的一些笔记参考yx部署过程记录.txt
 This guide give simple steps for stable-diffusion users to launch a stable diffusion deployment by using GCP GKE service, and using Filestore as shared storage for model and output files. User can just follow the step have your stable diffusion model running.
 
 * [Introduction](#Introduction)
