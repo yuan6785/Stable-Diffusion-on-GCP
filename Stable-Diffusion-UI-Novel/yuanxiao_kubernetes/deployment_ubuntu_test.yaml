@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-2204
+  namespace: default  # 如果不是这个命名空间,则修改
+spec:
+  volumes:
+    - name: stable-diffusion-storage
+      persistentVolumeClaim:
+        claimName: vol1
+  containers:
+    - name: ubuntu-2204
+      image: ubuntu:22.04
+      command: ["bash","-c","while true;do date;sleep 86400;done"]
+      args: []
+      volumeMounts:
+        - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
+          name: stable-diffusion-storage
+          subPath: models/Stable-diffusion/sd15
+        - mountPath: "/stable-diffusion-webui/outputs"
+          name: stable-diffusion-storage
+          subPath: outputs
+        - mountPath: "/stable-diffusion-webui/models/ControlNet"
+          name: stable-diffusion-storage
+          subPath: models/ControlNet
