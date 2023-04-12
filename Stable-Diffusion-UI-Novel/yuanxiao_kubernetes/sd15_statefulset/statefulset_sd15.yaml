@@ -1,18 +1,19 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: stable-diffusion-sd15-deployment
+  name: stable-diffusion-sd15-statefulset
   labels:
-    app: stable-diffusion-sd15
+    app: stable-diffusion-sd15-statefulset
 spec:
-  replicas: 2
+  serviceName: "stable-diffusion-sd15-statefulset-service"
+  replicas: 1
   selector:
     matchLabels:
-      app: stable-diffusion-sd15
+      app: stable-diffusion-sd15-statefulset
   template:
     metadata:
       labels:
-        app: stable-diffusion-sd15
+        app: stable-diffusion-sd15-statefulset
     spec:
       nodeSelector:
         cloud.google.com/gke-gpu-sharing-strategy: time-sharing
