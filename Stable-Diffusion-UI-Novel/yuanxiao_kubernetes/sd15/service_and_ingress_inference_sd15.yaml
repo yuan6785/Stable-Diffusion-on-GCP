@@ -10,7 +10,8 @@ spec:
     targetPort: 7860
   selector:
     app: stable-diffusion-sd15
-  type: NodePort
+  # type: NodePort
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
