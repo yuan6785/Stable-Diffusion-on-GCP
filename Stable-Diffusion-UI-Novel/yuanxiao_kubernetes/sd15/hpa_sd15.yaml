@@ -20,3 +20,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: "stable-diffusion-sd15-deployment"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 30
