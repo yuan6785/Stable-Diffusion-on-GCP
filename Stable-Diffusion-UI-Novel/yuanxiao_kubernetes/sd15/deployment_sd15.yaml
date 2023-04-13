@@ -5,7 +5,7 @@ metadata:
   labels:
     app: stable-diffusion-sd15
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: stable-diffusion-sd15
@@ -31,6 +31,26 @@ spec:
             nvidia.com/gpu: 1
         ports:
           - containerPort: 7860
+        # add by yx----启动健康检查
+        startupProbe:
+          httpGet:
+            path: /favicon.ico
+            port: 7860
+          failureThreshold: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /favicon.ico
+            port: 7860
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /favicon.ico
+            port: 7860
+          failureThreshold: 6
+          periodSeconds: 10
+        # end--by yx
         volumeMounts:
           - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage

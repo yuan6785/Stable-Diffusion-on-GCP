@@ -1,0 +1,39 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: my-backendconfig
+spec:
+  # sessionAffinity: # 用ip来固定负载均衡的pod
+  #   affinityType: "CLIENT_IP"  
+  sessionAffinity: # 用用GENERATED_COOKIE来固定负载均衡的pod
+    affinityType: "GENERATED_COOKIE"  # HTTP_COOKIE
+    affinityCookieTtlSec: 0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sd-web
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"8080":"my-backendconfig"}}'
+    # cloud.google.com/neg: '{"ingress": true}'
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 7860
+  selector:
+    app: stable-diffusion-sd15
+  # type: NodePort
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sd-ingress
+spec:
+  defaultBackend:
+    service:
+      name: sd-web
+      port:
+        number: 8080
