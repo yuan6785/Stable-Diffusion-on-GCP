@@ -14,12 +14,8 @@ spec:
       command: ["bash","-c","while true;do date;sleep 86400;done"]
       args: []
       volumeMounts:
-        - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
+        - mountPath: "/yuanxiao"
           name: stable-diffusion-storage
-          subPath: models/Stable-diffusion/sd15
-        - mountPath: "/stable-diffusion-webui/outputs"
-          name: stable-diffusion-storage
-          subPath: outputs
-        - mountPath: "/stable-diffusion-webui/models/ControlNet"
-          name: stable-diffusion-storage
-          subPath: models/ControlNet
+          # subPath: "/" # 不允许这样写,会报错
+          subPath: #这样写不会报错,也是挂载到filestore的根目录,后面留个空格即可
+        
