@@ -1,0 +1,53 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: my-backendconfig-statefulset
+spec:
+  # sessionAffinity: # 用ip来固定负载均衡的pod
+  #   affinityType: "CLIENT_IP"  
+  sessionAffinity: # 用用GENERATED_COOKIE来固定负载均衡的pod
+    affinityType: "GENERATED_COOKIE"  # HTTP_COOKIE
+    affinityCookieTtlSec: 0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stable-diffusion-sd15-statefulset-service
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"7860":"my-backendconfig-statefulset"}}'
+    # cloud.google.com/neg: '{"ingress": true}'
+  labels:
+    app: stable-diffusion-sd15-statefulset-service
+spec:
+  ports:
+  - protocol: TCP
+    port: 7860
+    targetPort: 7860
+  clusterIP: None
+  selector:
+    app: stable-diffusion-sd15-statefulset
+---
+apiVersion: "networking.k8s.io/v1"
+kind: "Ingress"
+metadata:
+  name: "stable-diffusion-sd15-statefulset-ingress"
+  namespace: "default"
+spec:
+  defaultBackend:
+    service:
+      name: "stable-diffusion-sd15-statefulset-service"
+      port:
+        number: 7860
+  # rules:
+  # - http:
+  #     paths:
+  #     - path: "/"
+  #       backend:
+  #         service:
+  #           name: "stable-diffusion-sd15-statefulset-service"
+  #           port:
+  #             number: 7860
+  #       pathType: "ImplementationSpecific"
+status:
+  loadBalancer: {}
