@@ -1,0 +1,15 @@
+第一步记得到ubuntu的pod中models/Stable-diffusion/sd15去下载基础模型
+
+
+全部创建命令-----
+kubectl apply -f  dreamworld_v30/deployment_sd15.yaml
+kubectl apply -f  dreamworld_v30/service_inference_sd15_multi.yaml
+kubectl apply -f  dreamworld_v30/hpa_sd15.yaml
+
+
+删除命令----
+kubectl delete deployment stable-diffusion-sd15-deployment
+kubectl delete  hpa stable-diffusion-hpa-sd15
+kubectl delete  backendconfig my-backendconfig-sd15
+kubectl delete  service sd15-web
+kubectl delete  ingress sd15-ingress
