@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stable-diffusion-sd15-deployment
+  name: stable-diffusion-dreamworld-deployment
   labels:
-    app: stable-diffusion-sd15
+    app: stable-diffusion-dreamworld
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stable-diffusion-sd15
+      app: stable-diffusion-dreamworld
   template:
     metadata:
       labels:
-        app: stable-diffusion-sd15
+        app: stable-diffusion-dreamworld
     spec:
       nodeSelector:
         cloud.google.com/gke-gpu-sharing-strategy: time-sharing
@@ -23,8 +23,8 @@ spec:
             claimName: vol1
       containers:
       - name: stable-diffusion-webui
-        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference
-        # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
+        # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference
+        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
         resources:
           limits:
             cpu: 1800m
@@ -55,7 +55,7 @@ spec:
         volumeMounts:
           - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
-            subPath: models/Stable-diffusion/sd15
+            subPath: models/Stable-diffusion/dreamworld_v30  # 自己用ubuntu测试机到这个路径下载一个sd基础模型
           - mountPath: "/stable-diffusion-webui/outputs"
             name: stable-diffusion-storage
             subPath: outputs
