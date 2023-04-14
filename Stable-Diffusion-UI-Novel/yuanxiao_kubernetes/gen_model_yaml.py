@@ -1,5 +1,7 @@
 """
-根据sd基础模型,生成保存模型的yaml文件夹和yaml文件
+根据sd基础模型
+生成sd基础模型的yaml工程
+每个sd基础模型对应一个yaml工程，对应一个k8s文件夹，对应一个deployment，有自己的公网访问ip
 """
 import os
 
