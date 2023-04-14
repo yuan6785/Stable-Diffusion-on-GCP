@@ -1,0 +1,15 @@
+第一步记得到ubuntu的pod中models/Stable-diffusion/%(sd_base_model_name)s去下载基础模型
+
+
+全部创建命令-----
+kubectl apply -f  %(k8s_subdir_name)s/deployment.yaml
+kubectl apply -f  %(k8s_subdir_name)s/service_inference_multi.yaml
+kubectl apply -f  %(k8s_subdir_name)s/hpa.yaml
+
+
+删除命令----
+kubectl delete  deployment sd-deployment-%(sd_base_model_name)s
+kubectl delete  hpa sd-hpa-%(sd_base_model_name)s
+kubectl delete  backendconfig sd-backendconfig-%(sd_base_model_name)s
+kubectl delete  service sd-service-%(sd_base_model_name)s
+kubectl delete  ingress sd-ingress-%(sd_base_model_name)s

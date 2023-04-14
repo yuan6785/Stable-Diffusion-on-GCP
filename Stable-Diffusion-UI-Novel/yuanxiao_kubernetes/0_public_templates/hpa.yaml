@@ -1,7 +1,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: sd-hpa-dreamworld  # change_other_model
+  name: sd-hpa-%(sd_base_model_name)s  # change_other_model
 spec:
   minReplicas: 1
   maxReplicas: 30
@@ -19,7 +19,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: "sd-deployment-dreamworld" # change_other_model
+    name: "sd-deployment-%(sd_base_model_name)s" # change_other_model
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300

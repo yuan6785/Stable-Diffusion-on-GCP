@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stable-diffusion-sd15-deployment
+  name: sd-deployment-sd15  # change_other_model
   labels:
-    app: stable-diffusion-sd15
+    app: sd-sd15 # change_other_model
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stable-diffusion-sd15
+      app: sd-sd15 # change_other_model
   template:
     metadata:
       labels:
-        app: stable-diffusion-sd15
+        app: sd-sd15 # change_other_model
     spec:
       nodeSelector:
         cloud.google.com/gke-gpu-sharing-strategy: time-sharing
@@ -55,7 +55,7 @@ spec:
         volumeMounts:
           - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
-            subPath: models/Stable-diffusion/sd15
+            subPath: models/Stable-diffusion/sd15   # change_other_model
           - mountPath: "/stable-diffusion-webui/outputs"
             name: stable-diffusion-storage
             subPath: outputs

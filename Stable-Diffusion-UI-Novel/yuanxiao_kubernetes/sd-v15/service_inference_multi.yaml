@@ -1,7 +1,7 @@
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: my-backendconfig-sd15
+  name: sd-backendconfig-sd15   # change_other_model
 spec:
   # sessionAffinity: # 用ip来固定负载均衡的pod
   #   affinityType: "CLIENT_IP"  
@@ -12,10 +12,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sd15-web
+  name: sd-service-sd15   # change_other_model
   namespace: default
   annotations:
-    cloud.google.com/backend-config: '{"ports": {"8080":"my-backendconfig-sd15"}}'
+    cloud.google.com/backend-config: '{"ports": {"8080":"sd-backendconfig-sd15"}}'  # change_other_model
     # cloud.google.com/neg: '{"ingress": true}'
 spec:
   ports:
@@ -23,17 +23,17 @@ spec:
     protocol: TCP
     targetPort: 7860
   selector:
-    app: stable-diffusion-sd15
+    app: sd-sd15   # change_other_model--这里注意是deployment的label
   # type: NodePort
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sd15-ingress
+  name: sd-ingress-sd15  # change_other_model
 spec:
   defaultBackend:
     service:
-      name: sd15-web
+      name: sd-service-sd15  # change_other_model
       port:
         number: 8080

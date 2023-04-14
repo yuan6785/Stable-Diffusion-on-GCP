@@ -1,4 +1,4 @@
-第一步记得到ubuntu的pod中models/Stable-diffusion/dreamworld_v30去下载基础模型
+第一步记得到ubuntu的pod中models/Stable-diffusion/dreamworld去下载基础模型
 
 
 全部创建命令-----
@@ -8,8 +8,8 @@ kubectl apply -f  dreamworld_v30/hpa.yaml
 
 
 删除命令----
-kubectl delete deployment stable-diffusion-dreamworld-deployment
-kubectl delete  hpa stable-diffusion-hpa-dreamworld
-kubectl delete  backendconfig my-backendconfig-dreamworld
-kubectl delete  service dreamworld-web
-kubectl delete  ingress dreamworld-ingress
+kubectl delete  deployment sd-deployment-dreamworld
+kubectl delete  hpa sd-hpa-dreamworld
+kubectl delete  backendconfig sd-backendconfig-dreamworld
+kubectl delete  service sd-service-dreamworld
+kubectl delete  ingress sd-ingress-dreamworld
