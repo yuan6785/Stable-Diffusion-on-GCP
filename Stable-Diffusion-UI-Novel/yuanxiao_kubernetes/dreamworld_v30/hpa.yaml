@@ -15,7 +15,7 @@ spec:
               resource.labels.cluster_name: sd-web-ui-gke2
         target:
           type: AverageValue
-          averageValue: 50
+          averageValue: 70
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
