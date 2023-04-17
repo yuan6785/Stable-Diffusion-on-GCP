@@ -27,8 +27,8 @@ spec:
         # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
         resources:
           limits:
-            cpu: 1800m    #1800m
-            memory: 16Gi  #23Gi
+            cpu: 1000m    #1800m
+            memory: 20Gi  #23Gi
             nvidia.com/gpu: 1
         ports:
           - containerPort: 7860
