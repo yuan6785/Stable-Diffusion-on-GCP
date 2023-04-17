@@ -23,5 +23,6 @@ spec:
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300
+      # terminationGracePeriodSeconds: 300 # 如果在300秒内任务没有完成，pod 会被强制终止。
     scaleUp:
       stabilizationWindowSeconds: 0

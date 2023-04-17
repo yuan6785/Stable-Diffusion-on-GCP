@@ -16,7 +16,7 @@ spec:
     spec:
       nodeSelector:
         cloud.google.com/gke-gpu-sharing-strategy: time-sharing
-        cloud.google.com/gke-max-shared-clients-per-gpu: "2"
+        cloud.google.com/gke-max-shared-clients-per-gpu: "5"  # 2
       volumes:
         - name: stable-diffusion-storage
           persistentVolumeClaim:
@@ -27,8 +27,8 @@ spec:
         # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
         resources:
           limits:
-            cpu: 1800m
-            memory: 23Gi
+            cpu: 1000m    #1800m
+            memory: 8Gi  #23Gi
             nvidia.com/gpu: 1
         ports:
           - containerPort: 7860
