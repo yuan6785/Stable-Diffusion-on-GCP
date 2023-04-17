@@ -28,7 +28,7 @@ spec:
         resources:
           limits:
             cpu: 1800m    #1800m
-            memory: 18Gi  #23Gi
+            memory: 16Gi  #23Gi
             nvidia.com/gpu: 1
         ports:
           - containerPort: 7860
