@@ -16,7 +16,8 @@ WORKDIR /home/sd3
 RUN ls -l /home/sd3
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 RUN git clone https://github.com/yuan6785/stable-diffusion-webui.git
-RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh && chmod +x 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
+RUN ls -l /home/sd3
+RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/sd3/miniconda3 \
     && /home/sd3/miniconda3/bin/conda init \
