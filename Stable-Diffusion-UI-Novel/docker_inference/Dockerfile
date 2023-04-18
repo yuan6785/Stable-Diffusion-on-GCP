@@ -20,7 +20,7 @@ RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/sd3/miniconda3 \
     && /home/sd3/miniconda3/bin/conda init \
-    && source ~/.bashrc \
+    && bash -c "source /home/sd3/.bashrc" \
     && conda create --name sd_python310 python=3.10 \
     && conda activate sd_python310 \
     && python -m pip install virtualenv \
