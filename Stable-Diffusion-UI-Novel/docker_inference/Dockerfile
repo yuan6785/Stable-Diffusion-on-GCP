@@ -8,11 +8,12 @@ RUN set -ex && \
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
 
-RUN groupadd -r sd3 && useradd -d /home/sd3 -r -g sd3 sd3
+RUN groupadd -r sd3 && useradd --create-home -r -g sd3 sd3
 USER sd3
 
 # 
 WORKDIR /home/sd3
+RUN ls -l /home/sd3
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 RUN git clone https://github.com/yuan6785/stable-diffusion-webui.git
 RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh && chmod +x 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
@@ -30,5 +31,5 @@ RUN set -ex \
 
 EXPOSE 7860
 
-WORKDIR /stable-diffusion-webui/
+WORKDIR /home/sd3/stable-diffusion-webui/
 CMD ["/home/sd3/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]

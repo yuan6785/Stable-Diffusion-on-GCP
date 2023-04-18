@@ -53,12 +53,12 @@ spec:
           periodSeconds: 10
         # end--by yx
         volumeMounts:
-          - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
+          - mountPath: "/home/sd3/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
             subPath: models/Stable-diffusion/%(sd_base_model_name)s   # change_other_model
-          - mountPath: "/stable-diffusion-webui/outputs"
+          - mountPath: "/home/sd3/stable-diffusion-webui/outputs"
             name: stable-diffusion-storage
             subPath: outputs
-          - mountPath: "/stable-diffusion-webui/models/ControlNet"
+          - mountPath: "/home/sd3/stable-diffusion-webui/models/ControlNet"
             name: stable-diffusion-storage
             subPath: models/ControlNet
