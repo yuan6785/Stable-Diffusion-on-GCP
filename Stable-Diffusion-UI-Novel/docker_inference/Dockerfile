@@ -8,35 +8,27 @@ RUN set -ex && \
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
 
+RUN groupadd -r sd3 && useradd -r -g sd3 sd3
+USER sd3
+
+# 
+WORKDIR /home/sd3
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
-
-RUN set -ex && cd stable-diffusion-webui \
-    && mkdir repositories \
-    && git clone https://github.com/CompVis/stable-diffusion.git repositories/stable-diffusion \
-    && git clone https://github.com/CompVis/taming-transformers.git repositories/taming-transformers\
-    && git clone https://github.com/sczhou/CodeFormer.git repositories/CodeFormer \
-    && git clone https://github.com/salesforce/BLIP.git repositories/BLIP \
-    && git clone https://github.com/crowsonkb/k-diffusion.git repositories/k-diffusion \
-    && git clone https://github.com/Stability-AI/stablediffusion repositories/stable-diffusion-stability-ai \
-    && git clone https://github.com/Mikubill/sd-webui-controlnet.git extensions/sd-webui-controlnet \
-    && pip install transformers diffusers invisible-watermark --prefer-binary \
-    && pip install git+https://github.com/crowsonkb/k-diffusion.git --prefer-binary \
-    && pip install git+https://github.com/TencentARC/GFPGAN.git --prefer-binary \
-    && pip install git+https://github.com/mlfoundations/open_clip.git --prefer-binary \
-    && pip install -r repositories/CodeFormer/requirements.txt --prefer-binary \
-    && pip install -r requirements.txt --prefer-binary \
-    && pip install -r extensions/sd-webui-controlnet/requirements.txt --prefer-binary
-
-RUN pip install opencv-contrib-python-headless opencv-python-headless tensorrt --prefer-binary
-RUN pip install -U --pre xformers torch==2.0.0+cu117 torchvision==0.15.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117 --prefer-binary
-RUN pip install -U tensorboard google-auth-oauthlib tb-nightly open-clip-torch clean-fid --prefer-binary
-
-ARG CUDNN_PATH=$(dirname $(python3 -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
-ARG TENSORRT_PATH=$(dirname $(python3 -c "import tensorrt;print(tensorrt.__file__)"))
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
+RUN set -ex \
+    bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/sd3/miniconda3 \
+    && /home/sd3/miniconda3/bin/conda init \
+    && source ~/.bashrc \
+    && conda create --name sd_python310 python=3.10 \
+    && conda activate sd_python310 \
+    && python -m pip install virtualenv \
+    && cd stable-diffusion-webui \
+    && bash <(wget -qO- https://raw.githubusercontent.com/yuan6785/stable-diffusion-webui/b791502f18b0de3e9eb93fca3aadce42878904d8/webui-conda-yuanxiao-gcp.sh) \
+    && git clone https://github.com/Mikubill/sd-webui-controlnet.git extensions/sd-webui-controlnet
 
 
 EXPOSE 7860
 
 WORKDIR /stable-diffusion-webui/
-CMD ["python3", "launch.py", "--listen", "--xformers",  "--medvram"]
+CMD ["/home/sd3/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
