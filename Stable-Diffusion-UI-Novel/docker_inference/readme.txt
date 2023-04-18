@@ -1,0 +1,2 @@
+用anconda版本的dockerfile
+记得修改deployment.yaml中的挂载位置
