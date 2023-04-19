@@ -15,6 +15,7 @@ spec:
     - name: ubuntu-2204
       # image: nvidia/cuda:11.8.0-runtime-ubuntu22.04  # dockerfile的基础镜像
       image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2  # 测试打包好的镜像
+      imagePullPolicy: Always
       resources:
         limits:
           # cpu: 1000m    #1800m

@@ -10,7 +10,7 @@ RUN set -ex \
     && if [[ ! -d "a1111-sd-webui-locon" ]];then git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git;fi && cd a1111-sd-webui-locon && git checkout 04b768bad41e0f1122a86d0636fce47bb2765af8 && cd .. \
     &&if [[ ! -d "a1111-sd-webui-tagcomplete" ]];then git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git;fi  && cd a1111-sd-webui-tagcomplete && git checkout 2.2.0 && cd .. \
     &&if [[ ! -d "openpose-editor" ]];then git clone https://github.com/fkunn1326/openpose-editor;fi  && cd openpose-editor && git checkout 0b10737e3a1226bb13346aa82b61ebb62c230b41 && cd .. \
-    &&if [[ ! -d "posex" ]];then git clone https://github.com/hnmr293/posex;fi  && cd posex && git checkout v0.41 && cd ..\
+    &&if [[ ! -d "posex" ]];then git clone https://github.com/hnmr293/posex;fi  && cd posex && git checkout 61169d30ae1be889b04d873522d9b985b64405bb && cd ..\
     &&if [[ ! -d "sd-webui-additional-networks" ]];then git clone https://github.com/kohya-ss/sd-webui-additional-networks;fi    && cd sd-webui-additional-networks && git checkout v0.5.0 && cd .. \
     &&if [[ ! -d "sd-webui-depth-lib" ]];then git clone https://github.com/jexom/sd-webui-depth-lib.git;fi  && cd sd-webui-depth-lib && git checkout efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     &&if [[ ! -d "ultimate-upscale-for-automatic1111" ]];then git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git;fi  && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..

@@ -32,11 +32,12 @@ RUN set -ex \
     && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout 04b768bad41e0f1122a86d0636fce47bb2765af8 && cd .. \
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout 2.2.0 && cd .. \
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout 0b10737e3a1226bb13346aa82b61ebb62c230b41 && cd .. \
-    && git clone https://github.com/hnmr293/posex && cd posex && git checkout v0.41 && cd ..\
+    && git clone https://github.com/hnmr293/posex && cd posex && git checkout 61169d30ae1be889b04d873522d9b985b64405bb && cd ..\
     && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout v0.5.0 && cd .. \
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
 
+COPY docker_data/config.json /root/stable-diffusion-webui/config.json
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
