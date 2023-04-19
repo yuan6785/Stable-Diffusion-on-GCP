@@ -24,6 +24,18 @@ spec:
       command: ["bash","-c","while true;do date;sleep 86400;done"]
       args: []
       volumeMounts:
+        - mountPath: "/root/stable-diffusion-webui/models/Stable-diffusion"
+          name: stable-diffusion-storage
+          subPath: models/Stable-diffusion/sd15   # change_other_model
+        - mountPath: "/root/stable-diffusion-webui/outputs"
+          name: stable-diffusion-storage
+          subPath: outputs
+        - mountPath: "/root/stable-diffusion-webui/models/ControlNet"
+          name: stable-diffusion-storage
+          subPath: models/ControlNet
+        - mountPath: "/root/stable-diffusion-webui/extensions/a1111-sd-webui-tagcomplete/tags"
+          name: stable-diffusion-storage
+          subPath: a1111-sd-webui-tagcomplete/tags
         - mountPath: "/yuanxiao_root_nfs"
           name: stable-diffusion-storage
           # subPath: "/" # 不允许这样写,会报错
