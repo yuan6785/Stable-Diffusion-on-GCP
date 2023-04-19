@@ -8,25 +8,28 @@ RUN set -ex && \
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
 
+
 RUN groupadd -r sd3 && useradd --create-home -r -g sd3 sd3
 USER sd3
 
 # 
 WORKDIR /home/sd3
+#
 RUN ls -l /home/sd3
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
-RUN ls -l /home/sd3
 RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
+#
+# /home/sd3/miniconda3/envs/sd_python310/bin/python -m pip install virtualenv 或者 /home/sd3/miniconda3/bin/conda install -n sd_python310 virtualenv
+# this use --skip-torch-cuda-test, because the docker build image is not cuda, so it will not test cuda
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/sd3/miniconda3 \
     && /home/sd3/miniconda3/bin/conda init \
-    && bash -c "source /home/sd3/.bashrc" \
-    && conda create --name sd_python310 python=3.10 \
-    && conda activate sd_python310 \
-    && python -m pip install virtualenv \
-    && wget https://raw.githubusercontent.com/yuan6785/stable-diffusion-webui/b791502f18b0de3e9eb93fca3aadce42878904d8/webui-conda-yuanxiao-gcp.sh \
-    && chmod -Rf 777 webui-conda-yuanxiao-gcp.sh&&chmod +x webui-conda-yuanxiao-gcp.sh \
-    && bash webui-conda-yuanxiao-gcp.sh \
+    && /home/sd3/miniconda3/bin/conda create -y --name sd_python310 python=3.10 \
+    && /home/sd3/miniconda3/bin/conda install -y -n sd_python310 virtualenv \
+    && git clone https://github.com/yuan6785/stable-diffusion-webui.git \
+    && cd stable-diffusion-webui \
+    && git checkout b791502f18b0de3e9eb93fca3aadce42878904d8 \
+    && /home/sd3/miniconda3/envs/sd_python310/bin/python launch_gcp.py --skip-torch-cuda-test  \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git extensions/sd-webui-controlnet
 
 
