@@ -1,8 +1,9 @@
 FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
+# apt install -y wget git python3 python3-venv python3-pip xdg-utils && \
 RUN set -ex && \
     apt update && \
-    apt install -y wget git python3 python3-venv python3-pip xdg-utils && \
+    apt install -y wget git && \
     rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
