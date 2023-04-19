@@ -4,7 +4,7 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 # xdg-utils 这个包太大了，要安装很久，取消掉，是一个远程桌面系统的包，用不到
 RUN set -ex && \
     apt update && \
-    apt install -y wget git && \
+    apt install -y wget git libglib2.0-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
@@ -27,7 +27,16 @@ RUN set -ex \
     && cd stable-diffusion-webui \
     && git checkout b791502f18b0de3e9eb93fca3aadce42878904d8 \
     && /root/miniconda3/envs/sd_python310/bin/python launch_gcp.py --skip-torch-cuda-test  \
-    && git clone https://github.com/Mikubill/sd-webui-controlnet.git extensions/sd-webui-controlnet
+    && cd extensions \
+    && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout eff5fb5c0e9ee3c5d0fc9a3c5ec0c10fce8ee3cd && cd .. \
+    && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout 04b768bad41e0f1122a86d0636fce47bb2765af8 && cd .. \
+    && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout 2.2.0 && cd .. \
+    && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout 0b10737e3a1226bb13346aa82b61ebb62c230b41 && cd .. \
+    && git clone https://github.com/hnmr293/posex && cd posex && git checkout v0.41 && cd ..\
+    && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout v0.5.0 && cd .. \
+    && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
+    && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
+
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
