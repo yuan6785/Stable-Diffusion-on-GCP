@@ -49,5 +49,5 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT
 EXPOSE 7860
 
 WORKDIR /root/stable-diffusion-webui/
-# /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram
+# /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram --share
 CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
