@@ -26,7 +26,7 @@ RUN set -ex \
     && /root/miniconda3/envs/sd_python310/bin/python launch_gcp.py --skip-torch-cuda-test  \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git extensions/sd-webui-controlnet
 
-# Install TensorRT and set env
+# Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
     && /root/miniconda3/envs/sd_python310/bin/python -y install tensorrt==8.6.0
 ARG CUDNN_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
