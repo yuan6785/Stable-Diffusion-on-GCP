@@ -12,7 +12,7 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
 
 # 开始安装sd
-# this use --skip-torch-cuda-test, because the docker build image is not cuda, so it will not test cuda
+# 使用 --skip-torch-cuda-test, 因为cloudbuild.yaml的machineType是没有GPU的； 另一种思路，取消这个参数，但是cloudbuild.yaml的machineType改成有GPU的也可以尝试下；
 WORKDIR /root
 RUN ls -l /root
 RUN set -ex \
