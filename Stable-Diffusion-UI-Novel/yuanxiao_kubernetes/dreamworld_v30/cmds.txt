@@ -14,5 +14,5 @@ kubectl delete  backendconfig sd-backendconfig-dreamworld
 kubectl delete  service sd-service-dreamworld
 kubectl delete  ingress sd-ingress-dreamworld
 
-重新部署pod---
+重新部署pod(更新镜像)---
 kubectl rollout restart deployment sd-deployment-dreamworld
