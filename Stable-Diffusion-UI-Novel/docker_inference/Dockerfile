@@ -17,7 +17,7 @@ RUN ls -l /root
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
 # /root/miniconda3/envs/sd_python310/bin/python -m pip install virtualenv 或者 /root/miniconda3/bin/conda install -n sd_python310 virtualenv
-# 使用 --skip-torch-cuda-test, 因为cloudbuild.yaml的machineType是没有GPU的； 另一种思路，取消这个参数，但是cloudbuild.yaml的machineType改成有GPU的也可以尝试下；
+# 使用 --skip-torch-cuda-test, 因为cloudbuild.yaml的machineType是没有GPU的； 另一种思路，取消这个参数，但是cloudbuild.yaml的machineType改成有GPU的也可以尝试下；----可以用打好的镜像创建一个ubuntu的pod参考deployment_ubuntu_sd_test.yaml进行调试
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /root/miniconda3 \
     && /root/miniconda3/bin/conda init \
@@ -48,4 +48,5 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT
 EXPOSE 7860
 
 WORKDIR /root/stable-diffusion-webui/
+# /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram
 CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]

@@ -14,5 +14,5 @@ kubectl delete  backendconfig sd-backendconfig-%(sd_base_model_name)s
 kubectl delete  service sd-service-%(sd_base_model_name)s
 kubectl delete  ingress sd-ingress-%(sd_base_model_name)s
 
-重新部署pod---
+重新部署pod(更新镜像)---
 kubectl rollout restart deployment sd-deployment-%(sd_base_model_name)s
