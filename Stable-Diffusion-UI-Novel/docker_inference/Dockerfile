@@ -29,7 +29,7 @@ RUN set -ex \
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
-    && /root/miniconda3/envs/sd_python310/bin/python -y install tensorrt==8.6.0
+    && /root/miniconda3/envs/sd_python310/bin/python install -y tensorrt==8.6.0
 ARG CUDNN_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 ARG TENSORRT_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
