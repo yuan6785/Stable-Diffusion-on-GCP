@@ -23,7 +23,7 @@ spec:
             claimName: vol1
       containers:
       - name: stable-diffusion-webui
-        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference
+        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2
         # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
         resources:
           limits:

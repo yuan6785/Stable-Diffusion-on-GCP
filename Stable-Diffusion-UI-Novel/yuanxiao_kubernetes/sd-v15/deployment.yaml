@@ -5,7 +5,7 @@ metadata:
   labels:
     app: sd-sd15 # change_other_model
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: sd-sd15 # change_other_model
@@ -23,7 +23,7 @@ spec:
             claimName: vol1
       containers:
       - name: stable-diffusion-webui
-        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference
+        image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2
         # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:train
         resources:
           limits:
@@ -53,12 +53,12 @@ spec:
           periodSeconds: 10
         # end--by yx
         volumeMounts:
-          - mountPath: "/stable-diffusion-webui/models/Stable-diffusion"
+          - mountPath: "/home/sd3/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
             subPath: models/Stable-diffusion/sd15   # change_other_model
-          - mountPath: "/stable-diffusion-webui/outputs"
+          - mountPath: "/home/sd3/stable-diffusion-webui/outputs"
             name: stable-diffusion-storage
             subPath: outputs
-          - mountPath: "/stable-diffusion-webui/models/ControlNet"
+          - mountPath: "/home/sd3/stable-diffusion-webui/models/ControlNet"
             name: stable-diffusion-storage
             subPath: models/ControlNet
