@@ -1,0 +1,28 @@
+FROM us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2 
+
+WORKDIR /root
+
+# 安装插件
+RUN set -ex \
+    && cd stable-diffusion-webui/extensions \
+    && if [[ ! -d "sd-webui-controlnet" ]];then git clone https://github.com/Mikubill/sd-webui-controlnet.git;fi && cd sd-webui-controlnet && git checkout eff5fb5c0e9ee3c5d0fc9a3c5ec0c10fce8ee3cd && cd .. \
+    && if [[ ! -d "a1111-sd-webui-locon" ]];then git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git;fi && cd a1111-sd-webui-locon && git checkout 04b768bad41e0f1122a86d0636fce47bb2765af8 && cd .. \
+    &&if [[ ! -d "a1111-sd-webui-tagcomplete" ]];then git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git;fi  && cd a1111-sd-webui-tagcomplete && git checkout 2.2.0 && cd .. \
+    &&if [[ ! -d "openpose-editor" ]];then git clone https://github.com/fkunn1326/openpose-editor;fi  && cd openpose-editor && git checkout 0b10737e3a1226bb13346aa82b61ebb62c230b41 && cd .. \
+    &&if [[ ! -d "posex" ]];then git clone https://github.com/hnmr293/posex;fi  && cd posex && git checkout v0.41 && cd ..\
+    &&if [[ ! -d "sd-webui-additional-networks" ]];then git clone https://github.com/kohya-ss/sd-webui-additional-networks;fi    && cd sd-webui-additional-networks && git checkout v0.5.0 && cd .. \
+    &&if [[ ! -d "sd-webui-depth-lib" ]];then git clone https://github.com/jexom/sd-webui-depth-lib.git;fi  && cd sd-webui-depth-lib && git checkout efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
+    &&if [[ ! -d "ultimate-upscale-for-automatic1111" ]];then git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git;fi  && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
+
+
+# Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
+RUN set -ex \
+    && /root/miniconda3/envs/sd_python310/bin/python -m pip install tensorrt==8.6.0
+ARG CUDNN_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+ARG TENSORRT_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+#
+EXPOSE 7860
+
+WORKDIR /root/stable-diffusion-webui/
+CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
