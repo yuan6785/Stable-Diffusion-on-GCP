@@ -1,6 +1,7 @@
 FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 # apt install -y wget git python3 python3-venv python3-pip xdg-utils && \
+# xdg-utils 这个包太大了，要安装很久，取消掉，是一个远程桌面系统的包，用不到
 RUN set -ex && \
     apt update && \
     apt install -y wget git && \
@@ -30,7 +31,7 @@ RUN set -ex \
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
-    && /root/miniconda3/envs/sd_python310/bin/python install -y tensorrt==8.6.0
+    && /root/miniconda3/envs/sd_python310/bin/python -m pip install -y tensorrt==8.6.0
 ARG CUDNN_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 ARG TENSORRT_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
