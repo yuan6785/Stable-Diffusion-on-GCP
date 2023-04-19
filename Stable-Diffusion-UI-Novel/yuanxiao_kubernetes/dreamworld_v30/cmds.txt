@@ -13,3 +13,6 @@ kubectl delete  hpa sd-hpa-dreamworld
 kubectl delete  backendconfig sd-backendconfig-dreamworld
 kubectl delete  service sd-service-dreamworld
 kubectl delete  ingress sd-ingress-dreamworld
+
+重新部署pod---
+kubectl rollout restart deployment sd-deployment-dreamworld

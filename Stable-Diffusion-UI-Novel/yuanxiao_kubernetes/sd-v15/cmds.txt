@@ -13,3 +13,6 @@ kubectl delete  hpa sd-hpa-sd15
 kubectl delete  backendconfig sd-backendconfig-sd15
 kubectl delete  service sd-service-sd15
 kubectl delete  ingress sd-ingress-sd15
+
+重新部署pod---
+kubectl rollout restart deployment sd-deployment-sd15
