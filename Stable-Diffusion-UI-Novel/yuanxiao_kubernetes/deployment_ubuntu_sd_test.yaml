@@ -54,6 +54,9 @@ spec:
         - mountPath: "/root/stable-diffusion-webui/samples"
           name: stable-diffusion-storage
           subPath: samples
+        - mountPath: "/root/stable-diffusion-webui/localizations"
+          name: stable-diffusion-storage
+          subPath: models/localizations
         - mountPath: "/root/stable-diffusion-webui/extensions/a1111-sd-webui-tagcomplete/tags"
           name: stable-diffusion-storage
           subPath: a1111-sd-webui-tagcomplete/tags
