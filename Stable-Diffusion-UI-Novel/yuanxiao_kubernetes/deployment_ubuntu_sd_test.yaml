@@ -16,7 +16,7 @@ spec:
   containers:
     - name: ubuntu-2204
       # image: nvidia/cuda:11.8.0-runtime-ubuntu22.04  # dockerfile的基础镜像
-      image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2  # 测试打包好的镜像，配合下面的command进行调试
+      image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference3  # 测试打包好的镜像，配合下面的command进行调试
       imagePullPolicy: Always
       ports:
         - containerPort: 7860
