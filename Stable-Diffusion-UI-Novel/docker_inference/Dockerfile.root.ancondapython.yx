@@ -40,7 +40,9 @@ RUN set -ex \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
 
 COPY docker_data/config.json /root/stable-diffusion-webui/config.json
+COPY docker_data/supervisord_l.conf /etc/supervisord.conf
 COPY docker_data/start_supervisor.sh /root/stable-diffusion-webui/yx_docker_start.sh
+RUN chmod +x /root/stable-diffusion-webui/yx_docker_start.sh
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \

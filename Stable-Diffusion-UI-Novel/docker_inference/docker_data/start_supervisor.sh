@@ -5,7 +5,7 @@ echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED
 echo PROJECT_ENV=$PROJECT_ENV
 while true;do date;sleep 86400;date;echo "loop--";done &
 /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram &
-/usr/bin/supervisord -c /etc/supervisor.conf &
-tail -f /var/log/loopscript.log &
-tail -f /var/log/sdwebui.log &
+/usr/bin/supervisord -c /etc/supervisord.conf &
+sleep 30 && tail -f /var/log/loopscript.log &
+sleep 30 && tail -f /var/log/sdwebui.log &
 fg %1
