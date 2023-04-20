@@ -1,4 +1,4 @@
-# # 多个镜像构建
+# # 多个镜像构建---其实还是依次构建
 # steps:
 # - name: 'gcr.io/cloud-builders/docker'
 #   args: [ 'build', '-t', 'us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2', '-f', 'Dockerfile.root.ancondapython.nginx.supervisor.yx', '.' ]
