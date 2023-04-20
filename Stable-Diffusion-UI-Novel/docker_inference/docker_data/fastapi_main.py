@@ -29,6 +29,11 @@ async def root():
 @app.get("/wqipqniwalala/sdwebuilogs")
 # 从url读取get参数filename
 async def get_file(filename: str=None, count: int=200):
+    """
+    http://34.27.19.204/wqipqniwalala/sdwebuilogs?filename=loopscript&count=100
+    http://34.27.19.204/wqipqniwalala/sdwebuilogs?filename=sdwebui&count=100
+    http://34.27.19.204/wqipqniwalala/sdwebuilogs?filename=fastapi_main&count=100
+    """
     # 读取文件内容
     if filename is None:
         filepath = "/var/log/sdwebui.log"
