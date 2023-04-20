@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-2204-cuda-1180
+  namespace: default  # 如果不是这个命名空间,则修改
+spec:
+  nodeSelector:
+      cloud.google.com/gke-gpu-sharing-strategy: time-sharing
+      cloud.google.com/gke-max-shared-clients-per-gpu: "5"  # 2
+  volumes:
+    - name: stable-diffusion-storage
+      persistentVolumeClaim:
+        claimName: vol1
+  containers:
+    - name: ubuntu-2204
+      image: nvidia/cuda:11.8.0-runtime-ubuntu22.04  # dockerfile的基础镜像
+      # image: us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference2  # 测试打包好的镜像
+      # imagePullPolicy: Always
+      command: ["bash","-c","while true;do date;sleep 86400;done"]
+      args: []
+      volumeMounts:
+        - mountPath: "/yuanxiao_root_nfs"
+          name: stable-diffusion-storage
+          # subPath: "/" # 不允许这样写,会报错
+          subPath: #这样写不会报错,也是挂载到filestore的根目录,后面留个空格即可
+        
+

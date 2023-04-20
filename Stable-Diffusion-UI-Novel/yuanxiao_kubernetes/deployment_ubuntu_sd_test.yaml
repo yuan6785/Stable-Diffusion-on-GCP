@@ -27,12 +27,33 @@ spec:
         - mountPath: "/root/stable-diffusion-webui/models/Stable-diffusion"
           name: stable-diffusion-storage
           subPath: models/Stable-diffusion/sd15   # change_other_model
-        - mountPath: "/root/stable-diffusion-webui/outputs"
-          name: stable-diffusion-storage
-          subPath: outputs
         - mountPath: "/root/stable-diffusion-webui/models/ControlNet"
           name: stable-diffusion-storage
           subPath: models/ControlNet
+        - mountPath: "/root/stable-diffusion-webui/models/VAE"
+          name: stable-diffusion-storage
+          subPath: models/VAE
+        - mountPath: "/root/stable-diffusion-webui/models/Lora"
+          name: stable-diffusion-storage
+          subPath: models/Lora
+        - mountPath: "/root/stable-diffusion-webui/models/lora"
+          name: stable-diffusion-storage
+          subPath: models/trainlora
+        - mountPath: "/root/stable-diffusion-webui/embeddings"
+          name: stable-diffusion-storage
+          subPath: models/embeddings
+        - mountPath: "/root/stable-diffusion-webui/hypernetworks"
+          name: stable-diffusion-storage
+          subPath: models/hypernetworks
+        - mountPath: "/root/stable-diffusion-webui/scripts"
+          name: stable-diffusion-storage
+          subPath: models/scripts
+        - mountPath: "/root/stable-diffusion-webui/outputs"
+          name: stable-diffusion-storage
+          subPath: outputs
+        - mountPath: "/root/stable-diffusion-webui/samples"
+          name: stable-diffusion-storage
+          subPath: samples
         - mountPath: "/root/stable-diffusion-webui/extensions/a1111-sd-webui-tagcomplete/tags"
           name: stable-diffusion-storage
           subPath: a1111-sd-webui-tagcomplete/tags
