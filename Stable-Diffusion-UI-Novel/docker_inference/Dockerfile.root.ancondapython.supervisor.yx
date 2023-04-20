@@ -2,8 +2,11 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 # apt install -y wget git python3 python3-venv python3-pip xdg-utils && \
 # xdg-utils 这个包太大了，要安装很久，取消掉，是一个远程桌面系统的包，用不到
-# /usr/bin/supervisord -c /etc/supervisor.conf # 手动启动supervisor /usr/bin/supervisorctl stop all;kill pid  # 停止所有程序并杀掉supervisor进程
-# /usr/sbin/nginx -c /etc/nginx/nginx.conf # 启动nginx  /usr/sbin/nginx -s stop # 停止nginx /usr/sbin/nginx -s reload # 重新加载nginx配置
+# /usr/bin/supervisord -c /etc/supervisor.conf # 手动启动supervisor
+# /usr/bin/supervisorctl stop all;kill pid  # 停止所有程序并杀掉supervisor进程
+# /usr/sbin/nginx -c /etc/nginx/conf.d/default.conf # 启动nginx  
+# /usr/sbin/nginx -s stop # 停止nginx 
+# /usr/sbin/nginx -s reload # 重新加载nginx配置
 RUN set -ex && \
     apt update && \
     apt install -y wget git supervisor nginx libglib2.0-dev && \
@@ -41,8 +44,10 @@ RUN set -ex \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
 
 COPY docker_data/config.json /root/stable-diffusion-webui/config.json
-COPY docker_data/start.sh /root/stable-diffusion-webui/yx_docker_start.sh
 COPY docker_data/supervisord.conf /etc/supervisord.conf
+COPY docker_data/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker_data/fastapi_main.py /root/fastapi_main.py
+COPY docker_data/start.sh /root/stable-diffusion-webui/yx_docker_start.sh
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \

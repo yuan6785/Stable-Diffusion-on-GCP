@@ -55,15 +55,42 @@ spec:
         volumeMounts:
           - mountPath: "/root/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
-            subPath: models/Stable-diffusion/%(sd_base_model_name)s   # change_other_model
-          - mountPath: "/root/stable-diffusion-webui/outputs"
-            name: stable-diffusion-storage
-            subPath: outputs
+            subPath: sdwebui/models/Stable-diffusion/sd15   # change_other_model
           - mountPath: "/root/stable-diffusion-webui/models/ControlNet"
             name: stable-diffusion-storage
-            subPath: models/ControlNet
+            subPath: sdwebui/models/ControlNet
+          - mountPath: "/root/stable-diffusion-webui/models/VAE"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/VAE
+          - mountPath: "/root/stable-diffusion-webui/models/Lora"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/Lora
+          - mountPath: "/root/stable-diffusion-webui/models/lora"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/trainlora
+          - mountPath: "/root/stable-diffusion-webui/embeddings"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/embeddings
+          - mountPath: "/root/stable-diffusion-webui/hypernetworks"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/hypernetworks
+          - mountPath: "/root/stable-diffusion-webui/scripts"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/scripts
+          - mountPath: "/root/stable-diffusion-webui/outputs"
+            name: stable-diffusion-storage
+            subPath: sdwebui/outputs
+          - mountPath: "/root/stable-diffusion-webui/samples"
+            name: stable-diffusion-storage
+            subPath: sdwebui/samples
+          - mountPath: "/root/stable-diffusion-webui/localizations"
+            name: stable-diffusion-storage
+            subPath: sdwebui/models/localizations
           - mountPath: "/root/stable-diffusion-webui/extensions/a1111-sd-webui-tagcomplete/tags"
             name: stable-diffusion-storage
-            subPath: a1111-sd-webui-tagcomplete/tags
+            subPath: sdwebui/a1111-sd-webui-tagcomplete/tags
+          - mountPath: "/root/loopscripts"
+            name: stable-diffusion-storage
+            subPath: loopscripts
 
             
