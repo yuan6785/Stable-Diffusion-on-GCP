@@ -25,7 +25,7 @@ spec:
           # cpu: 1000m    #1800m
           # memory: 19Gi  #23Gi
           nvidia.com/gpu: 1  # 有显卡需要这样挂载---如果是普通的pod，无法安装sdk，无法使用gpu
-      # command: ["bash","-c","while true;do date;sleep 86400;done"] # 注释掉这个，就会用镜像的启动命令---一般用这个命令调试为什么启动不了，如果启动的了，就注释掉这个命令
+      command: ["bash","-c","while true;do date;sleep 86400;done"] # 注释掉这个，就会用镜像的启动命令(用于调试启动命令是否正确)---（打开注释）用这个命令调试为什么启动不了； 如果启动的了，就注释掉这个命令
       args: []
       volumeMounts:
         - mountPath: "/root/stable-diffusion-webui/models/Stable-diffusion"

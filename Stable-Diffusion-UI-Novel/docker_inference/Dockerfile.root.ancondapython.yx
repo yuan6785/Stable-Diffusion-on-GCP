@@ -56,4 +56,4 @@ EXPOSE 7860
 WORKDIR /root/stable-diffusion-webui/
 # # /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram --share
 # CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
-CMD yx_docker_start.sh
+CMD ./yx_docker_start.sh

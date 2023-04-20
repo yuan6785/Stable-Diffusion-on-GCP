@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sd-deployment-%(sd_base_model_name)s  # change_other_model
+  name: sd-deployment-dreamworld  # change_other_model
   labels:
-    app: sd-%(sd_base_model_name)s # change_other_model
+    app: sd-dreamworld # change_other_model
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sd-%(sd_base_model_name)s # change_other_model
+      app: sd-dreamworld # change_other_model
   template:
     metadata:
       labels:
-        app: sd-%(sd_base_model_name)s # change_other_model
+        app: sd-dreamworld # change_other_model
     spec:
       nodeSelector:
         cloud.google.com/gke-gpu-sharing-strategy: time-sharing

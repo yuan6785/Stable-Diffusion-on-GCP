@@ -1,0 +1,28 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sd-hpa-sd15  # change_other_model
+spec:
+  minReplicas: 1
+  maxReplicas: 30
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: kubernetes.io|node|accelerator|duty_cycle
+          selector:
+            matchLabels:
+              resource.labels.cluster_name: sd-web-ui-gke2
+        target:
+          type: AverageValue
+          averageValue: 70
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "sd-deployment-sd15" # change_other_model
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      # terminationGracePeriodSeconds: 300 # 如果在300秒内任务没有完成，pod 会被强制终止。
+    scaleUp:
+      stabilizationWindowSeconds: 0
