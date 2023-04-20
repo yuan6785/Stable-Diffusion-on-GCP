@@ -5,7 +5,7 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 # /usr/bin/supervisord -c /etc/supervisor.conf # 手动启动supervisor /usr/bin/supervisorctl stop all;kill pid  # 停止所有程序并杀掉supervisor进程
 RUN set -ex && \
     apt update && \
-    apt install -y wget git supervisor libglib2.0-dev && \
+    apt install -y wget git supervisor nginx libglib2.0-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
@@ -25,9 +25,9 @@ RUN set -ex \
     && /root/miniconda3/bin/conda init \
     && /root/miniconda3/bin/conda create -y --name sd_python310 python=3.10 \
     && /root/miniconda3/bin/conda install -y -n sd_python310 virtualenv \
-    && git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui \
+    && git clone https://github.com/yuan6785/stable-diffusion-webui.git \
     && cd stable-diffusion-webui \
-    && git checkout 22bcc7be428c94e9408f589966c2040187245d81 \
+    && git checkout b791502f18b0de3e9eb93fca3aadce42878904d8 \
     && /root/miniconda3/envs/sd_python310/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout eff5fb5c0e9ee3c5d0fc9a3c5ec0c10fce8ee3cd && cd .. \
@@ -40,6 +40,8 @@ RUN set -ex \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout 0a3d03a41aef6f0a2b7f9582e42e06852881b4a8 && cd ..
 
 COPY docker_data/config.json /root/stable-diffusion-webui/config.json
+COPY docker_data/start.sh /root/stable-diffusion-webui/yx_docker_start.sh
+COPY docker_data/supervisord.conf /etc/supervisord.conf
 
 # Install TensorRT and set cuda env, 这一步其实可以不要，但按原作者的思想，加进去吧
 RUN set -ex \
@@ -47,9 +49,12 @@ RUN set -ex \
 ARG CUDNN_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 ARG TENSORRT_PATH=$(dirname $(/root/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+ENV PYTHONUNBUFFERED true
+ENV PROJECT_ENV prod
 #
 EXPOSE 7860
 
 WORKDIR /root/stable-diffusion-webui/
 # /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram --share
-CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
+# CMD ["/root/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
+CMD yx_docker_start.sh
