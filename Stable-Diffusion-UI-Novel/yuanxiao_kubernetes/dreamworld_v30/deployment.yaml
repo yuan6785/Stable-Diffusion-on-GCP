@@ -55,7 +55,7 @@ spec:
         volumeMounts:
           - mountPath: "/root/stable-diffusion-webui/models/Stable-diffusion"
             name: stable-diffusion-storage
-            subPath: sdwebui/models/Stable-diffusion/sd15   # change_other_model
+            subPath: sdwebui/models/Stable-diffusion/dreamworld   # change_other_model
           - mountPath: "/root/stable-diffusion-webui/models/ControlNet"
             name: stable-diffusion-storage
             subPath: sdwebui/models/ControlNet
