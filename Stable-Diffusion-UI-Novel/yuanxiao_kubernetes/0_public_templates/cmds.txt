@@ -19,4 +19,4 @@ kubectl rollout restart deployment sd-deployment-%(sd_base_model_name)s
 
 
 将deployment的ingress加入到Cloud Armor里面(当ingress创建完成后执行)------
-gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'%(k8s_subdir_name)s'" --format="value(name)") --security-policy=sd-web-ui --global
+gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'%(sd_base_model_name)s'" --format="value(name)") --security-policy=sd-web-ui --global

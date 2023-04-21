@@ -16,3 +16,7 @@ kubectl delete  ingress sd-ingress-dreamworld
 
 重新部署pod(更新镜像)---
 kubectl rollout restart deployment sd-deployment-dreamworld
+
+
+将deployment的ingress加入到Cloud Armor里面(当ingress创建完成后执行)------
+gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'dreamworld'" --format="value(name)") --security-policy=sd-web-ui --global
