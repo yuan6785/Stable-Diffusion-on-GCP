@@ -17,3 +17,13 @@ options:
   machineType: 'E2_HIGHCPU_8'
   diskSizeGb: '200'
 images: ['us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference3']
+
+
+# # 一个镜像构建
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: [ 'build', '-t', 'us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference3', '-f', 'Dockerfile.finally.yx', '.' ]
+# options:
+#   machineType: 'E2_HIGHCPU_8'
+#   diskSizeGb: '200'
+# images: ['us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference3']
