@@ -4,7 +4,7 @@ metadata:
   name: ubuntu-service-test
 spec:
   selector:
-    app: ubuntu-2204-cuda-1180
+    app: ubuntu-2204
   ports:
     - protocol: TCP
       port: 80

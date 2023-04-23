@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: ubuntu-2204-cuda-1180   # change_other_model--这里注意是deployment或者pod的metadata.name
+    app: ubuntu-2204   # change_other_model--这里注意是deployment或者pod的metadata.name
   ports:
   - port: 8080
     protocol: TCP

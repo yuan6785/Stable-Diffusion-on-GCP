@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ubuntu-2204-cuda-1180
+  name: ubuntu-2204
   labels:
-    app: ubuntu-2204-cuda-1180 # change_other_model
+    app: ubuntu-2204 # change_other_model
   namespace: default  # 如果不是这个命名空间,则修改
 spec:
   nodeSelector:
