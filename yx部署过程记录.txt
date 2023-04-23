@@ -1,0 +1,387 @@
+参考:    github repo
+-------
+目前采用第一种方式测试:
+    https://github.com/nonokangwei/gcp-stable-diffusion-build-deploy
+    我已经fork到我的github repo里面了, 
+    重要文件夹
+    /Stable-Diffusion-UI-Novel/yuanxiao_kubernetes   我的k8s服务编排
+    Stable-Diffusion-UI-Novel/docker_inference   我的镜像构建方式
+后面采用第二种方式测试:
+    terraform一键部署的参考 这个链接更新sample镜像 部署完 stable diffusion web ui 直接就可以用了 更新的话替换自己的镜像即可 
+    https://github.com/i-jw/gcp-stable-diffusion-build-deploy/tree/terraform-provision-infra/terraform-provision-infra
+核心优势是(gke可以多个pod轮询使用GPU资源, 这样可以多个用户使用同一个GPU出图。 就算其中一个用户一次出100张，也不影响其他用户出图,只不过比原来慢一些，但是有进度条):
+     https://cloud.google.com/kubernetes-engine/docs/how-to/timesharing-gpus?hl=zh-cn
+     https://cloud.google.com/kubernetes-engine/docs/concepts/timesharing-gpus?hl=zh-cn  (有各个指标统计)
+gcp的平台的左边菜单compute engine的实例模板可以创建自定义 的机型,保存模板后机型即出现(可以根据自己需求定制高内存低cpu，1个T4显卡的机型，固定一个节点池即可)
+
+第一种方式:-----------------------------------------------------------
+第零步:
+cd /Users/yuanxiao/workspace/0yxgithub
+git clone git@github.com:yuan6785/Stable-Diffusion-on-GCP.git
+
+
+
+第一步:
+安装gcloud cli
+https://cloud.google.com/sdk/docs/install?hl=zh-cn
+我安装到yuanxiao主目录里面
+环境变量在~/.zshrc_google_cloud里面
+source  ~/.zshrc_google_cloud  即可用gcloud命令
+gcloud init可以时间gcp项目的管理
+
+
+
+第二步:
+创建gcp项目，我这里选择的美国----（不要用免费那个）
+https://console.cloud.google.com/welcome?hl=zh-cn&_ga=2.244718405.1158541592.1681105744-2129578248.1678436318&_gac=1.57661144.1681108097.Cj0KCQjwxMmhBhDJARIsANFGOStKR19xfUvgEY2Creobx-1lEEKelmLy6BTun1jKNN8TBHafxGJDnYoaAi9_EALw_wcB&authuser=4
+
+
+
+
+
+第三步:
+创建sd-web-ui集群
+https://console.cloud.google.com/welcome?hl=zh-cn&_ga=2.147855223.1158541592.1681105744-2129578248.1678436318&_gac=1.112986486.1681111364.CjwKCAjw586hBhBrEiwAQYEnHTDNgMVnF1-KC1nwlmXm8IyJDv0_YbQjthmQ19e-aEuWwzS81LN3hBoC19MQAvD_BwE&project=happyaigc&authuser=4
+-----------------start--------------------创建gke集群（gpu-sharing-strategy=time-sharing， 这里是这个模式）-----------------
+PROJECT_ID=happyaigc
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+VPC_NETWORK=default
+VPC_SUBNETWORK=default
+CLIENT_PER_GPU=2
+gcloud beta container --project ${PROJECT_ID} clusters create ${GKE_CLUSTER_NAME} --region ${REGION} \
+    --no-enable-basic-auth --cluster-version "1.24.9-gke.3200" --release-channel "None" \
+    --machine-type "custom-4-49152-ext" --accelerator "type=nvidia-tesla-t4,count=1,gpu-sharing-strategy=time-sharing,max-shared-clients-per-gpu=${CLIENT_PER_GPU}" \
+    --image-type "COS_CONTAINERD" --disk-type "pd-balanced" --disk-size "100" \
+    --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/cloud-platform" \
+    --num-nodes "1" --logging=SYSTEM,WORKLOAD --monitoring=SYSTEM --enable-private-nodes \
+    --master-ipv4-cidr "172.16.1.0/28" --enable-ip-alias --network "projects/${PROJECT_ID}/global/networks/${VPC_NETWORK}" \
+    --subnetwork "projects/${PROJECT_ID}/regions/${REGION}/subnetworks/${VPC_SUBNETWORK}" \
+    --no-enable-intra-node-visibility --default-max-pods-per-node "110" --no-enable-master-authorized-networks \
+    --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver,GcpFilestoreCsiDriver \
+    --enable-autoupgrade --no-enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0 \
+    --enable-autoprovisioning --min-cpu 1 --max-cpu 64 --min-memory 1 --max-memory 256 \
+    --autoprovisioning-scopes=https://www.googleapis.com/auth/cloud-platform --no-enable-autoprovisioning-autorepair \
+    --enable-autoprovisioning-autoupgrade --autoprovisioning-max-surge-upgrade 1 --autoprovisioning-max-unavailable-upgrade 0 \
+    --enable-vertical-pod-autoscaling --enable-shielded-nodes
+-----------------end---------------------创建gke集群-----------------
+----
+-------------------创建好后，修改gke集群配置max-shared-clients-per-gpu的方法---新建节点池的方法(可选)-------------------------
+     要新建node pool 用不同的参数
+     已经创建的节点组不能更新这个参数 要新建一个节点组用不同的参数来替换这个值才行
+     kubectl edit node <node-name>，  已经创建的节点，好像可以通过这个命令改---未测试过(但一般不这样做，一般新建节点池)---
+例如: 新建节点池（
+参考 https://cloud.google.com/sdk/gcloud/reference/container/node-pools/create#--enable-private-nodes
+参考: https://cloud.google.com/kubernetes-engine/docs/how-to/node-pools?hl=zh-cn  增删改查节点池
+# 创建节点池的时候只需要修改需要修改的部分，其他部分会和创建集群配置保持一致--有一些会不一样
+PROJECT_ID=happyaigc
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+VPC_NETWORK=default
+VPC_SUBNETWORK=default
+CLIENT_PER_GPU=5
+POOL_NAME=sd-pool
+gcloud beta container  node-pools create ${POOL_NAME} \
+    --cluster ${GKE_CLUSTER_NAME} --region ${REGION} \
+    --machine-type "custom-4-49152-ext" --accelerator "type=nvidia-tesla-t4,count=1,gpu-sharing-strategy=time-sharing,max-shared-clients-per-gpu=${CLIENT_PER_GPU}" --num-nodes "1"
+    # --image-type "COS_CONTAINERD" --disk-type "pd-balanced" --disk-size "100" \
+    # --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/cloud-platform" \
+    # --num-nodes "1" --enable-private-nodes \
+    # --enable-autoupgrade --no-enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0 \
+    # --enable-autoprovisioning
+# 查看节点池的配置信息---可以看到刚才创建的节点池，只有max-shared-clients-per-gpu这个参数不一样，其他都和集群一样
+POOL_NAME=sd-pool
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+gcloud container node-pools describe ${POOL_NAME} \
+--cluster ${GKE_CLUSTER_NAME} --region ${REGION}
+# 修改节点池的默认数量(--num-nodes表示每个可用区多少个节点，如果这个小了，下面的节点池缩放也没有用)
+REGION=us-central1
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+POOL_NAME=sd-pool
+gcloud container clusters resize ${GKE_CLUSTER_NAME} --node-pool ${POOL_NAME} --num-nodes 3 --region ${REGION}
+# 节点池缩放---等待节点池创建完成后，过一段时间再进行缩放操作 （--no-enable-autoscaling 表示关闭自动扩缩）
+REGION=us-central1
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+POOL_NAME=sd-pool
+gcloud container clusters update ${GKE_CLUSTER_NAME} \
+    --enable-autoscaling \
+    --node-pool=${POOL_NAME} \
+    --min-nodes=0 \
+    --max-nodes=10 \
+    --region=${REGION}
+# 删除节点池(会自动进行pod排空操作和节点不可调用的操作, 这个命令不要在节点池创建就开始删除，创建后需要等待一段时间才能删除)---谨慎使用---
+# 界面上也可以删除，会自动进行排空，如果删除按钮灰色，则说明正在排空中，等一会会自动删除
+POOL_NAME=sd-pool
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+gcloud container node-pools delete ${POOL_NAME} \
+--cluster ${GKE_CLUSTER_NAME} --region ${REGION}
+# 看pod在哪个节点
+kubectl get pods -o wide -n default
+# 看每个节点的实时内存使用情况，不是分配的内存
+kubectl top nodes
+# # 看每个节点的被pod分配的内存，不是实时使用的内存，（窗口拖大看，排版才正确）；查看节点oom的情况
+kubectl describe nodes | grep -i mem
+-------------------end---创建好后，修改gke集群配置max-shared-clients-per-gpu的方法(可选)-------------------
+----
+------------------最后记得安装auth插件---------------------------
+gcloud components install gke-gcloud-auth-plugin
+------------------end------最后记得安装auth插件------------------
+------------------记得安装cloud nat（创建好立即生效，无需关联gke）------------
+关键配置：
+区域  us-central1
+来源子网和 IP 范围  所有子网的主要和次要 IP 范围
+----------------------------------------------
+
+
+
+第四步:
+获取gke集群的凭证
+source  ~/.zshrc_google_cloud  即可用gcloud命令
+------------------------------------
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} --region ${REGION}
+------------------------------------
+f*b**1**
+------------------------------------
+检测凭证生命周期
+------------------------------------
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+REGION=us-central1
+gcloud container clusters describe ${GKE_CLUSTER_NAME} \
+    --region ${REGION} \
+    --format "value(masterAuth.clusterCaCertificate)" \
+    | base64 --decode \
+    | openssl x509 -noout -dates
+------------------------------------
+
+
+
+第五步:
+安装gpu的驱动
+------------------------------------
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/nvidia-driver-installer/cos/daemonset-preloaded.yaml
+------------------------------------
+
+
+第六步:
+创建云工作件作为docker的存储库
+----------------------------
+BUILD_REGIST=sd-web-ui-artifacts
+REGION=us-central1
+gcloud artifacts repositories create ${BUILD_REGIST} --repository-format=docker \
+--location=${REGION}
+gcloud auth configure-docker ${REGION}-docker.pkg.dev
+----------------------------
+
+
+第七步:
+构建k8s的docker镜像(gcp叫artifacts)
+    A方法: gcloud builds submit打镜像的方法(最后用这种, 如果怕掉线，也可以到cloud build的cloud shell（自带gcloud命令)中执行下面的命令）：
+        参考: https://cloud.google.com/build/docs/build-push-docker-image?hl=zh-cn
+        -----------
+        cd /Users/yuanxiao/workspace/0yxgithub
+        git clone https://github.com/nonokangwei/Stable-Diffusion-on-GCP.git
+        cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference 
+        将如下内容复制到新建文件cloudbuild.yaml中
+        vi cloudbuild.yaml
+        #####cloudbuild.yaml---这个文件和Dockerfile在同一个目录下, 用于cloud build打镜像的虚拟机配置, 记得修改region和project_id和build_regist， 按照docker build . -t ${REGION}-docker.pkg.dev/${PROJECT_ID}/${BUILD_REGIST}/sd-webui:inference这个格式一一对应即可----数组就是可以打多个镜像
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference', '.' ]
+options:
+  machineType: 'E2_HIGHCPU_8'
+  diskSizeGb: '200'
+images: ['us-central1-docker.pkg.dev/happyaigc/sd-web-ui-artifacts/sd-webui:inference']
+        #####
+        ---------------------------------
+        BUILD_REGIST=sd-web-ui-artifacts
+        REGION=us-central1
+        PROJECT_ID=happyaigc
+        gcloud auth configure-docker ${REGION}-docker.pkg.dev
+        gcloud builds submit --region=${REGION} . --config=cloudbuild.yaml
+        ---------------------------------
+    
+    B方法: cloud build打镜像的方法(默认的cloud shell硬盘和内存太小，打不了这么耗资源的镜像)：-----------
+        不想本地打镜像的话可以用cloud build 打镜像-----最后我采用的cloud build方式, 点击cloud shell（自带gcloud命令）执行即可，方便，本地太慢；
+        git clone https://github.com/nonokangwei/Stable-Diffusion-on-GCP.git
+        cd /home/yuanxiao/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference
+        ---------------------------------
+        BUILD_REGIST=sd-web-ui-artifacts
+        REGION=us-central1
+        PROJECT_ID=happyaigc
+        gcloud auth configure-docker ${REGION}-docker.pkg.dev
+        docker build . -t ${REGION}-docker.pkg.dev/${PROJECT_ID}/${BUILD_REGIST}/sd-webui:inference
+        docker push 
+        ---------------------------------
+
+
+    C方法: 本地打镜像的方法(太慢了):----------------------
+        cd /Users/yuanxiao/workspace/0yxgithub
+        git clone https://github.com/nonokangwei/Stable-Diffusion-on-GCP.git
+        cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference
+        ---------------------------------
+        BUILD_REGIST=sd-web-ui-artifacts
+        REGION=us-central1
+        PROJECT_ID=happyaigc
+        docker build . -t ${REGION}-docker.pkg.dev/${PROJECT_ID}/${BUILD_REGIST}/sd-webui:inference
+        docker push 
+        ---------------------------------
+
+第八步:
+创建filestore保存基础模型
+-----------
+FILESTORE_NAME=sd-web-ui-filestore
+FILESTORE_ZONE=us-central1-b
+FILESHARE_NAME=sd-web-ui-filestore-share
+VPC_NETWORK=default
+gcloud filestore instances create ${FILESTORE_NAME} --zone=${FILESTORE_ZONE} --tier=BASIC_HDD --file-share=name=${FILESHARE_NAME},capacity=1TB --network=name=${VPC_NETWORK}
+gcloud filestore instances create nfs-store --zone=us-central1-b --tier=BASIC_HDD --file-share=name="vol1",capacity=1TB --network=name=${VPC_NETWORK}
+-------------
+
+
+第九步:
+启用节点池自动缩放
+------------------
+REGION=us-central1
+GKE_CLUSTER_NAME=sd-web-ui-gke2
+POOL_NAME=default-pool # 这里注意是default-pool还是sd-pool，注意节点池的名称
+gcloud container clusters update ${GKE_CLUSTER_NAME} \
+    --enable-autoscaling \
+    --node-pool=${POOL_NAME} \
+    --min-nodes=0 \
+    --max-nodes=5 \
+    --region=${REGION}
+------------------
+
+
+第十步(直接用kubectl命令的，需要执行第四步获取kubectl的凭证)------最重要的一步需要理解部署架构--------:
+创建k8s的pvc, pv, deployment, service
+-----
+hpa_nai.yaml, deployment_nai.yaml, service_inference_nai.yaml
+这里的设计是，一个deployment/service对应一个模型，不同的模型对应nfs里不同的目录，其他是一样的。
+跟kubernetes同级的还有一个template目录，这个是模版，把里面对应的值修改一下。
+------
+deploy完后，可以把模型放到nfs对应的路径下。
+-------------------------开始部署(非pv和pvc和公共部分， subfolder可以用gen_model_yaml.py生成,请参考./subfolder/cmds.txt)----------------
+------分配pv和pvc到nfs
+cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes
+kubectl apply -f nfs_pvc.yaml
+kubectl apply -f nfs_pv.yaml
+
+------(下面部分自文件夹用gen_model_yaml.py生成，下面我虽然分开执行和讲的但是在生成的subfoler里面cmds.txt里面有连续执行命令，熟悉后执行这个即可)-------------
+###################################################################
+------部署deployment(工作负载的无状态副本集)
+kubectl apply -f sd15/deployment.yaml
+------部署service的负载均衡
+# 这里有一个知识点，因为sd是可以开多个浏览器的，所以多人使用，进度条会乱掉不显示. 因为负载均衡会落到不同的pod上面
+# 参考 https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration?hl=zh-cn
+# 这个知识点叫: 会话亲和性(Session affinity)---更改后端健康检查状态、添加或移除后端或者更改后端完整度的因素（以平衡模式衡量）可能会破坏会话亲和性
+kubectl apply -f sd15/service_inference_multi.yaml
+------部署hpa-------
+# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldown-delay
+# 上面的文档有stabilizationWindowSeconds参数的解释
+# 如果是gpu timesharing模式，可以在deployment_sd15.yaml看到有timesharing模式，那么就修改hpa_sd15.yaml的这一行kubernetes.io|container|accelerator|duty_cycle要改成kubernetes.io|node|accelerator|duty_cycle；
+# 还需将resource.labels.namespace_name: $namespace替换成 resource.labels.cluster_name: ${GKE_CLUSTER_NAME}即可
+kubectl apply -f sd15/hpa.yaml
+# kubernetes.io|node|accelerator|duty_cycle 指标是 GPU 占空比的度量，表示过去采样周期（10 秒）内加速器正在处理的时间百分比。它的值在 1 到 100 之间
+-------下面两个可以看伸缩状态的命令----
+kubectl describe hpa
+kubectl get hpa
+--------下面命令可以删除hpa--------
+kubectl delete hpa [name]。其中，[name]是您要删除的HPA的名称.
+kubectl delete hpa stable-diffusion-hpa-sd15-statefulset
+-------下面命令删除service------
+kubectl delete service sd-web
+-------下面命令删除ingress------
+kubectl delete ingress sd-ingress
+-------下面命令删除BackendConfig-----
+kubectl delete backendconfig my-backendconfig
+-------访问ingress的url的时候需要等比较久大概10多分钟，有时候会爆502，等即可------
+###################################################################
+------部署完毕----------------
+
+
+
+第十一步(可选-设置安全组cloud armor):
+   gke集群创建的ingerss的公网IP如何设置安全组？--下面是chatgpt的回答
+   参考: 
+   https://cloud.google.com/armor/docs/security-policy-overview?hl=zh-cn#:~:text=A%20Google%20Cloud%20Armor%20security,address%20allowlist%20and%20denylist%20rules   最后用谷歌人员推荐的Cloud Armor
+   ----
+   https://cloud.google.com/vpc/docs/firewalls?hl=zh-cn#target_tags_naming_conventions  vpc网络防火墙
+   https://cloud.google.com/kubernetes-engine/docs/how-to/network-policy?hl=zh-cn     gke的网络政策
+   https://cloud.google.com/kubernetes-engine/docs/concepts/firewall-rules?hl=zh-cn  gke的默认创建防火墙(数字越小，优先级越高)
+   ------------
+   导出创建的cloud armor
+   gcloud compute security-policies export sd-web-ui --file-name sd-web-ui-cloud-armor.yaml --file-format yaml
+   导入修改好的cloud armor(相当于更新)---要报错--其实也不用这个命令---直接在控制台修改就行了--
+   gcloud compute security-policies import sd-web-ui --file-name sd-web-ui-cloud-armor.yaml --file-format yaml
+   列出名为sd-web-ui的安全策略的应用的后端服务---重要--
+   gcloud compute backend-services list  --format="value(name)"  # 所有的后端服务，包含没有安全策略的
+   gcloud compute backend-services list --filter="securityPolicy:*" --format="value(name)"   # 所有的安全策略
+   gcloud compute backend-services  list  --filter="securityPolicy:sd-web-ui" --format="value(name)" #名为sd-web-ui的安全策略的应用的后端服务
+   将安全政策附加到后端服务--(重要)----
+#    gcloud compute backend-services update k8s1-b0fd1c67-default-ubuntu-service-test-8080-1572ebb0 --security-policy sd-web-ui --region us-central1
+   gcloud compute backend-services update k8s1-b0fd1c67-default-ubuntu-service-test-8080-1572ebb0 --security-policy sd-web-ui --global
+   在一行命令里面完成上面的两个命令(过一两分钟生效)---
+   gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'ubuntu'" --format="value(name)") --security-policy=sd-web-ui --global  #黄色后缀#"--
+   将后端服务器移除安全策略(所有ip都能访问ingerss)(过一两分钟生效)----
+   gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'ubuntu'" --format="value(name)") --security-policy="" --global   #黄色后缀#"--
+   ------------
+
+
+
+
+
+
+结束语:------
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+调试pod(我自己创建的ubuntu镜像):
+# (直接用kubectl命令的，需要执行第四步获取kubectl的凭证)
+cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes
+kubectl apply -f deployment_ubuntu_test.yaml   # 创建ubuntu调试镜像，带显卡的ubuntu(调试打包好的镜像)： kubectl apply -f deployment_ubuntu_sd_test.yaml --- 重要，调试打包好的镜像
+kubectl apply -f ingress_lb_ubuntu_test.yaml # 或者 kubectl apply -f service_lb_ubuntu_test.yaml， service无法加入Cloud Armor里面
+# 进入pod进行测试----从s3同步，可以参考笔记[stablediffusionwebui安装过程之谷歌云]
+kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
+# # /root/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram --share # 这样在ubuntu的pod启动,可以直接访问web页面
+
+ubuntu安装gcloud和kubectl永久凭证环境
+参考：https://cloud.google.com/sdk/gcloud/reference/container/clusters/get-credentials?authuser=4&_ga=2.33786338.-2129578248.1678436318&_gac=1.58943199.1681464699.CjwKCAjw8-OhBhB5EiwADyoY1VuP0boiVxHwsrV-igzmlViwrIJZdv-rwX0cUE6GZiMto_UenxkrUBoCKUYQAvD_BwE
+************************************************************
+---ubuntu安装gcloud
+apt update 
+apt install wget vim 
+https://cloud.google.com/sdk/docs/downloads-versioned-archives?authuser=4&hl=zh-cn  使用归档安装
+https://cloud.google.com/sdk/docs/properties?authuser=4&hl=zh-cn   gcloud属性设置
+安装完成记得 source ~/.bashrc
+记得安装插件（不要在gcloud安装目录执行这个命令） gcloud components install gke-gcloud-auth-plugin
+---ubuntu的pod内安装kubectl
+https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/   参考
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --short
+gcp设置服务账号秘钥: (服务账号的秘钥我保存在talefun笔记里面的---具体有创建服务账号的信息)
+https://cloud.google.com/docs/authentication/provide-credentials-adc?authuser=4&hl=zh-cn#local-key
+export GOOGLE_APPLICATION_CREDENTIALS="/home/user/Downloads/服务账号的秘钥.json"  # 将服务账号的秘钥放到环境变量里面
+gcloud config set container/use_application_default_credentials true  # 执行第四步之前需要执行这个命令，保证凭证是永久的
+gcloud config list  # 看看是否生效
+rm ~/.kube/config  # 删除原来的凭证
+然后执行第四步生成kubectl凭证
+然后就可以快乐的在ubuntu使用永久不过期的kubectl命令了
+---
+************************************************************
+
+---
+# 删除pod
+kubectl delete pod ubuntu-2204
+-----其他pod日志查看-----
+kubectl   logs -n default   -f  sd-deployment-sd15-757c776dc5-86wjr   --tail=100 
+kubectl   logs -n default   -f  sd-deployment-sd15-757c776dc5-t8k8j	  --tail=100 
+----不用看pod的name的方法(输入pod或者deployment的大概的名称)-----
+kubectl   logs -n default   -f  $(kubectl get pods  -n default  |grep stable-diffusion-sd15 |awk '{print $1}' |awk NR==1)   --tail=100  # 进入第一个pod查看日志
+kubectl   logs -n default   -f  $(kubectl get pods  -n default  |grep stable-diffusion-sd15 |awk '{print $1}' |awk NR==2)  --tail=100 # 进入第二个pod查看日志
+-------------
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
