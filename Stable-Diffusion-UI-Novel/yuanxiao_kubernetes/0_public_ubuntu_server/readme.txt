@@ -1,6 +1,6 @@
 vsftpd的虚拟用户配置参考笔记【vsftp配置虚拟用户访问】
 
-
+https://blog.csdn.net/weixin_45444133/article/details/119203342  参考这个k8s部署
 
 
 
