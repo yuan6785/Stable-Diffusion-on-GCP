@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubuntu-2204-service
+spec:
+  selector:
+    app: ubuntu-2204
+  ports:
+    - name: ftp
+      protocol: TCP
+      port: 21
+      targetPort: 21
+    - name: passive-ports
+      protocol: TCP
+      port: 20000-20045
+      targetPort: 20000-20045
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ubuntu-2204-ingress
+spec:
+  rules:
+    # - host: vsftpd.example.com # 将此值更改为您的域名
+    - host:
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ubuntu-2204-service
+                port:
+                  name: ftp 
