@@ -1,0 +1,4 @@
+kubectl apply -f 0_public_ubuntu_server/deployment_ubuntu_test.yaml 
+
+
+kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
