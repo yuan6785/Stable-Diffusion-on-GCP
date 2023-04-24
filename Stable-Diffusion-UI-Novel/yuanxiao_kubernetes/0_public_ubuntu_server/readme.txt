@@ -4,56 +4,15 @@ https://blog.csdn.net/weixin_45444133/article/details/119203342  参考这个k8s
 
 
 
-您可以通过以下步骤在 GKE 上创建 Service 和 Ingress 来公开 vsftpd：
-
-    创建一个 Kubernetes Service，该服务将暴露 vsftpd Pod 的端口。可以使用以下 YAML 文件创建一个 Service：
-
-yaml
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: vsftpd-service
-spec:
-  selector:
-    app: vsftpd
-  ports:
-    - name: ftp
-      protocol: TCP
-      port: 21
-      targetPort: 21
-    - name: passive-ports
-      protocol: TCP
-      port: 20000-20045
-      targetPort: 20000-20045
-  type: ClusterIP
-
-    创建一个 Kubernetes Ingress，该 Ingress 将将外部流量路由到该 Service。可以使用以下 YAML 文件创建一个 Ingress：
-
-yaml
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: vsftpd-ingress
-spec:
-  rules:
-    - host: vsftpd.example.com # 将此值更改为您的域名
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vsftpd-service
-                port:
-                  name: ftp
-
-    部署和启动 Service 和 Ingress：
-
-ruby
-
-$ kubectl apply -f vsftpd-service.yaml
-$ kubectl apply -f vsftpd-ingress.yaml
-
-这将创建一个 Service 和 Ingress，以公开 vsftpd Pod 的端口。在 Ingress 创建后，您需要将 vsftpd.example.com 添加到您的 DNS 服务器中，并使用 ftp://vsftpd.example.com 连接到 vsftpd 服务器。
+执行./install_vsftp.sh后
+手动的启动vsftp服务
+-------
+进入到ubuntu的pod中
+修改/etc/vsftpd.conf
+加入负载均衡的ip地址为---------------这一步极为重要，否则被动模式下，客户端无法连接到pod中的ftp服务
+pasv_address=负载均衡外网地址
+-------
+ps -ef|grep vsftpd|grep -v grep|awk '{print $2}'|xargs kill -9
+# 启动vsftp
+nohup /usr/sbin/vsftpd /etc/vsftpd.conf &
+--------

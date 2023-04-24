@@ -1,99 +1,157 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ubuntu-2204-service
+# spec:
+#   selector:
+#     app: ubuntu-2204
+#   ports:
+#     - name: ftp
+#       protocol: TCP
+#       port: 21
+#       targetPort: 21
+#     - name: passive-ports-20000
+#       protocol: TCP
+#       port: 20000
+#       targetPort: 20000
+#     - name: passive-ports-20001
+#       protocol: TCP
+#       port: 20001
+#       targetPort: 20001
+#     - name: passive-ports-20002
+#       protocol: TCP
+#       port: 20002
+#       targetPort: 20002
+#     - name: passive-ports-20003
+#       protocol: TCP
+#       port: 20003
+#       targetPort: 20003
+#   type: ClusterIP
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: ubuntu-2204-networkpolicy
+#   namespace: default
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app: ubuntu-2204
+#   policyTypes:
+#     - Ingress
+#     - Egress
+#   ingress:
+#     - from:
+#         - podSelector: {}
+#         - ipBlock:
+#             cidr: 0.0.0.0/0
+#       ports:
+#         - protocol: TCP
+#           port: 21
+#         # - protocol: TCP
+#         #   port: 30000
+#         #   endPort: 30003
+#         - protocol: TCP
+#           port: 30000
+#         - protocol: TCP
+#           port: 30001
+#         - protocol: TCP
+#           port: 30002
+#         - protocol: TCP
+#           port: 30003
+  
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ubuntu-2204-configmap
+  namespace: default
+data:
+  21: "ubuntu-2204-service:21"
+  30000: "ubuntu-2204-service:30000"
+  30001: "ubuntu-2204-service:30001"
+  30002: "ubuntu-2204-service:30002"
+  30003: "ubuntu-2204-service:30003"
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: ubuntu-2204-service
+  namespace: default
+  labels:
+    app.kubernetes.io/name: ubuntu-2204-service
+    app.kubernetes.io/part-of: ubuntu-2204-service
 spec:
-  selector:
-    app: ubuntu-2204
+  type: LoadBalancer
   ports:
     - name: ftp
-      protocol: TCP
       port: 21
       targetPort: 21
-    # - name: passive-ports
-    #   protocol: TCP
-    #   port: 20000-20045
-    #   targetPort: 20000-20045
-    - name: passive-ports-20000
       protocol: TCP
-      port: 20000
-      targetPort: 20000
-    - name: passive-ports-20001
+    - name: passive-30000
+      port: 30000
+      targetPort: 30000
       protocol: TCP
-      port: 20001
-      targetPort: 20001
-    - name: passive-ports-20002
+    - name: passive-30001
+      port: 30001
+      targetPort: 30001
       protocol: TCP
-      port: 20002
-      targetPort: 20002
-    - name: passive-ports-20003
+    - name: passive-30002
+      port: 30002
+      targetPort: 30002
       protocol: TCP
-      port: 20003
-      targetPort: 20003
-    - name: passive-ports-20004
+    - name: passive-30003
+      port: 30003
+      targetPort: 30003
       protocol: TCP
-      port: 20004
-      targetPort: 20004
-    - name: passive-ports-20005
-      protocol: TCP
-      port: 20005
-      targetPort: 20005
-    - name: passive-ports-20006
-      protocol: TCP
-      port: 20006
-      targetPort: 20006
-    - name: passive-ports-20007
-      protocol: TCP
-      port: 20007
-      targetPort: 20007
-    - name: passive-ports-20008
-      protocol: TCP
-      port: 20008
-      targetPort: 20008
-    - name: passive-ports-20009
-      protocol: TCP
-      port: 20009
-      targetPort: 20009
-    - name: passive-ports-20010
-      protocol: TCP
-      port: 20010
-      targetPort: 20010
-    - name: passive-ports-20011
-      protocol: TCP
-      port: 20011
-      targetPort: 20011
-    - name: passive-ports-20012
-      protocol: TCP
-      port: 20012
-      targetPort: 20012
-    - name: passive-ports-20013
-      protocol: TCP
-      port: 20013
-      targetPort: 20013
-    - name: passive-ports-20014
-      protocol: TCP
-      port: 20014
-      targetPort: 20014
-    - name: passive-ports-20015
-      protocol: TCP
-      port: 20015
-      targetPort: 20015
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ubuntu-2204-ingress
-spec:
-  rules:
-    # - host: vsftpd.example.com # 将此值更改为您的域名
-    - host:
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: ubuntu-2204-service
-                port:
-                  name: ftp 
+  selector:
+    app: ubuntu-2204
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ubuntu-2204-ingress
+#   annotations:
+#     nginx.org/stream: "true"
+#     nginx.org/tcp-services: "21:ubuntu-2204-service,20000:ubuntu-2204-service,20001:ubuntu-2204-service,20002:ubuntu-2204-service,20003:ubuntu-2204-service"
+# spec:
+#   rules:
+#   - host: 
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: ubuntu-2204-service
+#             port:
+#               number: 21
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: ubuntu-2204-service
+#             port:
+#               number: 20000
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: ubuntu-2204-service
+#             port:
+#               number: 20001
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: ubuntu-2204-service
+#             port:
+#               number: 20002
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: ubuntu-2204-service
+#             port:
+#               number: 20003
+

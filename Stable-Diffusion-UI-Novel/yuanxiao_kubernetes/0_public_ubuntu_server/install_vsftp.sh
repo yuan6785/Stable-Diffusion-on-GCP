@@ -1,11 +1,12 @@
 apt update
-apt -y install vsftpd db-util
+apt -y install vsftpd db-util ftp
 mkdir -p /var/run/vsftpd/empty
 echo $(vsftpd -v)
 echo "local_enable=YES
 pam_service_name=vsftpd
 anonymous_enable=NO
 listen=YES
+listen_port=21
 listen_ipv6=NO
 guest_enable=YES
 guest_username=FTP
@@ -14,8 +15,8 @@ allow_writeable_chroot=YES
 chroot_local_user=YES
 secure_chroot_dir=/var/run/vsftpd/empty
 pasv_enable=YES
-pasv_min_port=20000
-pasv_max_port=20045">/etc/vsftpd.conf
+pasv_min_port=30000
+pasv_max_port=30003">/etc/vsftpd.conf
 mkdir -p /etc/vsftpd_yx
 cd  /etc/vsftpd_yx
 echo "playdayy

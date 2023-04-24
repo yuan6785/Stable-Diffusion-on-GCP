@@ -14,7 +14,9 @@ spec:
     - name: ubuntu-2204
       image: ubuntu:22.04
       command: ["bash","-c","while true;do date;sleep 86400;done"]
-      args: []
+      args:
+        - /nginx-ingress-controller
+        - --tcp-services-configmap=default/ubuntu-2204-configmap
       volumeMounts:
         - mountPath: "/yuanxiao_root_nfs"
           name: stable-diffusion-storage
