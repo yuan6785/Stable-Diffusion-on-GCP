@@ -2,18 +2,21 @@
     kubectl apply -f 0_public_ubuntu_server/deployment_ubuntu_test.yaml 
     kubectl apply -f 0_public_ubuntu_server/service_ingress_ubuntu_test.yaml
 
-将install_vsftp.sh里面的
-    pasv_address 修改为上面的service的ip公网地址
 
+    
 进入pod部署ftp:
     kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
     apt update
-    apt install wget vim
-    vi /root/install_vsftp.sh # 将install_vsftp.sh的内容复制过来
+    apt install -y wget vim
+    vi /root/install_vsftp.sh # 将install_vsftp.sh的内容复制过来 ，重要： pasv_address 修改为上面的service的ip公网地址
     chmod +x /root/install_vsftp.sh
-    cd /root
-    ./install_vsftp.sh  # 安装vsftp并添加默认用户
-
+    /root/install_vsftp.sh  # 安装vsftp并添加默认用户
+    # 启动vsftp
+    ps -ef|grep vsftpd|grep -v grep|awk '{print $2}'|xargs kill -9
+    nohup /usr/sbin/vsftpd /etc/vsftpd.conf &
+    # 测试
+    ftp 127.0.0.1即可
+    
 
 删除命令----
     kubectl delete  pod ubuntu-2204
