@@ -1,9 +1,21 @@
-kubectl apply -f 0_public_ubuntu_server/deployment_ubuntu_test.yaml 
-kubectl apply -f 0_public_ubuntu_server/service_ingress_ubuntu_test.yaml
+安装:
+    kubectl apply -f 0_public_ubuntu_server/deployment_ubuntu_test.yaml 
+    kubectl apply -f 0_public_ubuntu_server/service_ingress_ubuntu_test.yaml
 
-kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
+将install_vsftp.sh里面的
+    pasv_address 修改为上面的service的ip公网地址
+
+进入pod部署ftp:
+    kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
+    apt update
+    apt install wget vim
+    vi /root/install_vsftp.sh # 将install_vsftp.sh的内容复制过来
+    chmod +x /root/install_vsftp.sh
+    cd /root
+    ./install_vsftp.sh  # 安装vsftp并添加默认用户
 
 
-kubectl get NetworkPolicy
-kubectl describe networkpolicy ubuntu-2204-networkpolicy
-kubectl delete networkpolicy ubuntu-2204-networkpolicy
+删除命令----
+    kubectl delete  pod ubuntu-2204
+    kubectl delete  configmap ubuntu-2204-configmap
+    kubectl delete  service ubuntu-2204-service

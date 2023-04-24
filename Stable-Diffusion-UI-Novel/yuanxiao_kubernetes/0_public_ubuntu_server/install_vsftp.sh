@@ -15,6 +15,8 @@ allow_writeable_chroot=YES
 chroot_local_user=YES
 secure_chroot_dir=/var/run/vsftpd/empty
 pasv_enable=YES
+pasv_promiscuous=YES
+pasv_address=记得修改这里为上面的service的lb公网IP
 pasv_min_port=30000
 pasv_max_port=30003">/etc/vsftpd.conf
 mkdir -p /etc/vsftpd_yx
