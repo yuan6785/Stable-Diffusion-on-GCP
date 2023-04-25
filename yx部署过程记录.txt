@@ -64,6 +64,13 @@ gcloud beta container --project ${PROJECT_ID} clusters create ${GKE_CLUSTER_NAME
     --autoprovisioning-scopes=https://www.googleapis.com/auth/cloud-platform --no-enable-autoprovisioning-autorepair \
     --enable-autoprovisioning-autoupgrade --autoprovisioning-max-surge-upgrade 1 --autoprovisioning-max-unavailable-upgrade 0 \
     --enable-vertical-pod-autoscaling --enable-shielded-nodes
+
+--------我安装ingress-nginx-controller失败了(空了在研究)----
+可选： 安装ingress-nginx-controller （参考： https://cloud.google.com/community/tutorials/nginx-ingress-gke）
+helm install  nginx-ingress ingress-nginx/ingress-nginx --kubeconfig="/Users/yuanxiao/.kube/config"
+-------
+卸载ingress-nginx-controller： 
+helm uninstall nginx-ingress ingress-nginx/ingress-nginx --kubeconfig="/Users/yuanxiao/.kube/config"
 -----------------end---------------------创建gke集群-----------------
 ----
 -------------------创建好后，修改gke集群配置max-shared-clients-per-gpu的方法---新建节点池的方法(可选)-------------------------

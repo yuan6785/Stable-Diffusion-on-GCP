@@ -1,23 +1,56 @@
 ---
+# 这种可行，但是需要配置域名;本地hosts也支持，只需要vi /etc/hosts; 修改后source /etc/hosts即可
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sd-ingress
 spec:
   rules:
-  - http:
-      paths:
-      - path: /sd15
-        pathType: Prefix
-        backend:
-          service:
-            name: sd-service-sd15
-            port:
-              number: 8080
-      - path: /dreamworld
-        pathType: Prefix
-        backend:
-          service:
-            name: sd-service-dreamworld
-            port:
-              number: 8080
+  - host: sd15.sd.com
+    http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: sd-service-sd15
+              port:
+                number: 8080
+  - host: dreamworld.sd.com
+    http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: sd-service-dreamworld
+              port:
+                number: 8080
+--- 
+# # 这种也可行，而且不用配置域名---但必须安装nginx-ingress-controller, 但我在gke中安装这个失败了
+# 安装nginx-ingress-controller的文档: https://cloud.google.com/community/tutorials/nginx-ingress-gke
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: sd-ingress
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     nginx.ingress.kubernetes.io/rewrite-target: /$1
+# spec:
+#   rules:
+#   - http:
+#       paths:
+#       - path: /sd15(/|$)?
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: sd-service-sd15
+#             port:
+#               number: 8080
+#       - path: /dreamworld(/|$)?
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: sd-service-dreamworld
+#             port:
+#               number: 8080
