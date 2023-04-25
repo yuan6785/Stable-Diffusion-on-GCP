@@ -21,5 +21,26 @@ kubectl rollout restart deployment sd-deployment-sd15
 将deployment的ingress加入到Cloud Armor里面(当ingress创建完成后执行)------
 gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'sd15'" --format="value(name)") --security-policy=sd-web-ui --global  #黄色后缀#"--
 
-用于特殊测试的命令, 将将deployment的ingress安全策略移除(所有ip都可以访问)-----一般不用----------
+用于特殊测试的命令, 将deployment的ingress安全策略移除(所有ip都可以访问)-----一般不用----------
 gcloud compute backend-services update $(gcloud compute backend-services list --filter="name~'sd15'" --format="value(name)") --security-policy="" --global  #黄色后缀#"--
+
+
+
+修改yuanxiao_kubernetes/sd_public_ingress.yaml
+   加入下面一段然后执行
+   kubectl apply -f sd_public_ingress.yaml 
+   即可
+   -----
+   - host: sd15.sd.com
+    http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: sd-service-sd15
+              port:
+                number: 8080
+   -----
+   加入域名映射
+   或者本地hosts也支持，只需要vi /etc/hosts; 修改后source /etc/hosts即可
