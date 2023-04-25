@@ -152,11 +152,7 @@ if __name__ == "__main__":
         {
             "k8s_subdir_name": "dreamworld_v30",
             "sd_base_model_name": "dreamworld"
-        },
-        {
-            "k8s_subdir_name": "haha",
-            "sd_base_model_name": "haha"
-        },
+        }
     ]
     #
     for folder_info in folder_infos:
