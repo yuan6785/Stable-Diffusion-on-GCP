@@ -42,5 +42,5 @@ gcloud compute backend-services update $(gcloud compute backend-services list --
               port:
                 number: 8080
    -----
-   加入域名映射
+   加入域名映射; ingress的公网ip可以点进去看到
    或者本地hosts也支持，只需要vi /etc/hosts; 修改后source /etc/hosts即可

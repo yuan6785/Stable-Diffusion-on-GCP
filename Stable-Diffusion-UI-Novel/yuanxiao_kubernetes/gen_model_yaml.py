@@ -4,6 +4,7 @@
 每个sd基础模型对应一个yaml工程，对应一个k8s文件夹，对应一个deployment，有自己的公网访问ip
 """
 import os
+import yaml
 
 
 class GenTemplateDir(object):
@@ -31,7 +32,7 @@ class GenTemplateDir(object):
             content = content % {"sd_base_model_name": self.sd_base_model_name}
         with open(self.k8s_subdir_name + "/deployment.yaml", "w") as f:
             f.write(content)
-    
+
     def make_hpa_yaml(self):
         """
         生成deployment.yaml文件
@@ -42,7 +43,7 @@ class GenTemplateDir(object):
             content = content % {"sd_base_model_name": self.sd_base_model_name}
         with open(self.k8s_subdir_name + "/hpa.yaml", "w") as f:
             f.write(content)
-    
+
     def make_service_multi_yaml(self):
         """
         生成service.yaml和ingress文件
@@ -53,7 +54,7 @@ class GenTemplateDir(object):
             content = content % {"sd_base_model_name": self.sd_base_model_name}
         with open(self.k8s_subdir_name + "/service_inference_multi.yaml", "w") as f:
             f.write(content)
-    
+
     def make_service_signle_yaml(self):
         """
         生成service.yaml和ingress文件
@@ -64,7 +65,7 @@ class GenTemplateDir(object):
             content = content % {"sd_base_model_name": self.sd_base_model_name}
         with open(self.k8s_subdir_name + "/service_inference.yaml", "w") as f:
             f.write(content)
-    
+
     def make_cmds_txt(self):
         """
         生成service.yaml和ingress文件
@@ -72,10 +73,10 @@ class GenTemplateDir(object):
         file_path = "./0_public_templates/cmds.txt"
         with open(file_path, "r") as f:
             content = f.read()
-            content = content % {"sd_base_model_name": self.sd_base_model_name, "k8s_subdir_name": self.k8s_subdir_name}
+            content = content % {
+                "sd_base_model_name": self.sd_base_model_name, "k8s_subdir_name": self.k8s_subdir_name}
         with open(self.k8s_subdir_name + "/cmds.txt", "w") as f:
             f.write(content)
-    
 
     def make_model_k8s_folder(self):
         """
@@ -86,6 +87,42 @@ class GenTemplateDir(object):
             return True
         else:
             return False
+
+    # def make_model_public_ingress(self):
+    #     """
+    #     修改sd_public_ingress.yaml文件
+    #     """
+    #     file_path = "./sd_public_ingress.yaml"
+    #     # 使用yaml读取文件
+    #     with open(file_path, "r") as f:
+    #         content = yaml.load(f, Loader=yaml.FullLoader)
+    #     # 查找
+    #     for i in range(len(content["spec"]["rules"])):
+    #         if content["spec"]["rules"][i]["host"] == self.sd_base_model_name + ".sd.com":
+    #             print("ingress已存在,不再生成")
+    #             return
+    #     # 添加
+    #     content["spec"]["rules"].append({
+    #         "host": self.sd_base_model_name + ".sd.com",
+    #         "http": {
+    #             "paths": [
+    #                 {
+    #                     "path": "/",
+    #                     'pathType': 'Prefix',
+    #                     'backend': {
+    #                         'service': {
+    #                             'name': f'sd-service-{self.sd_base_model_name}', 
+    #                             'port': {'number': 8080}
+    #                         }
+    #                     }
+    #                 }
+    #             ]
+    #         }
+    #     })
+    #     # 写入
+    #     with open(file_path, "w") as f:
+    #         yaml.dump(content, f, default_flow_style=False)
+        
 
     def make_all(self):
         """
@@ -99,6 +136,7 @@ class GenTemplateDir(object):
             self.make_service_multi_yaml()
             self.make_service_signle_yaml()  # 这个不用, 生成出来仅供参考
             self.make_cmds_txt()
+            # self.make_model_public_ingress()
 
 
 if __name__ == "__main__":
@@ -114,7 +152,11 @@ if __name__ == "__main__":
         {
             "k8s_subdir_name": "dreamworld_v30",
             "sd_base_model_name": "dreamworld"
-        }
+        },
+        {
+            "k8s_subdir_name": "haha",
+            "sd_base_model_name": "haha"
+        },
     ]
     #
     for folder_info in folder_infos:
