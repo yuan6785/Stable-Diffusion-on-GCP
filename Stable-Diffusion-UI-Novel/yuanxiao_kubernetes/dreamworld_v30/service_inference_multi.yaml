@@ -26,14 +26,14 @@ spec:
     app: sd-dreamworld   # change_other_model--这里注意是deployment的label
   # type: NodePort
   type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: sd-ingress-dreamworld  # change_other_model
-spec:
-  defaultBackend:
-    service:
-      name: sd-service-dreamworld  # change_other_model
-      port:
-        number: 8080
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: sd-ingress-dreamworld  # change_other_model
+# spec:
+#   defaultBackend:
+#     service:
+#       name: sd-service-dreamworld  # change_other_model
+#       port:
+#         number: 8080

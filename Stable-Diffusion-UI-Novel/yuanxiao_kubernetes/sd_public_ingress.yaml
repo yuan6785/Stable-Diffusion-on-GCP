@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sd-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /sd15
+        pathType: Prefix
+        backend:
+          service:
+            name: sd-service-sd15
+            port:
+              number: 8080
+      - path: /dreamworld
+        pathType: Prefix
+        backend:
+          service:
+            name: sd-service-dreamworld
+            port:
+              number: 8080
