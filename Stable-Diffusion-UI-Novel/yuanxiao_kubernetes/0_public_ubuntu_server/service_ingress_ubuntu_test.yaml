@@ -1,17 +1,5 @@
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ubuntu-2204-configmap
-  namespace: default
-data:
-  21: "ubuntu-2204-service:21"
-  30000: "ubuntu-2204-service:30000"
-  30001: "ubuntu-2204-service:30001"
-  30002: "ubuntu-2204-service:30002"
-  30003: "ubuntu-2204-service:30003"
----
-apiVersion: v1
 kind: Service
 metadata:
   name: ubuntu-2204-service
