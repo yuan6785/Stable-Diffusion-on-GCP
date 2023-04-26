@@ -1,3 +1,4 @@
+# 这种可行，但是需要配置域名,加入泛域名解析即可*.sd这样的； 参考西部数码泛域名配置
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
