@@ -39,6 +39,7 @@ runuser FTP -s /bin/bash -c 'mkdir -p /home/FTP/playdayy&&echo "1" > /home/FTP/p
 echo "local_root=/home/FTP/playdayy
 write_enable=YES
 anon_upload_enable=YES
+download_enable=NO
 anon_mkdir_write_enable=NO
 anon_other_write_enable=NO
 anon_umask=000">/etc/vsftpd_yx/vuser_conf/playdayy
