@@ -26,7 +26,15 @@ spec:
               name: sd-service-dreamworld
               port:
                 number: 8080
+----
+
+
+---- 还有一种，直接用nginx反向代理重写路径 
+# 参考 0_public_nginx
+
+
 --- 
+
 # # 这种也可行，而且不用配置域名---但必须安装nginx-ingress-controller, 但我在gke中安装这个失败了
 # 安装nginx-ingress-controller的文档: https://cloud.google.com/community/tutorials/nginx-ingress-gke
 # apiVersion: networking.k8s.io/v1
