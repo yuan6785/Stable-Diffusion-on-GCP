@@ -1,5 +1,5 @@
 ---
-# 这种可行，但是需要配置域名;本地hosts也支持，只需要vi /etc/hosts; 修改后source /etc/hosts即可
+# 这种可行，但是需要配置域名,加入泛域名解析即可*.sd这样的;本地hosts也支持，但不支持泛域名 ，只需要vi /etc/hosts; 修改后source /etc/hosts即可
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

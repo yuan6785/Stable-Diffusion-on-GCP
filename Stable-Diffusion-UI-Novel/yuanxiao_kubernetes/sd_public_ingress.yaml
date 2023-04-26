@@ -4,7 +4,7 @@ metadata:
   name: sd-ingress
 spec:
   rules:
-  - host: sd15.sd.com
+  - host: sd15.sd.163py.com
     http:
       paths:
       - backend:
@@ -14,7 +14,7 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
-  - host: dreamworld.sd.com
+  - host: dreamworld.sd.163py.com
     http:
       paths:
       - backend:
