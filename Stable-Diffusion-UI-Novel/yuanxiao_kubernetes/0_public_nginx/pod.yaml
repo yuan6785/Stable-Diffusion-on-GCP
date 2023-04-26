@@ -62,6 +62,9 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: sd-nginx
+  namespace: default  # 如果不是这个命名空间,则修改
+  labels:
+    app: sd-nginx # 标签
 spec:
   containers:
   - name: sd-nginx

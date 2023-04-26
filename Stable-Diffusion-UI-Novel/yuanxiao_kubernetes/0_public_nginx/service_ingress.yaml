@@ -4,8 +4,8 @@ metadata:
   name: sd-nginx-service
 spec:
   selector:
-    # app: sd-nginx # 用于label
-    name: sd-nginx # 用于pod的name
+    app: sd-nginx # 用于label
+    # name: sd-nginx # 用于pod的name
   ports:
   - name: http
     port: 8080
