@@ -67,8 +67,6 @@ spec:
   - name: sd-nginx
     # image: k8s.gcr.io/nginx-slim:0.8
     image: nginx:1.24.0
-    ports:
-    - containerPort: 8080
     volumeMounts:
     - name: nginx-conf
       mountPath: /etc/nginx/conf.d
