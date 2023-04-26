@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sd-nginx-service
+spec:
+  selector:
+    app: sd-nginx
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sd-nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: 
+    http:
+      paths:
+      - path: /sd15(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              name: http
+        # 如果需要配置TLS，取消以下注释并修改相应内容
+        #tls:
+        #- hosts:
+        #  - example.com
+        #  secretName: tls-secret
+      - path: /dreamworld(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              name: http

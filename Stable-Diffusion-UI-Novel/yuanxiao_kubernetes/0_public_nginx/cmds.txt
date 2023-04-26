@@ -1,0 +1,10 @@
+全部创建命令-----
+kubectl apply -f  0_public_nginx/pod.yaml
+kubectl apply -f  0_public_nginx/service_ingress.yaml
+
+
+删除命令----
+kubectl delete  pod sd-nginx
+kubectl delete  sd-nginx-configmap
+kubectl delete  service sd-nginx-service
+kubectl delete  ingress sd-nginx-ingress
