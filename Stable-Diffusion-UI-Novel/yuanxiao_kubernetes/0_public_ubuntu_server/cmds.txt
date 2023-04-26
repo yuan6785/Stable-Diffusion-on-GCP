@@ -15,7 +15,7 @@
     ps -ef|grep vsftpd|grep -v grep|awk '{print $2}'|xargs kill -9
     nohup /usr/sbin/vsftpd /etc/vsftpd.conf &
     # 测试
-    ftp 127.0.0.1即可
+    ftp 127.0.0.1 即可
 
 ftp的目录mount:
     1
