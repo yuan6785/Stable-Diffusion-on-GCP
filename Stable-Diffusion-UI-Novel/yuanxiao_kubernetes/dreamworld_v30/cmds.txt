@@ -31,7 +31,7 @@ gcloud compute backend-services update $(gcloud compute backend-services list --
    kubectl apply -f sd_public_ingress.yaml 
    即可
    -----
-   - host: dreamworld.sd.com
+   - host: dreamworld.sd.163py.com
     http:
         paths:
         - path: /
