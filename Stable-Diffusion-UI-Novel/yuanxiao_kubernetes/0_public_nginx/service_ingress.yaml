@@ -21,7 +21,7 @@ spec:
   - host: 
     http:
       paths:
-      - path: /sd15/*
+      - path: /sd15
         pathType: Prefix
         backend:
           service:
@@ -33,7 +33,7 @@ spec:
         #- hosts:
         #  - example.com
         #  secretName: tls-secret
-      - path: /dreamworld/*
+      - path: /dreamworld
         pathType: Prefix
         backend:
           service:
