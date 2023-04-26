@@ -7,4 +7,5 @@ kubectl apply -f  0_public_nginx/service_ingress.yaml
 kubectl delete  pod sd-nginx
 kubectl delete  sd-nginx-configmap
 kubectl delete  service sd-nginx-service
+kubectl delete  configmap sd-nginx-configmap
 kubectl delete  ingress sd-nginx-ingress
