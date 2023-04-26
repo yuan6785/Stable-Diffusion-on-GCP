@@ -4,6 +4,10 @@ kind: ConfigMap
 metadata:
   name: sd-nginx-configmap
 data:
+  index_html.conf: |
+    <html>
+    yx1111
+    </html>
   nginx-config.conf: |
     upstream proxy_sdwebui_sd15
     {
@@ -17,6 +21,9 @@ data:
     {
       listen 8080;
       server_name .*;  # 这个特别重要，如果用ip访问，需要改为ip，如果是域名访问需要修改为域名
+
+
+
       location /sd15
       {
         proxy_pass http://proxy_sdwebui_sd15;
@@ -73,6 +80,8 @@ spec:
     volumeMounts:
     - name: nginx-conf
       mountPath: /etc/nginx/conf.d
+    - name: nginx-index-html
+      mountPath: /etc/nginx/html
   volumes:
   - name: nginx-conf
     configMap:
@@ -80,4 +89,11 @@ spec:
       items:
       - key: nginx-config.conf
         path: nginx.conf
+  - name: nginx-index-html
+    configMap:
+      name: sd-nginx-configmap
+      items:
+      - key: index_html.conf
+        path: index.html
+      
 
