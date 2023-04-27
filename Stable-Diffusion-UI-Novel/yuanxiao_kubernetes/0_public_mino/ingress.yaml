@@ -1,25 +1,31 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: sd-minio-backendconfig
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    timeoutSec: 20
+    healthyThreshold: 5
+    unhealthyThreshold: 5
+    requestPath: /minio/health/live
+    port: 9000   # 指定要用于健康检查的端口
+
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sd-minio-ingress
+  annotations:
+    # 配置 Ingress 不进行健康检查
+    # cloud.google.com/load-balancer-healthcheck: "disable"
+    # cloud.google.com/neg: '{"ingress": true}'
+    # 自定义健康检查
+    networking.gke.io/backend-config: '{"default": "sd-minio-backendconfig"}'
 spec:
   rules:
-  # - host: minio.api.com
-  #   http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         service:
-  #           name: my-release-minio
-  #           port:
-  #             name: minio-api
-  #       # 如果需要配置TLS，取消以下注释并修改相应内容
-  #       #tls:
-  #       #- hosts:
-  #       #  - example.com
-  #       #  secretName: tls-secret
-  - host: minio.console.com
+  # 跑成功--
+  - host:
     http:
       paths:
       - path: /
@@ -29,3 +35,10 @@ spec:
             name: my-release-minio
             port:
               name: minio-console
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: my-release-minio
+            port:
+              name: minio-api

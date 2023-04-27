@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    cloud.google.com/neg-status: '{"network_endpoint_groups":{"9000":"k8s1-b0fd1c67-default-my-release-minio-9000-0bb4754f","9001":"k8s1-b0fd1c67-default-my-release-minio-9001-d90750e8"},"zones":["us-central1-b","us-central1-c","us-central1-f"]}'
+    meta.helm.sh/release-name: my-release
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-04-27T06:51:51Z"
+  labels:
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-12.4.1
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    manager: Go-http-client
+    operation: Update
+    time: "2023-04-27T06:51:51Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:cloud.google.com/neg-status: {}
+    manager: glbc
+    operation: Update
+    subresource: status
+    time: "2023-04-27T07:41:52Z"
+  name: my-release-minio
+  namespace: default
+  resourceVersion: "15608170"
+  uid: dc259112-8441-402e-ab0c-23bcde3c2051
+spec:
+  clusterIP: 10.40.7.51
+  clusterIPs:
+  - 10.40.7.51
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: minio-api
+    port: 9000
+    protocol: TCP
+    targetPort: minio-api
+  - name: minio-console
+    port: 9001
+    protocol: TCP
+    targetPort: minio-console
+  selector:
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/name: minio
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

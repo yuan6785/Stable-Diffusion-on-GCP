@@ -277,6 +277,12 @@ deploy完后，可以把模型放到nfs对应的路径下。
 cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes
 kubectl apply -f nfs_pvc.yaml
 kubectl apply -f nfs_pv.yaml
+# 重要: vol1需要用ubuntu镜像挂载进去，修改根目录权限为777, 否则非root用户使用pvc会报权限错误，例如minio资源（root用户可以忽略）
+# kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
+#------------非常重要-----
+# 例如: chmod -Rf 777 yuanxiao_root_nfs/  # 注，原来是777
+# 但是别用--set volumePermissions.enabled=true, 虽然也生效，但是会影响其他的pod使用vol1这个pv, 因为把目录权限修改了, 会修改为1001:1001
+# 例如: drwxr-xr-x   5 1001 1001 4.0K Apr 27 10:02 yuanxiao_root_nfs
 
 ------(下面部分自文件夹用gen_model_yaml.py生成，下面我虽然分开执行和讲的但是在生成的subfoler里面cmds.txt里面有连续执行命令，熟悉后执行这个即可)-------------
 ###################################################################
