@@ -40,10 +40,12 @@ helm install my-release bitnami/minio --version 12.4.1 \
 status:
   loadBalancer: {}
 ----为:
-  type: loadBalancer
+  type: LoadBalancer
 ----
+执行 kubectl apply -f 0_public_mino/service.yaml
 然后访问外网ip:9001即可，非常哇塞
 ##### 
+
 
 
 获取登录用户名和密码(重新部署需要自己生成):

@@ -5,57 +5,17 @@ metadata:
     cloud.google.com/neg: '{"ingress":true}'
     meta.helm.sh/release-name: my-release
     meta.helm.sh/release-namespace: default
-  creationTimestamp: "2023-04-27T11:23:10Z"
   labels:
     app.kubernetes.io/instance: my-release
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: minio
     helm.sh/chart: minio-12.4.1
-  managedFields:
-  - apiVersion: v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:meta.helm.sh/release-name: {}
-          f:meta.helm.sh/release-namespace: {}
-        f:labels:
-          .: {}
-          f:app.kubernetes.io/instance: {}
-          f:app.kubernetes.io/managed-by: {}
-          f:app.kubernetes.io/name: {}
-          f:helm.sh/chart: {}
-      f:spec:
-        f:internalTrafficPolicy: {}
-        f:ports:
-          .: {}
-          k:{"port":9000,"protocol":"TCP"}:
-            .: {}
-            f:name: {}
-            f:port: {}
-            f:protocol: {}
-            f:targetPort: {}
-          k:{"port":9001,"protocol":"TCP"}:
-            .: {}
-            f:name: {}
-            f:port: {}
-            f:protocol: {}
-            f:targetPort: {}
-        f:selector: {}
-        f:sessionAffinity: {}
-        f:type: {}
-    manager: Go-http-client
-    operation: Update
-    time: "2023-04-27T11:23:10Z"
   name: my-release-minio
   namespace: default
-  resourceVersion: "15741724"
-  uid: 413c5865-c48d-41a8-9e58-21ebfb3ac345
 spec:
-  clusterIP: 10.40.13.124
+  clusterIP: 10.40.1.192
   clusterIPs:
-  - 10.40.13.124
+  - 10.40.1.192
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
@@ -73,5 +33,4 @@ spec:
     app.kubernetes.io/instance: my-release
     app.kubernetes.io/name: minio
   sessionAffinity: None
-  type: loadBalancer
-
+  type: LoadBalancer
