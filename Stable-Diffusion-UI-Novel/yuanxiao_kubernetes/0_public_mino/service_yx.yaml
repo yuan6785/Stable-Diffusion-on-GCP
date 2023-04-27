@@ -13,9 +13,6 @@ metadata:
   name: my-release-minio
   namespace: default
 spec:
-  clusterIP: 10.40.1.192
-  clusterIPs:
-  - 10.40.1.192
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4

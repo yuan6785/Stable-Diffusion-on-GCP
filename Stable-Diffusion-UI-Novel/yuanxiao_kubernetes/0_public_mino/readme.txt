@@ -32,19 +32,27 @@ helm install my-release bitnami/minio --version 12.4.1 \
   --set imagePullPolicy=Always 
 
 
-# 重要--------到gke下载my-release-minio这个service的yaml修改为service.yaml
+# 重要--------
 #####
-修改最后一部分
-----
-  type: ClusterIP
-status:
-  loadBalancer: {}
-----为:
-  type: LoadBalancer
-----
-执行 kubectl apply -f 0_public_mino/service.yaml
-然后访问外网ip:9001即可，非常哇塞
-##### 
+两种方式暴露服务到公网:
+A.  直接执行(不用修改service_yx.yaml,我已经优化过了)
+    kubectl delete service my-release-minio   # 这一步可选
+    kubectl apply -f 0_public_mino/service_yx.yaml
+
+
+B.  到gke下载my-release-minio这个service的yaml修改为service.yaml
+    修改最后一部分
+    ----
+    type: ClusterIP
+    status:
+    loadBalancer: {}
+    ----为:
+    type: LoadBalancer
+    ----
+    执行 kubectl apply -f 0_public_mino/service.yaml
+    然后访问外网ip:9001即可，非常哇塞
+    ##### 
+
 
 
 
@@ -53,7 +61,7 @@ kubectl get secret --namespace default my-release-minio -o jsonpath="{.data.root
 kubectl get secret --namespace default my-release-minio -o jsonpath="{.data.root-password}" | base64 -d
 -----
 admin
-7mw3LWJcoV
+FrJoPrFwi7
 
 登录ip:9001,用上面的密码和用户名登录即可
 
