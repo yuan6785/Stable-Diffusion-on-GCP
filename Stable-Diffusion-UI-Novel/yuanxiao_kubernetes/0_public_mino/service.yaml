@@ -3,10 +3,9 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
-    cloud.google.com/neg-status: '{"network_endpoint_groups":{"9000":"k8s1-b0fd1c67-default-my-release-minio-9000-0bb4754f","9001":"k8s1-b0fd1c67-default-my-release-minio-9001-d90750e8"},"zones":["us-central1-b","us-central1-c","us-central1-f"]}'
     meta.helm.sh/release-name: my-release
     meta.helm.sh/release-namespace: default
-  creationTimestamp: "2023-04-27T06:51:51Z"
+  creationTimestamp: "2023-04-27T11:23:10Z"
   labels:
     app.kubernetes.io/instance: my-release
     app.kubernetes.io/managed-by: Helm
@@ -15,27 +14,48 @@ metadata:
   managedFields:
   - apiVersion: v1
     fieldsType: FieldsV1
-    manager: Go-http-client
-    operation: Update
-    time: "2023-04-27T06:51:51Z"
-  - apiVersion: v1
-    fieldsType: FieldsV1
     fieldsV1:
       f:metadata:
         f:annotations:
-          f:cloud.google.com/neg-status: {}
-    manager: glbc
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/name: {}
+          f:helm.sh/chart: {}
+      f:spec:
+        f:internalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":9000,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":9001,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: Go-http-client
     operation: Update
-    subresource: status
-    time: "2023-04-27T07:41:52Z"
+    time: "2023-04-27T11:23:10Z"
   name: my-release-minio
   namespace: default
-  resourceVersion: "15608170"
-  uid: dc259112-8441-402e-ab0c-23bcde3c2051
+  resourceVersion: "15741724"
+  uid: 413c5865-c48d-41a8-9e58-21ebfb3ac345
 spec:
-  clusterIP: 10.40.7.51
+  clusterIP: 10.40.13.124
   clusterIPs:
-  - 10.40.7.51
+  - 10.40.13.124
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
@@ -53,6 +73,5 @@ spec:
     app.kubernetes.io/instance: my-release
     app.kubernetes.io/name: minio
   sessionAffinity: None
-  type: ClusterIP
-status:
-  loadBalancer: {}
+  type: loadBalancer
+

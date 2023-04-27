@@ -29,15 +29,51 @@ helm install my-release bitnami/minio --version 12.4.1 \
   --set persistence.accessModes=["ReadWriteMany"] \
   --set persistence.existingClaim=vol1 \
   --set persistence.mountPath=/data \
-  --set imagePullPolicy=Always \
-  --set provisioning.containerSecurityContext.runAsNonRoot=false \
-  --set containerSecurityContext.runAsNonRoot=false \
-  --set ingress.enabled=true \
-  --set ingress.hostname=web.minio.localhost \
-  --set apiIngress.enabled=true \
-  --set apiIngress.hostname=api.minio.localhost
+  --set imagePullPolicy=Always 
 
-自己创建ingress
+
+# 重要--------到gke下载my-release-minio这个service的yaml修改为service.yaml
+#####
+修改最后一部分
+----
+  type: ClusterIP
+status:
+  loadBalancer: {}
+----为:
+  type: loadBalancer
+----
+然后访问外网ip:9001即可，非常哇塞
+##### 
+
+
+获取登录用户名和密码(重新部署需要自己生成):
+kubectl get secret --namespace default my-release-minio -o jsonpath="{.data.root-user}" | base64 -d
+kubectl get secret --namespace default my-release-minio -o jsonpath="{.data.root-password}" | base64 -d
+-----
+admin
+7mw3LWJcoV
+
+登录ip:9001,用上面的密码和用户名登录即可
+
+
+
+卸载(一个命令即可):
+helm uninstall my-release
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------下面是废弃的仅供参考-------------------
+
+自己创建ingress----没有效果，因为是tcp协议------废弃，仅供失败参考
 kubectl apply -f ingress.yaml
 
 # 通过ingress访问
@@ -52,7 +88,7 @@ kubectl port-forward --namespace default svc/my-release-minio 9001:9001
         kubectl get secret --namespace default my-release-minio -o jsonpath="{.data.root-password}" | base64 -d
         -----
         admin
-        OiJbYoeJnI
+        7mw3LWJcoV
 
     # 加入用户信息
     kubectl run --namespace default my-release-minio-client \
@@ -65,7 +101,3 @@ kubectl port-forward --namespace default svc/my-release-minio 9001:9001
 
 
 
-卸载
-helm delete my-release
-kubectl delete ingerss sd-minio-ingress
-kubectl delete configmap sd-minio-backendconfig
