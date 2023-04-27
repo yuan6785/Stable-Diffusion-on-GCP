@@ -22,7 +22,7 @@ helm search repo bitnami/minio --versions
 # 例如: chmod -Rf 777 yuanxiao_root_nfs/  # 注，原来是777
 # 但是别用--set volumePermissions.enabled=true, 虽然也生效，但是会影响其他的pod使用vol1这个pv, 因为把目录权限修改了, 会修改为1001:1001
 # 例如: drwxr-xr-x   5 1001 1001 4.0K Apr 27 10:02 yuanxiao_root_nfs
-# 上面的vol权限不改也可以, 修改provisioning.containerSecurityContext.runAsNonRoot和containerSecurityContext.runAsNonRoot为false即可，用root执行minio也可以
+# 上面的vol权限不改, 修改provisioning.containerSecurityContext.runAsNonRoot和containerSecurityContext.runAsNonRoot为false测试也不行，还是得改vol的权限为777
 helm install my-release bitnami/minio --version 12.4.1 \
   --set persistence.enabled=true \
   --set persistence.storageClass="nfs" \
@@ -30,9 +30,9 @@ helm install my-release bitnami/minio --version 12.4.1 \
   --set persistence.existingClaim=vol1 \
   --set persistence.mountPath=/data \
   --set imagePullPolicy=Always \
-  --set ingress.enabled=true \
   --set provisioning.containerSecurityContext.runAsNonRoot=false \
   --set containerSecurityContext.runAsNonRoot=false \
+  --set ingress.enabled=true \
   --set ingress.hostname=web.minio.localhost \
   --set apiIngress.enabled=true \
   --set apiIngress.hostname=api.minio.localhost
