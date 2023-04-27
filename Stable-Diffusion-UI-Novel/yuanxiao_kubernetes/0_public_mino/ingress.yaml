@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sd-minio-ingress
+spec:
+  rules:
+  # - host: minio.api.com
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: my-release-minio
+  #           port:
+  #             name: minio-api
+  #       # 如果需要配置TLS，取消以下注释并修改相应内容
+  #       #tls:
+  #       #- hosts:
+  #       #  - example.com
+  #       #  secretName: tls-secret
+  - host: minio.console.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-release-minio
+            port:
+              name: minio-console
