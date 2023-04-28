@@ -23,13 +23,26 @@ helm search repo bitnami/minio --versions
 # 但是别用--set volumePermissions.enabled=true, 虽然也生效，但是会影响其他的pod使用vol1这个pv, 因为把目录权限修改了, 会修改为1001:1001
 # 例如: drwxr-xr-x   5 1001 1001 4.0K Apr 27 10:02 yuanxiao_root_nfs
 # 上面的vol权限不改, 修改provisioning.containerSecurityContext.runAsNonRoot和containerSecurityContext.runAsNonRoot为false测试也不行，还是得改vol的权限为777
+# 实际上如果有existingClaim参数(存在的pvc), storageClass和accessModes参数就不起作用了，因为已经有了pvc, 会直接使用pvc的配置，我这里写上去是为了方便看------重要----
 helm install my-release bitnami/minio --version 12.4.1 \
   --set persistence.enabled=true \
   --set persistence.storageClass="nfs" \
   --set persistence.accessModes=["ReadWriteMany"] \
   --set persistence.existingClaim=vol1 \
   --set persistence.mountPath=/data \
-  --set imagePullPolicy=Always 
+  --set imagePullPolicy=Always \
+  --set defaultBucket.encryption.enable=false \
+  --set defaultBucket.policy=""
+
+
+
+# 重要--------
+#####
+修改deployment挂载到nfs的目录路径--不要总是挂载到根目录--修改挂载的子目录(sdwebui,deployment_yx.yaml)权限为777
+直接执行(不用修改deployment_yx.yaml,我已经优化过了)
+kubectl delete deployment my-release-minio   # 这一步可选
+kubectl apply -f 0_public_mino/deployment_yx.yaml
+
 
 
 # 重要--------
