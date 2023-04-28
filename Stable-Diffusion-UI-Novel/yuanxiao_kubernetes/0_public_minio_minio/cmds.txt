@@ -1,6 +1,10 @@
 参考文档:
+https://hub.docker.com/r/minio/minio    # 非常重要-----各种服务器启动模式---
 /Users/yuanxiao/workspace/data_analysis/data_analysis/readme.txt
-https://hub.docker.com/r/minio/minio/tags
+#Erasure Coding和无Erasure Coding的模式
+https://blog.51cto.com/u_14625168/2508627
+https://blog.51cto.com/u_14625168/2509279   
+#end
 从RELEASE.2022-06-02T02-11-04Z开始，MinIO 为单节点单驱动器部署实施了零奇偶校验纠删码后端
 RELEASE.2022-05-26T05-48-41Z是最后一个支持单节点单驱动器部署的没有纠删码的版本
 
@@ -10,6 +14,9 @@ RELEASE.2022-05-26T05-48-41Z是最后一个支持单节点单驱动器部署的�
 文件系统存储的版本
 https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-single-node-single-drive.html#minio-snsd
 
+
+rm -rf /Users/yuanxiao/workspace/0tmp/minio_data
+mkdir /Users/yuanxiao/workspace/0tmp/minio_data
 
 本地mac测试老的minio(最后一个没有用Erasure Coding的版本, 文件存在物理系统的，没有分片存储)  docker运行命令:
     # 最重要的权限和物理机目录测试成功------
@@ -23,8 +30,8 @@ https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-si
     -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
     -d minio/minio:RELEASE.2022-05-26T05-48-41Z server /data --console-address ":9001"
 
-    
 本地mac测试最新minio  docker运行命令:
+
     # 运行在前端, 结束后自动删除容器
     docker run --rm -p 9000:9000 -p 9001:9001 \
     -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
@@ -34,3 +41,21 @@ https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-si
     docker run --rm -p 9000:9000 -p 9001:9001 \
     -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
     -d minio/minio:RELEASE.2023-04-20T17-56-55Z server /data --console-address ":9001"
+
+
+mac二进制下载的服务器版本:
+    使用以下命令在 macOS 上下载并运行独立的 MinIO 服务器。替换/data为您希望 MinIO 存储数据的驱动器或目录的路径。
+    mkdir ./data
+
+    wget https://dl.min.io/server/minio/release/darwin-amd64/minio.RELEASE.2023-04-20T17-56-55Z
+    chmod +x minio
+    ./minio -h  # 可以查看帮助
+    ./minio server minio_data
+    -----
+    最后一个支持真正物理文件系统的版本:
+    https://dl.min.io/server/minio/release/darwin-amd64/archive/minio.RELEASE.2022-05-26T05-48-41Z
+    chmod +x minio.RELEASE.2022-05-26T05-48-41Z
+    ./minio.RELEASE.2022-05-26T05-48-41Z server minio_data
+
+linux二进制下载版本：
+    https://dl.min.io/server/minio/release/linux-amd64/minio
