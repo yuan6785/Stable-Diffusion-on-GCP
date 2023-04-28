@@ -16,7 +16,8 @@ helm search repo bitnami/minio --versions
 安装
 # persistence.size 是一个可选参数，用于指定 MinIO 存储的容量。如果未指定，MinIO 将使用默认的存储大小
 # vol1 是一个已经存在的 PVC 名称，用于存储 MinIO 数据。如果未指定，MinIO 将使用默认的存储类
-# 参数参考 https://github.com/bitnami/charts/tree/main/bitnami/minio#parameters
+# 参数参考 https://github.com/bitnami/charts/tree/main/bitnami/minio#parameters   -----------  重要 -------
+# 环境变量参考  https://min.io/docs/minio/linux/reference/minio-server/minio-server.html#environment-variables  --- 重要
 # 重要: vol1需要用ubuntu镜像挂载进去，修改根目录权限为777, 否则会报权限错误------------非常重要-----
 # kubectl  exec -it   -n default $(kubectl get pods  -n default  |grep ubuntu |awk '{print $1}' |awk NR==1)   /bin/bash
 # 例如: chmod -Rf 777 yuanxiao_root_nfs/  # 注，原来是777
@@ -29,10 +30,7 @@ helm install my-release bitnami/minio --version 12.4.1 \
   --set persistence.storageClass="nfs" \
   --set persistence.accessModes=["ReadWriteMany"] \
   --set persistence.existingClaim=vol1 \
-  --set persistence.mountPath=/data \
-  --set imagePullPolicy=Always \
-  --set defaultBucket.encryption.enable=false \
-  --set defaultBucket.policy=""
+  --set persistence.mountPath=/data
 
 
 

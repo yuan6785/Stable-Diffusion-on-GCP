@@ -1,4 +1,5 @@
 # 环境变量参考： https://min.io/docs/minio/linux/reference/minio-server/minio-server.html#environment-variables
+# cmd: /opt/bitnami/minio/bin/minio server --certs-dir /certs --console-address :9001 --address :9000 /data
 apiVersion: apps/v1
 kind: Deployment
 metadata:
