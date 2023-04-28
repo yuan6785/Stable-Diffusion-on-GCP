@@ -1,14 +1,36 @@
 参考文档:
+/Users/yuanxiao/workspace/data_analysis/data_analysis/readme.txt
 https://hub.docker.com/r/minio/minio/tags
+从RELEASE.2022-06-02T02-11-04Z开始，MinIO 为单节点单驱动器部署实施了零奇偶校验纠删码后端
+RELEASE.2022-05-26T05-48-41Z是最后一个支持单节点单驱动器部署的没有纠删码的版本
 
 
-本地mac测试  docker运行命令:
-    # 运行在前端
-    docker run -p 9000:9000 -p 9001:9001 \
+默认用户名密码： minioadmin:minioadmin
+
+文件系统存储的版本
+https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-single-node-single-drive.html#minio-snsd
+
+
+本地mac测试老的minio(最后一个没有用Erasure Coding的版本, 文件存在物理系统的，没有分片存储)  docker运行命令:
+    # 最重要的权限和物理机目录测试成功------
+    # 运行在前端, 结束后自动删除容器
+    docker run --rm -p 9000:9000 -p 9001:9001 \
     -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
-    quay.io/minio/minio server /data --console-address ":9001"
+    minio/minio:RELEASE.2022-05-26T05-48-41Z server /data --console-address ":9001"
 
     # 运行在后台
-    docker run -p 9000:9000 -p 9001:9001 \
+    docker run --rm -p 9000:9000 -p 9001:9001 \
     -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
-    -d quay.io/minio/minio server /data --console-address ":9001"
+    -d minio/minio:RELEASE.2022-05-26T05-48-41Z server /data --console-address ":9001"
+
+    
+本地mac测试最新minio  docker运行命令:
+    # 运行在前端, 结束后自动删除容器
+    docker run --rm -p 9000:9000 -p 9001:9001 \
+    -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
+    minio/minio:RELEASE.2023-04-20T17-56-55Z server /data --console-address ":9001"
+
+    # 运行在后台
+    docker run --rm -p 9000:9000 -p 9001:9001 \
+    -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
+    -d minio/minio:RELEASE.2023-04-20T17-56-55Z server /data --console-address ":9001"

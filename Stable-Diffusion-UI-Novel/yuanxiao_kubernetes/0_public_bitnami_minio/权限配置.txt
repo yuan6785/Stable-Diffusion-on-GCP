@@ -51,17 +51,6 @@
             "Resource": [
                 "arn:aws:s3:::yxtest/*"
             ]
-        },
-        {
-            "Sid": "NoSharing",
-            "Effect": "Deny",
-            "Action": [
-                "s3:PutObjectAcl",
-                "s3:PutObjectVersionAcl"
-            ],
-            "Resource": [
-                "arn:aws:s3:::yxtest/*"
-            ]
         }
     ]
 }
