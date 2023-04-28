@@ -1,7 +1,5 @@
 文件管理系统
 可挂载nfs进行管理
-我感觉装错了，该装这个 https://hub.docker.com/r/minio/minio/tags
-我装的 https://hub.docker.com/r/bitnami/minio
 
 文档
 https://hub.docker.com/r/bitnami/minio

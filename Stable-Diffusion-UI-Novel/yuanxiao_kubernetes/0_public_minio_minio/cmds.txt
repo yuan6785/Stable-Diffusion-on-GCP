@@ -1,0 +1,14 @@
+参考文档:
+https://hub.docker.com/r/minio/minio/tags
+
+
+本地mac测试  docker运行命令:
+    # 运行在前端
+    docker run -p 9000:9000 -p 9001:9001 \
+    -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
+    quay.io/minio/minio server /data --console-address ":9001"
+
+    # 运行在后台
+    docker run -p 9000:9000 -p 9001:9001 \
+    -v /Users/yuanxiao/workspace/0tmp/minio_data:/data \
+    -d quay.io/minio/minio server /data --console-address ":9001"
