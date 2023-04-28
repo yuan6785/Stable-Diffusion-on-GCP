@@ -1,6 +1,7 @@
 文件管理系统
 可挂载nfs进行管理
-
+我感觉装错了，该装这个 https://hub.docker.com/r/minio/minio/tags
+我装的 https://hub.docker.com/r/bitnami/minio
 
 文档
 https://hub.docker.com/r/bitnami/minio
@@ -39,7 +40,7 @@ helm install my-release bitnami/minio --version 12.4.1 \
 修改deployment挂载到nfs的目录路径--不要总是挂载到根目录--修改挂载的子目录(sdwebui,deployment_yx.yaml)权限为777
 直接执行(不用修改deployment_yx.yaml,我已经优化过了)
 kubectl delete deployment my-release-minio   # 这一步可选
-kubectl apply -f 0_public_mino/deployment_yx.yaml
+kubectl apply -f 0_public_bitnami_minio/deployment_yx.yaml
 
 
 
@@ -48,7 +49,7 @@ kubectl apply -f 0_public_mino/deployment_yx.yaml
 两种方式暴露服务到公网:
 A.  直接执行(不用修改service_yx.yaml,我已经优化过了)
     kubectl delete service my-release-minio   # 这一步可选
-    kubectl apply -f 0_public_mino/service_yx.yaml
+    kubectl apply -f 0_public_bitnami_minio/service_yx.yaml
 
 
 B.  到gke下载my-release-minio这个service的yaml修改为service.yaml
@@ -60,7 +61,7 @@ B.  到gke下载my-release-minio这个service的yaml修改为service.yaml
     ----为:
     type: LoadBalancer
     ----
-    执行 kubectl apply -f 0_public_mino/service.yaml
+    执行 kubectl apply -f 0_public_bitnami_minio/service.yaml
     然后访问外网ip:9001即可，非常哇塞
     ##### 
 
