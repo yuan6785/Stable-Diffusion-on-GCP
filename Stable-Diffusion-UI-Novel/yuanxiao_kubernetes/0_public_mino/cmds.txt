@@ -72,6 +72,16 @@ helm uninstall my-release
 
 
 
+客户端命令行测试:
+   参考  https://min.io/docs/minio/macos/index.html
+   cd ~/workspace/0tmp
+   wget curl -O https://dl.min.io/client/mc/release/darwin-amd64/mc
+   chmod +x mc
+   ./mc config host add gke-minio http://34.121.213.190:9000/ "admin" "FrJoPrFwi7"   # 加入别名配置，这里是9000，不是9001
+   ./mc --help
+   ./mc ls gke-minio   # 列出所有的bucket
+   ./mc cp haha gke-minio/yxtest  # 复制文件到bucket
+
 
 
 
