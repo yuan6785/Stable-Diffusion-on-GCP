@@ -1,3 +1,4 @@
+// 权限参考 https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
 
 // 这个策略包括了以下几个部分：
 
@@ -7,6 +8,7 @@
 // 允许修改bucket yxtest中对象的ACL。
 // 禁止删除bucket yxtest中的对象。
 // 请注意，这个策略只适用于bucket yxtest中的文件，而不是整个bucket。如果您想要对整个bucket进行限制，请将Resource字段改为"arn:aws:s3:::yxtest"。
+
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -45,6 +47,17 @@
             "Effect": "Deny",
             "Action": [
                 "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::yxtest/*"
+            ]
+        },
+        {
+            "Sid": "NoSharing",
+            "Effect": "Deny",
+            "Action": [
+                "s3:PutObjectAcl",
+                "s3:PutObjectVersionAcl"
             ],
             "Resource": [
                 "arn:aws:s3:::yxtest/*"

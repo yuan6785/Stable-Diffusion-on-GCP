@@ -1,0 +1,5 @@
+1. share的链接不正确, 是localhost
+pod里面设置环境变量：
+MINIO_BROWSER_REDIRECT_URL=https://storage.example.com
+MINIO_SERVER_URL=https://s3.example.com
+CONSOLE_SECURE_TLS_REDIRECT="off"
