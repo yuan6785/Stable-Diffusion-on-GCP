@@ -12,4 +12,4 @@ Dockerfile.root.ancondapython.nginx.supervisor.yx ----超级重要(虽然没有�
 
 
 
-Dockerfile.aliyun.libo ----  这个是从Dockerfile.finally.yx修改而来，用于阿里云函数李波那边的部署
+aliyun_func_libo/Dockerfile.aliyun.libo ----  这个是从Dockerfile.finally.yx修改而来，用于阿里云函数李波那边的部署

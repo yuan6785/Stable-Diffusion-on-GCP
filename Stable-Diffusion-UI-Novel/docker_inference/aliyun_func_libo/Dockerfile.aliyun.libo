@@ -5,7 +5,7 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 # /usr/bin/supervisord -c /etc/supervisor.conf # 手动启动supervisor /usr/bin/supervisorctl stop all;kill pid  # 停止所有程序并杀掉supervisor进程
 RUN set -ex && \
     apt update && \
-    apt install -y wget git libglib2.0-dev && \
+    apt install -y wget git libglib2.0-dev libcairo2-dev libgl1-mesa-glx && \
     rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
@@ -20,6 +20,7 @@ RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-
 # /home/miniconda3/envs/sd_python310/bin/python -m pip install virtualenv 或者 /home/miniconda3/bin/conda install -n sd_python310 virtualenv
 # && /home/miniconda3/envs/sd_python310/bin/python  launch_gcp.py --skip-torch-cuda-test  \ 原来用这个，后来改为python -c的方式
 # 使用 --skip-torch-cuda-test, 因为cloudbuild.yaml的machineType是没有GPU的； 另一种思路，取消这个参数，但是cloudbuild.yaml的machineType改成有GPU的也可以尝试下；----可以用打好的镜像创建一个ubuntu的pod参考deployment_ubuntu_sd_test.yaml进行调试
+# 独立部署时， 如果出现安装gfpgan报错，可以先尝试安装/home/miniconda3/envs/sd_python310/bin/python -m pip install cython==0.29.34
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/miniconda3 \
     && /home/miniconda3/bin/conda init \
