@@ -59,3 +59,9 @@ mac二进制下载的服务器版本:
 
 linux二进制下载版本：
     https://dl.min.io/server/minio/release/linux-amd64/minio
+
+
+
+用其他配置启动:
+export MINIO_CONFIG_ENV_FILE=/etc/default/minio
+minio server --console-address :9090
