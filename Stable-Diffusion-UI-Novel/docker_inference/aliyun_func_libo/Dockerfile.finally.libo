@@ -2,14 +2,13 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 RUN set -ex && \
     apt update && \
-    apt install -y wget git libglib2.0-dev libcairo2-dev libgl1-mesa-glx && \
+    apt install -y wget git rsync libglib2.0-dev libcairo2-dev libgl1-mesa-glx && \
     rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
 
 # /share是李波挂载到nfs的目录，需要和李波确认
-WORKDIR /share/sdwebui_env
 #
 ARG CUDNN_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
@@ -20,5 +19,5 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT
 #
 EXPOSE 7860
 
-WORKDIR /home/stable-diffusion-webui
+WORKDIR /share/stable-diffusion-webui
 CMD ["/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
