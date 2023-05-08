@@ -22,3 +22,15 @@ cd /mnt/sdwebui_env/stable-diffusion-webui
 
 带gpu的ec2的启动命令--
 cd /mnt/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
+
+
+
+
+
+----本地打包镜像
+cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo
+docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 本地打包镜像
+----推送本地镜像到阿里云
+docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
+docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:[镜像版本号]
+docker tag [ImageId] registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:[镜像版本号]
