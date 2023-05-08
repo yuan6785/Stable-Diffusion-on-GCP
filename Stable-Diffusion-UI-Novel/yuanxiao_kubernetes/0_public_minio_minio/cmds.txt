@@ -4,6 +4,9 @@ https://hub.docker.com/r/minio/minio    # 非常重要-----各种服务器启动
 #Erasure Coding和无Erasure Coding的模式
 https://blog.51cto.com/u_14625168/2508627
 https://blog.51cto.com/u_14625168/2509279   
+管理你的部署:
+https://min.io/docs/minio/macos/administration/minio-console.html   
+https://min.io/docs/minio/linux/reference/minio-server/minio-server.html#envvar.MINIO_STORAGE_CLASS_STANDARD  各种配置选项
 #end
 从RELEASE.2022-06-02T02-11-04Z开始，MinIO 为单节点单驱动器部署实施了零奇偶校验纠删码后端
 RELEASE.2022-05-26T05-48-41Z是最后一个支持单节点单驱动器部署的没有纠删码的版本
@@ -50,7 +53,7 @@ mac二进制下载的服务器版本:
     wget https://dl.min.io/server/minio/release/darwin-amd64/minio.RELEASE.2023-04-20T17-56-55Z
     chmod +x minio
     ./minio -h  # 可以查看帮助
-    ./minio server minio_data
+    MINIO_STORAGE_CLASS_STANDARD=1&&./minio server minio_data
     -----
     最后一个支持真正物理文件系统的版本:
     https://dl.min.io/server/minio/release/darwin-amd64/archive/minio.RELEASE.2022-05-26T05-48-41Z
@@ -65,3 +68,4 @@ linux二进制下载版本：
 用其他配置启动:
 export MINIO_CONFIG_ENV_FILE=/etc/default/minio
 minio server --console-address :9090
+
