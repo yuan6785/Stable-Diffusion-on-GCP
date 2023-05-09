@@ -27,4 +27,5 @@ RUN ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusi
 EXPOSE 7860
 
 WORKDIR /home/stable-diffusion-webui
+# --ui-settings-file /home/stable-diffusion-webui/config.json
 CMD ["/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
