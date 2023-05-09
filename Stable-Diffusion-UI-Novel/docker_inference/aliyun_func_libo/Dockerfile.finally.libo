@@ -27,8 +27,10 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT
 #
 EXPOSE 7860
 
-WORKDIR /home
+
 # WORKDIR /share/sdwebui_env/stable-diffusion-webui
 # --ui-settings-file /home/stable-diffusion-webui/config.json
 # CMD ["/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
+#
+WORKDIR /home
 CMD /bin/sh -c "rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui && cd /home/stable-diffusion-webui && ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/ && ln -s /share/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/ && ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/ && ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ &&  ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/ && /share/sdwebui_env/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram"
