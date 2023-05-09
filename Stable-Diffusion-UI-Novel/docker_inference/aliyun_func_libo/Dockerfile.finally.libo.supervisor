@@ -1,3 +1,5 @@
+# 这个dockerfile的阿里云函数版本的内存需要24个G----阿里云对# CMD ./start.sh启动多个服务的支持不太好，所以放弃这种
+# 这种还需要登录一次云函数实例,进到镜像里面，才能启动起来启动命令
 FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 RUN set -ex && \

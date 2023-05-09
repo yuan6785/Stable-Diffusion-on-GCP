@@ -1,3 +1,4 @@
+# 这个dockerfile的阿里云函数版本的内存需要16个G
 FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 RUN set -ex && \
@@ -14,18 +15,18 @@ ARG CUDNN_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/p
 ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 #
-WORKDIR /home
-RUN rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui
-RUN chmod -Rf 777 /home/stable-diffusion-webui
-RUN ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/ && \
-    ln -s /share/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/ && \
-    ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/ && \
-    ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ && \
-    ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && \
-    ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/
+# WORKDIR /home
+# RUN rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui
+# RUN chmod -Rf 777 /home/stable-diffusion-webui
+# RUN ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/
 #
 EXPOSE 7860
 
-WORKDIR /home/stable-diffusion-webui
+WORKDIR /share/stable-diffusion-webui
 # --ui-settings-file /home/stable-diffusion-webui/config.json
 CMD ["/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]

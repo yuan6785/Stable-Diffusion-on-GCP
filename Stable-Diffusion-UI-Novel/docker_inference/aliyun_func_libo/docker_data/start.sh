@@ -7,5 +7,5 @@ while true;do date;sleep 86400;date;echo "loop--";done &
 echo "yx test 1111">/var/log/sdwebui.log &
 /usr/bin/supervisord -c /etc/supervisord.conf &
 /usr/sbin/nginx -c /etc/nginx/nginx.conf &
-sleep 10 && tail -f /var/log/sdwebui.log &
+sleep 30 && tail -f /var/log/sdwebui.log &
 fg %1
