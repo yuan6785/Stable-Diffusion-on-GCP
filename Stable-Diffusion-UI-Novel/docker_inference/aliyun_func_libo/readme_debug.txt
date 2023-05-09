@@ -7,6 +7,8 @@ nvidia-smi # 查看显卡驱动是否安装成功
 ---
 我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
 实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）
+---
+也可以直接在云函数中"登录实例"--进入docker镜像中， 进行调试
 
 
 
@@ -29,10 +31,10 @@ cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-
 docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 本地打包镜像
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash
-----推送本地镜像到阿里云
+----推送本地镜像到阿里云（记得修改版本号）
 docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
-docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v10
-docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v10
+docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v14
+docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v14
 ----清理镜像
 docker images
 docker rmi -f sand:1.0
