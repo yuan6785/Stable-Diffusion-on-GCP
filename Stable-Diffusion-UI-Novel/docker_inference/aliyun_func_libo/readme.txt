@@ -9,7 +9,8 @@ nvidia-smi # 查看显卡驱动是否安装成功
 实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）
 
 
-
+----nfs的minio机器---
+ssh -o StrictHostKeyChecking=no root@47.253.96.55  -i ~/workspace/0pems/sdwebui-nas-manager.pem 
 
 
 
