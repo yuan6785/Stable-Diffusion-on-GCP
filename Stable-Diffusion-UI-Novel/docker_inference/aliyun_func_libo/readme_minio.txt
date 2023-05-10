@@ -49,4 +49,4 @@ cd /opt
 wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20220526054841.0.0_amd64.deb
 dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
-export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15  # 记得将9001/9002加入白名单
+export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15  # 记得将9001/9002加入白名单, export也可以单独执行
