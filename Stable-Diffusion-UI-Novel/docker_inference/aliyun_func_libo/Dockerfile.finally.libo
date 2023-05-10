@@ -11,9 +11,12 @@ RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudar
 
 # /share是李波挂载到nfs的目录，需要和李波确认
 #
-ARG CUDNN_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
-ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+# ARG CUDNN_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+# ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+# 上面的环境变量有问题(build镜像的时候share目录是不存在的)---用下面的-----
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:/share/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/nvidia/cudnn:/share/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/tensorrt
+
 #
 # WORKDIR /home
 # 同步命令不能写在这里，因为share目录是在容器运行时挂载上的，build镜像的时候share目录是不存在的
