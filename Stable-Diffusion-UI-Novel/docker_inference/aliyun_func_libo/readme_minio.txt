@@ -50,3 +50,62 @@ wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_202205260
 dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
 export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15  # 记得将9001/9002加入白名单, export也可以单独执行
+
+
+
+
+------权限配置minio----------
+// 权限参考 https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
+// 这个策略包括了以下几个部分：
+// 允许列出bucket yxtest中的对象列表。
+// 禁止下载bucket yxtest中的对象。
+// 允许上传对象到bucket yxtest。
+// 允许修改bucket yxtest中对象的ACL。
+// 禁止删除bucket yxtest中的对象。
+// 请注意，这个策略只适用于bucket yxtest中的文件，而不是整个bucket。如果您想要对整个bucket进行限制，请将Resource字段改为"arn:aws:s3:::yxtest"。
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListObjectsInBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::yxtest"
+            ]
+        },
+        {
+            "Sid": "GetObject",
+            "Effect": "Deny",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::yxtest/*"
+            ]
+        },
+        {
+            "Sid": "PutObject",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::yxtest/*"
+            ]
+        },
+        {
+            "Sid": "DeleteObject",
+            "Effect": "Deny",
+            "Action": [
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::yxtest/*"
+            ]
+        }
+    ]
+}
