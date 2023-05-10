@@ -42,3 +42,11 @@ nohup aws s3 sync s3://sd-web-ui-ec2/stable-diffusion-webui/scripts /mnt/sdwebui
 tail -f aws_sync.log
 rm -rf aws_sync.log
 
+
+
+------启动minio---------
+cd /opt
+wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20220526054841.0.0_amd64.deb
+dpkg -i minio_20220526054841.0.0_amd64.deb
+minio server --help # 查看帮助
+export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15  # 记得将9001/9002加入白名单

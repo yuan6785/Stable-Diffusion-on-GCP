@@ -61,6 +61,7 @@ mac二进制下载的服务器版本:
     wget https://dl.min.io/server/minio/release/darwin-amd64/minio.RELEASE.2023-04-20T17-56-55Z
     chmod +x minio
     ./minio -h  # 可以查看帮助
+    ./minio server -h  # 可以查看具体服务器启动的帮助
     MINIO_STORAGE_CLASS_STANDARD=1&&./minio server minio_data
     -----
     最后一个支持真正物理文件系统的版本:
@@ -70,6 +71,12 @@ mac二进制下载的服务器版本:
 
 linux二进制下载版本：
     https://dl.min.io/server/minio/release/linux-amd64/minio
+    #
+    cd /opt
+    wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20220526054841.0.0_amd64.deb
+    dpkg -i minio_20220526054841.0.0_amd64.deb
+    minio server --help # 查看帮助
+    minio server /mnt/sd15
 
 
 
