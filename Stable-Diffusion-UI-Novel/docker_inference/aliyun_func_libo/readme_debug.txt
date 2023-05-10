@@ -40,3 +40,7 @@ docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images
 docker images
 docker rmi -f sand:1.0
 docker image prune -a  # 清理没有容器生成的所有镜像的存储空间
+
+
+
+
