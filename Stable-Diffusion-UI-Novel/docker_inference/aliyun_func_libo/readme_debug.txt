@@ -9,6 +9,8 @@ nvidia-smi # 查看显卡驱动是否安装成功
 实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）
 ---
 也可以直接在云函数中"登录实例"--进入docker镜像中， 进行调试
+---调试rsync--
+rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /mnt/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui   
 
 
 
@@ -40,6 +42,9 @@ docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images
 docker images
 docker rmi -f sand:1.0
 docker image prune -a  # 清理没有容器生成的所有镜像的存储空间
+
+
+
 
 
 
