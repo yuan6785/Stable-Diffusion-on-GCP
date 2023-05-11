@@ -51,7 +51,7 @@ dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
 export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_env/stable-diffusion-webui  # 记得将9001/9002加入白名单, export也可以单独执行
 #
-minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15
+nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &
 
 
 -----启动minio客户端------
@@ -61,7 +61,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ./mc -h 即可
 
 
-------权限配置minio----------
+------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)----------
 // 权限参考 https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
 // 这个策略包括了以下几个部分：
 // 允许列出bucket yxtest中的对象列表。
@@ -116,3 +116,81 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
         }
     ]
 }
+
+
+
+-----admin只读s3权限-------
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "admin:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        }
+    ]
+}
+
+
+-----非admin所有指定文件夹目录的权限-------
+// s3有一个bucket叫embeddings,  下面有一个文件夹haha。 我只允许用户能在haha上传文件，查看haha的文件列表，但不能下载，该如何写这个权限配置文件policy
+// 下面的每一段都比较重要
+// 1. 是允许用户查看embeddings这个bucket的列表
+// 2. 是允许用户查看embeddings这个bucket下面haha这个文件夹的文件列表
+// 3. 是允许用户上传文件到embeddings这个bucket下面haha这个文件夹, 如果有其他允许的权限，请加在这一段即可
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::embeddings"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "haha/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/haha/*"
+            ]
+        }
+    ]
+}
+
+
+
+// 动态policy ---  根据用户名配置
+https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html#minio-policy-conditions
