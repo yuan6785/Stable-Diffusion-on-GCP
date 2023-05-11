@@ -51,7 +51,7 @@ dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
 export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_env/stable-diffusion-webui  # 记得将9001/9002加入白名单, export也可以单独执行
 #
-nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &
+nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
 
 
 -----启动minio客户端------
@@ -61,7 +61,110 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ./mc -h 即可
 
 
-------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)----------
+------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)------
+###########################正式环境######################################
+####普通用户的权限
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "Lora/${aws:username}/*",
+                        "VAE/${aws:username}/*",
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models/Lora/${aws:username}/*",
+                "arn:aws:s3:::models/VAE/${aws:username}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "${aws:username}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/${aws:username}/*",
+                "arn:aws:s3:::scripts/${aws:username}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::samples/${aws:username}/*"
+            ]
+        }
+    ]
+}
+###########################end 正式环境##################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------权限配置minio--一些测试有用的配置(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)-----------------------------------------------这些是重要的参考
 // 权限参考 https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
 // 这个策略包括了以下几个部分：
 // 允许列出bucket yxtest中的对象列表。
@@ -236,3 +339,11 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 
 // 动态policy ---  根据用户名配置
 https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
+
+
+
+
+
+
+
+下面是正式权限配置:
