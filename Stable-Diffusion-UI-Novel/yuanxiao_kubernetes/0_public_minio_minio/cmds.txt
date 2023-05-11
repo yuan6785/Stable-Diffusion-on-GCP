@@ -79,6 +79,13 @@ linux二进制下载版本：
     export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15  # 记得将9001/9002加入白名单, export也可以单独执行
 
 
+-----启动minio客户端------
+https://dl.min.io/client/mc/release   历史版本下载
+wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z  # 对应历史版本下载
+mv mc.RELEASE.2022-06-10T22-29-12Z mc
+./mc -h 即可
+
+
 
 用其他配置启动:
 export MINIO_CONFIG_ENV_FILE=/etc/default/minio

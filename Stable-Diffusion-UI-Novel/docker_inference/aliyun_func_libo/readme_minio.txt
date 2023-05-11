@@ -50,10 +50,15 @@ wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_202205260
 dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
 export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_env/stable-diffusion-webui  # 记得将9001/9002加入白名单, export也可以单独执行
-
-
+#
 minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15
 
+
+-----启动minio客户端------
+https://dl.min.io/client/mc/release   历史版本下载
+wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z
+mv mc.RELEASE.2022-06-10T22-29-12Z mc
+./mc -h 即可
 
 
 ------权限配置minio----------
