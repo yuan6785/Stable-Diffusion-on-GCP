@@ -143,7 +143,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 }
 
 
------非admin所有指定文件夹目录的权限-------
+-----非admin所有指定文件夹目录的权限(重要--bucket的文件夹权限设置)-------
 // s3有一个bucket叫embeddings,  下面有一个文件夹haha。 我只允许用户能在haha上传文件，查看haha的文件列表，但不能下载，该如何写这个权限配置文件policy
 // 下面的每一段都比较重要
 // 1. 是允许用户查看embeddings这个bucket的列表
@@ -173,7 +173,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
             "Condition": {
                 "StringLike": {
                     "s3:prefix": [
-                        "haha/*"
+                        "haha/*"  
                     ]
                 }
             }
@@ -190,7 +190,49 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
     ]
 }
 
+根据登录用户名动态配置---将上面的haha换为${aws:username}/*即可-----文件夹不存在会自己重建-----重要---
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::embeddings"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "${aws:username}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/${aws:username}/*"
+            ]
+        }
+    ]
+}
+
 
 
 // 动态policy ---  根据用户名配置
-https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html#minio-policy-conditions
+https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html
