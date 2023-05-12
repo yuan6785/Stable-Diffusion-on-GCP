@@ -53,6 +53,34 @@ export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio serve
 #
 nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
 
+nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &
+
+
+-----nginx配置（证书保存在企业微信，杨铸里面）---------
+server {
+    listen 443 ssl;
+    server_name minio.playdayy.cn;
+    index index.html index.htm index.php;
+
+    ssl_certificate  /etc/nginx/cert/8436159__playdayy.cn.pem;
+    ssl_certificate_key /etc/nginx/cert/8436159__playdayy.cn.key;
+    ssl_session_timeout 5m;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+
+    location / {
+        proxy_pass http://127.0.0.1:9002;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+    }
+}
+
+
 
 -----启动minio客户端------
 https://dl.min.io/client/mc/release   历史版本下载
@@ -97,7 +125,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
                 "StringLike": {
                     "s3:prefix": [
                         "Lora/${aws:username}/*",
-                        "VAE/${aws:username}/*",
+                        "VAE/${aws:username}/*"
                     ]
                 }
             }
@@ -153,6 +181,96 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
         }
     ]
 }
+
+
+// 这个是不分用户的
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "Lora/*",
+                        "VAE/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models/Lora/*",
+                "arn:aws:s3:::models/VAE/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/*",
+                "arn:aws:s3:::scripts/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::samples/*"
+            ]
+        }
+    ]
+}
+
+
+
 ###########################end 正式环境##################################
 
 
