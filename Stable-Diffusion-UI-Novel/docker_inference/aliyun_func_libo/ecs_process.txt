@@ -1,0 +1,60 @@
+
+
+su sd3
+
+cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/pkuliyi2015/multidiffusion-upscaler-for-automatic1111 && cd multidiffusion-upscaler-for-automatic1111 && git checkout 23f3a14432e7740f4a59322ba36eafbf042dffb0 && cd ..
+
+cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout 2da464780254d3f5beaf15edaea78499896c52e7 && cd ..
+
+
+# 需要做一个软连接
+ln -s /home/sd3/stable-diffusion-webui/models/Lora  /home/sd3/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+
+cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/AUTOMATIC1111/stable-diffusion-webui-rembg && cd stable-diffusion-webui-rembg && git checkout 64821f04767b04b92ac157f3c02f28d269dba5d8 && cd ..
+
+
+vae v1-5-pruned.vae.pt  也移动过来了（vae刷新是不能出来的，需要重启sd的webui）
+
+
+cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/Mikubill/sd-webui-controlnet && cd sd-webui-controlnet && git checkout 3b27ba01f399ab935011fc0024ba95b852ccfb74 && cd ..
+
+# 需要做一个软链接---废弃
+rm -rf /home/sd3/stable-diffusion-webui/models/ControlNet
+ln -s /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet  /home/sd3/stable-diffusion-webui/models/ControlNet
+
+
+# 下载controlnet相关模型
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11e_sd15_ip2p.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11e_sd15_ip2p.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11e_sd15_shuffle.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11e_sd15_shuffle.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1e_sd15_tile.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11f1e_sd15_tile.yaml
+wget  https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_depth.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11f1p_sd15_depth.yaml
+-
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_canny.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_canny.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_inpaint.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_inpaint.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_lineart.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_lineart.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_mlsd.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_mlsd.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_normalbae.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_normalbae.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_openpose.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_openpose.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_scribble.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_scribble.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_seg.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_seg.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_softedge.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15_softedge.yaml
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15s2_lineart_anime.pth
+wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11p_sd15s2_lineart_anime.yaml
+
+# 复制过来
+su sd3
+mkdir /home/sd3/stable-diffusion-webui/models/ControlNet/
+cp -r /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet/controlnet11 /home/sd3/stable-diffusion-webui/models/ControlNet/
