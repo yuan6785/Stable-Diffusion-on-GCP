@@ -1,3 +1,6 @@
+----minio参考---
+/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes/0_public_minio_minio/cmds.txt
+
 ----nfs的minio机器---
 ssh -o StrictHostKeyChecking=no root@47.253.96.55  -i ~/workspace/0pems/sdwebui-nas-manager.pem 
 首次登录初始化已经存在的conda到环境变量
