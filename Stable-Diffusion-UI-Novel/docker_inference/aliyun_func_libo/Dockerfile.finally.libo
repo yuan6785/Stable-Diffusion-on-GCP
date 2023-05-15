@@ -37,6 +37,7 @@ EXPOSE 7860
 # CMD ["/share/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
 #
 # /share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m http.server 7860  测试命令
+# 这里会创建stable-diffusion-webui目录，所以下面命令不能去判断stable-diffusion-webui是否存在
 WORKDIR /home/stable-diffusion-webui
 CMD /bin/sh -c "if [ ! -d '/home/stable-diffusion-webui/modules' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
 if [ ! -L '/home/stable-diffusion-webui/models' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/; fi && \
