@@ -45,6 +45,7 @@ ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-
 ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ && \
 ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && \
 ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/ && \
+ln -s /share/sdwebui_env/stable-diffusion-webui/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 cd /home/stable-diffusion-webui && \
 sleep 10 && \
 /share/sdwebui_env/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram"
