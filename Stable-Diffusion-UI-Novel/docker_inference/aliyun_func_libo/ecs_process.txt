@@ -63,3 +63,17 @@ cp -r /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet/controlnet11 /ho
 # 需要做一个软链接
 rm -rf /home/sd3/stable-diffusion-webui/models/ControlNet
 ln -s /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet  /home/sd3/stable-diffusion-webui/models/ControlNet
+
+
+
+
+更新记录:
+. 更新controlnet插件到1.1, 也支持原1.0的模型
+. 安装插件multidiffusion-upscaler
+. 更新插件additional-networks,可在界面调整lora使用权重
+. 安装插件rembg, 可以实现抠图
+
+vsftp上传下载优化:
+  访问 http://ip:9003 
+
+原来vsftp保留现有的功能，不做改动
