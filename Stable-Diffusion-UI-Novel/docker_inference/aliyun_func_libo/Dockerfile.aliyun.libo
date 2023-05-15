@@ -21,6 +21,14 @@ RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-
 # && /home/miniconda3/envs/sd_python310/bin/python  launch_gcp.py --skip-torch-cuda-test  \ 原来用这个，后来改为python -c的方式
 # 使用 --skip-torch-cuda-test, 因为cloudbuild.yaml的machineType是没有GPU的； 另一种思路，取消这个参数，但是cloudbuild.yaml的machineType改成有GPU的也可以尝试下；----可以用打好的镜像创建一个ubuntu的pod参考deployment_ubuntu_sd_test.yaml进行调试
 # 独立部署时， 如果出现安装gfpgan报错，可以先尝试安装/home/miniconda3/envs/sd_python310/bin/python -m pip install cython==0.29.34
+#
+# AddNet如何报错，可能是lora的的模型不完整，删除不完整的lora即可----重要
+# 
+# 成功版本记录: 
+# https://github.com/yuan6785/stable-diffusion-webui.git
+# 上一个成功版本 ： branch:20230515 submit:   b791502f18b0de3e9eb93fca3aadce42878904d8
+# 目前版本:  branch:master   submit:  e4cd0e1abc89713d7c1ac7f1f37ea8359c49d7ec
+#
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/miniconda3 \
     && /home/miniconda3/bin/conda init \
@@ -28,7 +36,7 @@ RUN set -ex \
     && /home/miniconda3/bin/conda install -y -n sd_python310 virtualenv \
     && git clone https://github.com/yuan6785/stable-diffusion-webui.git \
     && cd stable-diffusion-webui \
-    && git checkout b791502f18b0de3e9eb93fca3aadce42878904d8 \
+    && git checkout 20230515 && git checkout b791502f18b0de3e9eb93fca3aadce42878904d8 \
     && /home/miniconda3/envs/sd_python310/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout eff5fb5c0e9ee3c5d0fc9a3c5ec0c10fce8ee3cd && cd .. \

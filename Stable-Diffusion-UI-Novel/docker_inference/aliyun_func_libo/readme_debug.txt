@@ -7,6 +7,7 @@ nvidia-smi # 查看显卡驱动是否安装成功
 ---
 我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
 实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）
+如果内存不够: 最好创建一个虚拟内存----todo
 ---
 也可以直接在云函数中"登录实例"--进入docker镜像中， 进行调试
 ---调试rsync--
