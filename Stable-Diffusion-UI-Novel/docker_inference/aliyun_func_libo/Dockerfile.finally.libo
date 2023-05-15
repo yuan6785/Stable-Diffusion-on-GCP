@@ -38,13 +38,13 @@ EXPOSE 7860
 #
 # /share/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m http.server 7860  测试命令
 WORKDIR /home/stable-diffusion-webui
-CMD /bin/sh -c "rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui  && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/ && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/ && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/ && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && \
-ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/ && \
+CMD /bin/sh -c "if [ ! -d '/home/stable-diffusion-webui' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
+if [ ! -L '/home/stable-diffusion-webui/models' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/; fi && \
+if [ ! -L '/home/stable-diffusion-webui/embeddings' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/;fi && \
+if [ ! -L '/home/stable-diffusion-webui/scripts' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/;fi  && \
+if [ ! -L '/home/stable-diffusion-webui/samples' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/;fi  && \
+if [ ! -L '/home/stable-diffusion-webui/localizations' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/;fi  && \
+if [ ! -L '/home/stable-diffusion-webui/outputs' ];then ln -s /share/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/;fi  && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 ln -s /share/sdwebui_env/stable-diffusion-webui/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 cd /home/stable-diffusion-webui && \
