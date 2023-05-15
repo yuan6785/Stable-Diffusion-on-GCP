@@ -18,11 +18,13 @@ vae v1-5-pruned.vae.pt  也移动过来了（vae刷新是不能出来的，需�
 
 cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/Mikubill/sd-webui-controlnet && cd sd-webui-controlnet && git checkout 3b27ba01f399ab935011fc0024ba95b852ccfb74 && cd ..
 
-# Auto-Photoshop-StableDiffusion-Plugin插件，需要开放--api --share才能使用
+# Auto-Photoshop-StableDiffusion-Plugin插件，需要开放--api --share才能使用--暂不安装
 cd /home/sd3/stable-diffusion-webui/extensions && git clone  https://github.com/AbdullahAlfaraj/Auto-Photoshop-StableDiffusion-Plugin && cd Auto-Photoshop-StableDiffusion-Plugin && git checkout 0ad3f02fef38eb923dc2f28a86a1d537b1edc1de && cd ..
 
 
 # 下载controlnet相关模型
+cd /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet
+-
 wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11e_sd15_ip2p.pth
 wget https://huggingface.co/lllyasviel/ControlNet-v1-1/raw/main/control_v11e_sd15_ip2p.yaml
 wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11e_sd15_shuffle.pth
