@@ -68,14 +68,14 @@ ln -s /mnt/sdwebui_env/stable-diffusion-webui/models/ControlNet  /home/sd3/stabl
 
 
 打包前:0-----------
-删除lora
-切换默认vae和大模型
+
 
 更新记录:
 . 更新controlnet插件到1.1, 也支持原1.0的模型
 . 安装插件multidiffusion-upscaler
 . 更新插件additional-networks,可在界面调整lora使用权重
 . 安装插件rembg, 可以实现抠图
+. 表中的大模型均已更新
 
 vsftp上传下载优化:
   访问 http://ip:9003 

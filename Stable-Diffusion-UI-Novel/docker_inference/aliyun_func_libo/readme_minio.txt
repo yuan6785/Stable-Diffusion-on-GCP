@@ -54,9 +54,9 @@ dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
 export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_env/stable-diffusion-webui  # 记得将9001/9002加入白名单, export也可以单独执行
 #
-nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
+nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_env/stable-diffusion-webui > minio.log &
+# nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
 
-nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &
 
 
 -----nginx配置（证书保存在企业微信，杨铸里面）---------
