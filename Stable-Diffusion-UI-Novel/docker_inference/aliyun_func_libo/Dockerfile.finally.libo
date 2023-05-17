@@ -11,9 +11,9 @@ RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudar
 
 # /share是李波挂载到nfs的目录，需要和李波确认
 #
-ARG CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
-ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+# ARG CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+# ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 # 上面的环境变量有问题(build镜像的时候share目录是不存在的)---用下面的-----
 # ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/nvidia/cudnn:/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/tensorrt
 
@@ -40,21 +40,36 @@ EXPOSE 7860
 # 这里会创建stable-diffusion-webui目录，所以下面命令不能去判断stable-diffusion-webui是否存在
 WORKDIR /home/stable-diffusion-webui
 
+# 关键命令----
+# 设置环境变量命令
+# CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
+# TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import tensorrt;print(tensorrt.__file__)')) && echo $CUDNN_PATH && echo $TENSORRT_PATH && \
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+# echo $LD_LIBRARY_PATH 
 
+# # 创建models目录
+# if [ ! -d '/home/stable-diffusion-webui/models' ]; then mkdir /home/stable-diffusion-webui/models; fi && \
+# # 非公共模型
+# for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done
+# # 公共模型
+# for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done
+# # 非模型公共目录
+# for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done
+# # additional的lora模型软连接
+# rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
+# ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
+
+
+CMD /bin/sh -c "CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import tensorrt;print(tensorrt.__file__)')) && \
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+if [ ! -d '/home/stable-diffusion-webui/modules' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
 if [ ! -d '/home/stable-diffusion-webui/models' ]; then mkdir /home/stable-diffusion-webui/models; fi && \
-for dir in ControlNet hypernetworks Lora Stable-diffusion  VAE; do ln -s /path/to/$dir /path/to/link/$dir; done
-
-for dir in ControlNet hypernetworks Lora Stable-diffusion  VAE; do if [ ! -d '/mnt/1' ]; then echo "haha"; fi; done
-
-CMD /bin/sh -c "if [ ! -d '/home/stable-diffusion-webui/modules' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
-if [ ! -L '/home/stable-diffusion-webui/models' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/; fi && \
-if [ ! -L '/home/stable-diffusion-webui/embeddings' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/;fi && \
-if [ ! -L '/home/stable-diffusion-webui/scripts' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/;fi  && \
-if [ ! -L '/home/stable-diffusion-webui/samples' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/;fi  && \
-if [ ! -L '/home/stable-diffusion-webui/localizations' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/;fi  && \
-if [ ! -L '/home/stable-diffusion-webui/outputs' ];then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/;fi  && \
+for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L \"/home/stable-diffusion-webui/models/$dir\" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L \"/home/stable-diffusion-webui/models/$dir\" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/stable-diffusion-webui/$dir\" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
-ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
+ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 sleep 10 && \
 cd /home/stable-diffusion-webui && \
 /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python launch.py --listen --xformers --medvram"
