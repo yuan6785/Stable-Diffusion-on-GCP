@@ -67,8 +67,8 @@ WORKDIR /home/stable-diffusion-webui
 
 CMD /bin/sh -c "echo '---------start-------' && \
 echo '---------start set env-------' && \
-CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
-TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import tensorrt;print(tensorrt.__file__)')) && \
+CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
+TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import tensorrt;print(tensorrt.__file__)')) && \
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 echo '---------start rsync-------' && \
 if [ ! -d '/home/stable-diffusion-webui/modules' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
