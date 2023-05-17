@@ -37,8 +37,7 @@ EXPOSE 7860
 # CMD ["/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
 #
 # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m http.server 7860  测试命令
-# 这里会创建stable-diffusion-webui目录，所以下面命令不能去判断stable-diffusion-webui是否存在
-WORKDIR /home/stable-diffusion-webui
+
 
 # 关键命令----
 # 设置环境变量命令
@@ -60,6 +59,16 @@ WORKDIR /home/stable-diffusion-webui
 # ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 
 
+for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/test/; fi; done
+
+for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/test/; fi; done
+
+# 如果以字符串的形式执行，注意$dir前面必须有反斜杠, 双引号前面也必须有反斜杠
+# bash -c "for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/test/\$dir\" ]; then ln -s /mnt/sdwebui_public/public/\$dir  /home/test/; fi; done"
+
+# 这里会创建stable-diffusion-webui目录，所以下面命令不能去判断stable-diffusion-webui是否存在
+WORKDIR /home/stable-diffusion-webui
+
 CMD /bin/sh -c "echo '---------start-------' && \
 echo '---------start set env-------' && \
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
@@ -69,9 +78,9 @@ echo '---------start rsync-------' && \
 if [ ! -d '/home/stable-diffusion-webui/modules' ]; then rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
 echo '---------start ln base-------' && \
 if [ ! -d '/home/stable-diffusion-webui/models' ]; then mkdir /home/stable-diffusion-webui/models; fi && \
-for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L \"/home/stable-diffusion-webui/models/$dir\" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
-for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L \"/home/stable-diffusion-webui/models/$dir\" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
-for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/stable-diffusion-webui/$dir\" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
+for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L \"/home/stable-diffusion-webui/models/\$dir\" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/\$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L \"/home/stable-diffusion-webui/models/\$dir\" ]; then ln -s /share/sdwebui_public/public/models/\$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/stable-diffusion-webui/\$dir\" ]; then ln -s /share/sdwebui_public/public/\$dir  /home/stable-diffusion-webui/; fi; done && \
 echo '---------start ln additional networks-------' && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
