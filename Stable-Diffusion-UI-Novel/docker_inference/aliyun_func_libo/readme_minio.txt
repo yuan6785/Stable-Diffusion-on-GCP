@@ -97,8 +97,54 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)------
 
 ###########################正式环境(authing版)############################################
+####管理员的权限
+// models, embeddings, scripts, samples四个文件夹的权限配置
+// models/Lora和models/VAE只能上传，不能下载，不能删除自己的用户名文件夹
+// embeddings只能上传,不能下载,不能删除自己的用户名文件夹
+// scripts只能上传,不能下载,不能删除自己的用户名文件夹
+// samples能上传,能下载,能删除自己的用户名文件夹
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "admin:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::localizations",
+                "arn:aws:s3:::samples",
+                "arn:aws:s3:::scripts"
+            ]
+        }
+    ]
+}
+
+####普通用户的权限
+// models, embeddings, scripts, samples四个文件夹的权限配置
+// models/Lora和models/VAE只能上传，不能下载，不能删除自己的用户名文件夹
+// embeddings只能上传,不能下载,不能删除自己的用户名文件夹
+// scripts只能上传,不能下载,不能删除自己的用户名文件夹
+// samples能上传,能下载,能删除自己的用户名文件夹
+
+
+
 
 ###########################end---正式环境(authing版)######################################
+
+
+
+
+
 
 
 ###########################正式环境(用户版)######################################
