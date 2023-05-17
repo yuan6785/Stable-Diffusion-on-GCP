@@ -27,6 +27,26 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui
 
 
 
+----解决阿里云函数无法用ssl下载模型的问题(重要---重启云函数才会生效---)------
+修改源码 vi /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/urllib/request.py
+###############
+1346         try:
+1347             try:
+1348                 # modify by yx --disabled ssl
+1349                 import ssl
+1350                 ssl._create_default_https_context = ssl._create_unverified_context
+1351                 print("yx--modify-ssl--")
+1352                 # end --- modify by yx
+1353                 h.request(req.get_method(), req.selector, req.data, headers,
+1354                           encode_chunked=req.has_header('Transfer-encoding'))
+1355             except OSError as err: # timeout error
+1356                 raise URLError(err)
+1357             r = h.getresponse()
+1358         except:
+1359             h.close()
+1360             raise
+###############
+
 
 
 ----本地打包镜像
@@ -37,8 +57,8 @@ docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本
 docker run -it --rm sand:1.0 /bin/bash
 ----推送本地镜像到阿里云（记得修改版本号）
 docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
-docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v31
-docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v31
+docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v32
+docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v32
 ----清理镜像
 docker images
 docker rmi -f sand:1.0
