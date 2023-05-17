@@ -58,11 +58,7 @@ EXPOSE 7860
 # rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 # ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 
-
-for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/test/; fi; done
-
-for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/test/; fi; done
-
+# debu命令-----
 # 如果以字符串的形式执行，注意$dir前面必须有反斜杠, 双引号前面也必须有反斜杠
 # bash -c "for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/test/\$dir\" ]; then ln -s /mnt/sdwebui_public/public/\$dir  /home/test/; fi; done"
 
