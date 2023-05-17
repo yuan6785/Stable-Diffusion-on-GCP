@@ -52,9 +52,9 @@ cd /opt
 wget  https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20220526054841.0.0_amd64.deb
 dpkg -i minio_20220526054841.0.0_amd64.deb
 minio server --help # 查看帮助
-export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui  # 记得将9001/9002加入白名单, export也可以单独执行
+export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/public  # 记得将9001/9002加入白名单, export也可以单独执行
 #
-nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui > minio.log &
+nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/public > minio.log &
 # nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
 
 
@@ -95,7 +95,13 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 
 
 ------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)------
-###########################正式环境######################################
+
+###########################正式环境(authing版)############################################
+
+###########################end---正式环境(authing版)######################################
+
+
+###########################正式环境(用户版)######################################
 ####普通用户的权限
 // models, embeddings, scripts, samples四个bucket的权限配置
 // models/Lora和models/VAE只能上传，不能下载，不能删除自己的用户名文件夹
@@ -276,7 +282,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 
 
 
-###########################end 正式环境##################################
+###########################end 正式环境(用户版)##################################
 
 
 
