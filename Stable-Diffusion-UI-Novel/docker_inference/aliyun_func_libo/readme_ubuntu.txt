@@ -1,3 +1,5 @@
+ssh -o StrictHostKeyChecking=no root@47.253.96.55  -i ~/workspace/0pems/sdwebui-nas-manager.pem 
+
 安装docker在ubunt22.04
 ------
 sudo apt update
@@ -46,12 +48,21 @@ ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/ext
 运行sdwebui下载该下载的，节约云函数启动时间
 /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-torch-cuda-test
 当一切下载完毕后，到了Loading weights这一步，赶紧ctrl+c结束即可，否则会读虚拟内存，卡爆炸（如果是GPU机器就不用管了）
+exit 退出容器
 ---提交容器到镜像
 docker commit 容器id sand:1.0  # docker commit $(docker ps -lq) sand:1.0 
+docker inspect -f '{{.Config.Cmd}}' sand:1.0  # 看容器或者镜像的启动命令即dockerfile的CMD
+---二次打包（因为上面的commit命令会覆盖原来的镜像的启动CMD）----
+# 如果dockerfile有改动，将Dockerfile.finally.libo.ubuntu2复制到ubuntu的目录下
+docker build -t sand:2.0 -f Dockerfile.finally.libo.ubuntu2  .  # 因为上面的commit会修改dockerfile的CMD，所以需要重新打包一次
+docker inspect -f '{{.Config.Cmd}}' sand:2.0
 ----推送本地镜像到阿里云（记得修改版本号）
 docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
-docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u10
-docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u10
+docker tag sand:2.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u12
+docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u12
 
-
+----删除所有镜像---
+# 删除所有容器
+docker rm -f $(docker ps -aq)
+docker image prune -a  # 清理没有容器生成的所有镜像的存储空间
 
