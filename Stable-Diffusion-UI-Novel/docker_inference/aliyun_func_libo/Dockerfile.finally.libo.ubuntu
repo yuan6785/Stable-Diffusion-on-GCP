@@ -33,5 +33,4 @@ echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && 
 sleep 2 && \
 cd /home/stable-diffusion-webui && \
 /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python launch.py --port 7860 --listen --xformers --medvram && \
-# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
 echo ---------end-------'
