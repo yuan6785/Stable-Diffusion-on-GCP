@@ -31,8 +31,6 @@ systemctl restart docker
 mkdir -p /mnt/docker_build/docker_data/stable-diffusion-webui
 rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /mnt/docker_build/docker_data/stable-diffusion-webui
 
-
-
 2. 执行docker build创建镜像
 
 ----本地打包镜像
@@ -40,7 +38,7 @@ cd /mnt/docker_build
 docker build -t sand:1.0 -f Dockerfile.finally.libo.ubuntu  .  # 只有sd的版本---如果有修改则重新复制到改目录即可
 ---进入容器调试(启动一下sd，下载该下载的东西，第二次启动才会更快)---记得修改config为一个小模型比如皮克斯，否则加载很慢-------
 docker run -it  -v /mnt:/share sand:1.0 /bin/bash  # 非gpu
-docker run -it --gpus device=all -p 9965:9965 -v /mnt:/share sand:1.0 /bin/bash  # 带gpu的---这个启动后是可以用web访问的
+docker run -it --gpus device=all -p 9965:9965 -v /mnt:/share sand:1.0 /bin/bash  # 带gpu的---这个启动后是可以用web访问的, 可以开多个容器共享gpu，太爽了，修改下端口即可(但需要主机内存够大，一般还是一台一个容器)
 执行dockerfile种的CMD的launch之前的部分命令，挂载好目录---重要
 #####目前是这一段#####
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
