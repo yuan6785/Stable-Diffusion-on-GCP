@@ -56,7 +56,23 @@ export MINIO_ROOT_USER=playdayy&& export MINIO_ROOT_PASSWORD=xxxxxx&&minio serve
 #
 nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/public > minio.log &
 # nohup minio server --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sd15 > minio.log &  # 测试服务
-
+superverisor中启动
+#####/etc/supervisor/supervisord.conf
+[program:sdwebui-minio]  
+command=bash -c "sleep 10 &&  minio server  --anonymous --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/public"  #  yxlooptask.py的内容可以看下面的记录，我记录到下面的
+directory=/opt
+user=root
+redirect_stderr=true
+autostart=true
+startsecs=1
+stdout_logfile=/var/log/sdwebui/minioyx.log
+stopsignal=TERM
+stopwaitsecs=60 
+stopasgroup=true 
+priority=1002
+#####
+superverisorctl # 看是否启动成功
+tail -f /var/log/sdwebui/minioyx.log
 
 
 -----nginx配置（证书保存在企业微信，杨铸里面）---------
@@ -103,6 +119,7 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 // embeddings只能上传,不能下载,不能删除自己的用户名文件夹
 // scripts只能上传,不能下载,不能删除自己的用户名文件夹
 // samples能上传,能下载,能删除自己的用户名文件夹
+// admin_groupl.json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -135,7 +152,93 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 // embeddings只能上传,不能下载,不能删除自己的用户名文件夹
 // scripts只能上传,不能下载,不能删除自己的用户名文件夹
 // samples能上传,能下载,能删除自己的用户名文件夹
-
+// normal_group.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "Lora/${jwt:name}/*",
+                        "VAE/${jwt:name}/*",
+                        "hypernetworks/${jwt:name}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models/Lora/${jwt:name}/*",
+                "arn:aws:s3:::models/VAE/${jwt:name}/*",
+                "arn:aws:s3:::models/hypernetworks/${jwt:name}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "${jwt:name}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/${jwt:name}/*",
+                "arn:aws:s3:::scripts/${jwt:name}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::samples/${jwt:name}/*"
+            ]
+        }
+    ]
+}
 
 
 
