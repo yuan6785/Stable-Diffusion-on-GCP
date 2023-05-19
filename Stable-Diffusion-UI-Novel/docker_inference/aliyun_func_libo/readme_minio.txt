@@ -155,6 +155,8 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 // scripts只能上传,不能下载,不能删除自己的用户名文件夹
 // samples能上传,能下载,能删除自己的用户名文件夹
 // normal_group.json ---- ---name, aud, email
+// 
+
 {
     "Version": "2012-10-17",
     "Statement": [
