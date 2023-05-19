@@ -75,6 +75,8 @@ superverisorctl # 看是否启动成功
 tail -f /var/log/sdwebui/minioyx.log
 
 
+域名访问： minio.playdayy.cn
+
 -----nginx配置（证书保存在企业微信，杨铸里面）---------
 server {
     listen 443 ssl;
