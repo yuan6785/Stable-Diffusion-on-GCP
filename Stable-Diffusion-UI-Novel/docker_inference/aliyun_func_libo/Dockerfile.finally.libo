@@ -89,6 +89,6 @@ ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/ext
 echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 sleep 10 && \
 cd /home/stable-diffusion-webui && \
-/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python launch.py --port 7860 --listen --xformers --medvram && \
+/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 7860 --listen --xformers --medvram 2>&1 | tee sd.log && \
 # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
 echo ---------end-------'
