@@ -131,3 +131,5 @@ kubectl port-forward --namespace default svc/my-release-minio 9001:9001
 
 
 
+--------如果已经配置了好了minio，配置文件在.minio.sys下面,权限文件的修改-------
+/你的minio的启动目录/.minio.sys/config/iam/policies/

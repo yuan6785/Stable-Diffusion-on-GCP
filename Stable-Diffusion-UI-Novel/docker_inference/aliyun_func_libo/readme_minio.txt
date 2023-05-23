@@ -112,6 +112,10 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ./mc -h 即可
 
 
+--------如果已经配置了好了minio，配置文件在.minio.sys下面,权限文件的修改(防止权限改错了，root用户进不去)-------
+/你的minio的启动目录/.minio.sys/config/iam/policies/
+
+
 ------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)------
 
 ###########################正式环境(authing版)############################################
@@ -134,15 +138,16 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
         {
             "Effect": "Allow",
             "Action": [
+                "s3:GetObject",
                 "s3:ListBucket",
-                "s3:GetObject"
+                "s3:PutObject"
             ],
             "Resource": [
-                "arn:aws:s3:::models",
-                "arn:aws:s3:::embeddings",
-                "arn:aws:s3:::localizations",
-                "arn:aws:s3:::samples",
-                "arn:aws:s3:::scripts"
+                "arn:aws:s3:::embeddings/*",
+                "arn:aws:s3:::localizations/*",
+                "arn:aws:s3:::models/*",
+                "arn:aws:s3:::samples/*",
+                "arn:aws:s3:::scripts/*"
             ]
         }
     ]
