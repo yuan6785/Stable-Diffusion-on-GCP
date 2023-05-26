@@ -354,21 +354,21 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 }
 
 
-// 这个是不分用户的
+// 这个是不分用户的----阿里云训练机版本
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": [
-                "s3:ListAllMyBuckets",
-                "s3:GetBucketLocation"
-            ],
             "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:ListAllMyBuckets"
+            ],
             "Resource": [
-                "arn:aws:s3:::models",
                 "arn:aws:s3:::embeddings",
-                "arn:aws:s3:::scripts",
-                "arn:aws:s3:::samples"
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::samples",
+                "arn:aws:s3:::scripts"
             ]
         },
         {
@@ -382,8 +382,9 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
             "Condition": {
                 "StringLike": {
                     "s3:prefix": [
+                        "VAE/*",
                         "Lora/*",
-                        "VAE/*"
+                        "lora/*"
                     ]
                 }
             }
@@ -395,7 +396,17 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
             ],
             "Resource": [
                 "arn:aws:s3:::models/Lora/*",
+                "arn:aws:s3:::models/lora/*",
                 "arn:aws:s3:::models/VAE/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models/lora/*"
             ]
         },
         {
@@ -404,9 +415,9 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::samples",
                 "arn:aws:s3:::scripts",
-                "arn:aws:s3:::samples"
+                "arn:aws:s3:::embeddings"
             ],
             "Condition": {
                 "StringLike": {
@@ -422,16 +433,16 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
                 "s3:PutObject"
             ],
             "Resource": [
-                "arn:aws:s3:::embeddings/*",
-                "arn:aws:s3:::scripts/*"
+                "arn:aws:s3:::scripts/*",
+                "arn:aws:s3:::embeddings/*"
             ]
         },
         {
             "Effect": "Allow",
             "Action": [
-                "s3:PutObject",
+                "s3:DeleteObject",
                 "s3:GetObject",
-                "s3:DeleteObject"
+                "s3:PutObject"
             ],
             "Resource": [
                 "arn:aws:s3:::samples/*"
