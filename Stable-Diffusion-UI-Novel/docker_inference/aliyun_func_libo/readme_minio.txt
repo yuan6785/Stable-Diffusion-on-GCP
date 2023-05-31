@@ -118,6 +118,8 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 
 ------权限配置minio(注意，修改权限后，需要用户刷新浏览器生效 或者 退出登录，重新登录生效)------
 
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazon-s3-policy-keys.html   权限编辑参考
+
 ###########################正式环境(authing版)############################################
 ####管理员的权限
 // models, embeddings, scripts, samples四个文件夹的权限配置
