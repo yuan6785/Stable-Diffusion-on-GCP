@@ -652,3 +652,19 @@ https://min.io/docs/minio/linux/administration/identity-access-management/policy
 
 
 下面是正式权限配置:
+铸哥用的预权限文件,后面我替换即可
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::localizations/*"
+            ]
+        }
+    ]
+}
