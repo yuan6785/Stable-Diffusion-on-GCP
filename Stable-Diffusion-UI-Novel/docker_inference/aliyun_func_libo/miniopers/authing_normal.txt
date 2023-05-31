@@ -1,0 +1,95 @@
+####普通用户的权限
+// models, embeddings, scripts, samples四个文件夹的权限配置
+// models/Lora和models/VAE只能上传，不能下载，不能删除自己的用户名文件夹
+// embeddings只能上传,不能下载,不能删除自己的用户名文件夹
+// scripts只能上传,不能下载,不能删除自己的用户名文件夹
+// samples能上传,能下载,能删除自己的用户名文件夹
+// normal_group.json ---- ---name, aud, email
+// 
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::models",
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "Lora/f_${jwt:email}/*",
+                        "VAE/f_${jwt:email}/*",
+                        "hypernetworks/f_${jwt:email}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::models/Lora/f_${jwt:email}/*",
+                "arn:aws:s3:::models/VAE/f_${jwt:email}/*",
+                "arn:aws:s3:::models/hypernetworks/f_${jwt:email}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings",
+                "arn:aws:s3:::scripts",
+                "arn:aws:s3:::samples"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "f_${jwt:email}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::embeddings/f_${jwt:email}/*",
+                "arn:aws:s3:::scripts/f_${jwt:email}/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::samples/f_${jwt:email}/*"
+            ]
+        }
+    ]
+}
