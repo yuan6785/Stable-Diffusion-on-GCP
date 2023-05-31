@@ -112,6 +112,16 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ./mc -h 即可
 
 
+重要(批量上传policy文件的脚本):
+pyenv activate py3.10_virtualenv_test
+python ./miniopers/make_policy.py  即可更新权限文件
+
+
+
+
+
+
+
 --------如果已经配置了好了minio，配置文件在.minio.sys下面,权限文件的修改(防止权限改错了，root用户进不去)-------
 /你的minio的启动目录/.minio.sys/config/iam/policies/
 
