@@ -29,3 +29,8 @@ https://confluence.playnexx.net/pages/viewpage.action?pageId=82576211
 
 
 后面： 用户只需要分配对应的域名即可， 可能需要你那边去给他们分配下域名，需要准备类似每天分配服务器那么一张表来填域名
+
+
+重要(批量上传policy文件的脚本):
+pyenv activate py3.10_virtualenv_test
+python ./miniopers/make_policy.py  即可更新权限文件
