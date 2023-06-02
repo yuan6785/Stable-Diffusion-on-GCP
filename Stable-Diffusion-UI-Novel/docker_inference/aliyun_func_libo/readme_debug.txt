@@ -14,8 +14,6 @@ nvidia-smi # 查看显卡驱动是否安装成功
 rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui   
 
 
-
-
 最后验证按照的命令--(如果用的非gpu机器启动的， 这里不要用gpu启动，只是验证---)
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-torch-cuda-test
@@ -72,3 +70,36 @@ docker image prune -a  # 清理没有容器生成的所有镜像的存储空间
 
 
 
+另外一种调试方法(带GPU的)--------复制到home目录模拟云函数环境进行调试---------
+我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
+实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）--------
+--------------到带gpu的服务器执行下面命令----------------
+
+/bin/sh -c 'echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) && \
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)")) && \
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
+echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi && \
+for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
+echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
+ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+'
+
+启动(可以在home目录下自行调试，不影响云函数的运行)---
+cd /home/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
+
+
+例如调试扩展： /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
+rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
+cp -r /mnt/bak/extensions/sd-webui-additional-networks /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
+ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
