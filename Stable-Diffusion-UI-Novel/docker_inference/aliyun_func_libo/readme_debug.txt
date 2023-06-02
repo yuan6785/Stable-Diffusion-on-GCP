@@ -102,7 +102,7 @@ rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 cp -r /mnt/bak/extensions/sd-webui-additional-networks /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
 vi extensions/sd-webui-additional-networks/scripts/model_util.py
-修改164行的函数为下面的(这个可以检查lora是否完整):
+修改164行的函数为下面的(这个可以检查lora是否完整---原来的功能是不完整则不启动sd, 我改为了打印出来不完整的lora文件名，但还是启动sd，不将错误的lora显示在下拉列表):
 ####################
 def hash_model_file(finfo):
     filename = finfo[0]
