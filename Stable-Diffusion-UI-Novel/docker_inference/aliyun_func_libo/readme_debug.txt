@@ -102,7 +102,7 @@ rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 cp -r /mnt/bak/extensions/sd-webui-additional-networks /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
 vi extensions/sd-webui-additional-networks/scripts/model_util.py
-修改164行的函数为下面的:
+修改164行的函数为下面的(这个可以检查lora是否完整):
 ####################
 def hash_model_file(finfo):
     filename = finfo[0]
@@ -138,3 +138,6 @@ def hash_model_file(finfo):
 
 启动即可:
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
+
+
+调试完成后: 删除/home/stable-diffusion-webui即可
