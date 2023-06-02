@@ -137,6 +137,7 @@ def hash_model_file(finfo):
 ####################
 
 启动即可:
+cd /home/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
 
 
