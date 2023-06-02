@@ -101,5 +101,40 @@ cd /home/stable-diffusion-webui
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 cp -r /mnt/bak/extensions/sd-webui-additional-networks /home/stable-diffusion-webui/extensions/sd-webui-additional-networks
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+vi extensions/sd-webui-additional-networks/scripts/model_util.py
+修改164行的函数为下面的:
+####################
+def hash_model_file(finfo):
+    filename = finfo[0]
+    stat = finfo[1]
+    name = os.path.splitext(os.path.basename(filename))[0]
 
+    # Prevent a hypothetical "None.pt" from being listed.
+    if name != "None":
+        metadata = None
+
+        cached = cache("hashes").get(filename, None)
+        if cached is None or stat.st_mtime != cached["mtime"]:
+            if metadata is None and model_util.is_safetensors(filename):
+                try:
+                    metadata = safetensors_hack.read_metadata(filename)
+                except Exception as ex:
+                    return {"error": ex, "filename": filename}
+            model_hash = get_model_hash(metadata, filename)
+            # modify by yx
+            # legacy_hash = get_legacy_hash(metadata, filename)
+            try:
+                legacy_hash = get_legacy_hash(metadata, filename)
+            except Exception as ex:
+                print(111111, 'yx print----', filename)
+                return {"error": ex, "filename": filename}
+            # end-modify by yx
+        else:
+            model_hash = cached["model"]
+            legacy_hash = cached["legacy"]
+
+    return {"model": model_hash, "legacy": legacy_hash, "fileinfo": finfo}
+####################
+
+启动即可:
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
