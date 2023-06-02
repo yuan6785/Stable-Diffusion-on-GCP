@@ -103,6 +103,10 @@ cp -r /mnt/bak/extensions/sd-webui-additional-networks /home/stable-diffusion-we
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
 vi extensions/sd-webui-additional-networks/scripts/model_util.py
 修改164行的函数为下面的(这个可以检查lora是否完整---原来的功能是不完整则不启动sd, 我改为了打印出来不完整的lora文件名，但还是启动sd，不将错误的lora显示在下拉列表):
+解决报错: 
+[AddNet] Updating model hashes... 
+Error loading script: model_util.py
+RuntimeError: self.size(-1) must be divisible by 4 to view Byte as Float (different element sizes), but got 689998
 ####################
 def hash_model_file(finfo):
     filename = finfo[0]
