@@ -1,4 +1,8 @@
+---nas挂载的问题---
+参考: https://www.alibabacloud.com/help/zh/nas/latest/mount-an-nfs-file-system-on-a-linux-ecs-instance
 如果ECS已经挂载了/mnt到nas盘，强烈建议在打包镜像的时候 umount /mnt, 否则跨区域的镜像启动系统会很慢-----重要
+如果是自启动就挂载的，需要vi /etc/fstab, 注释掉/mnt的nas挂载【注释 # 1386f52d-h9fi.us-east-1.extreme.nas.aliyuncs.com:/share /mnt nfs vers=3,nolock,noacl,proto=tcp,noresvport,_netdev,x-systemd.automount 0 0】，然后重启即可
+
 
 ----minio参考---
 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes/0_public_minio_minio/cmds.txt
