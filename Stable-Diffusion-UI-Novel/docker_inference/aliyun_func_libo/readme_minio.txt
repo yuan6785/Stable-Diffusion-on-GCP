@@ -1,3 +1,5 @@
+如果ECS已经挂载了/mnt到nas盘，强烈建议在打包镜像的时候 umount /mnt, 否则跨区域的镜像启动系统会很慢-----重要
+
 ----minio参考---
 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/yuanxiao_kubernetes/0_public_minio_minio/cmds.txt
 
