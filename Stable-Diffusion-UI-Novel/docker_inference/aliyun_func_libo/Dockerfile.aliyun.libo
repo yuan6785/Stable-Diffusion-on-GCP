@@ -24,10 +24,20 @@ RUN chmod -Rf 777 Miniconda3-py38_23.1.0-1-Linux-x86_64.sh&&chmod +x Miniconda3-
 #
 # AddNet如何报错，可能是lora的的模型不完整，删除不完整的lora即可----重要
 # 
+# 安装Auto-Photoshop-StableDiffusion-Plugin插件
+# git clone https://github.com/AbdullahAlfaraj/Auto-Photoshop-StableDiffusion-Plugin
+# cd Auto-Photoshop-StableDiffusion-Plugin
+# git checkout 745d541a6298ce58ea8a135349978c864106836d
+# pip install -r requirements.txt  # 可以不执行，启动sdwebui会自动执行
+# 修改
+# /Users/yuanxiao/workspace/0yxgithub/Auto-Photoshop-StableDiffusion-Plugin/install.py
+# auto_update=False # 否则会自动更新
+#
 # 成功版本记录: 
 # https://github.com/yuan6785/stable-diffusion-webui.git
 # 上一个成功版本 ： branch:20230515 submit:   b791502f18b0de3e9eb93fca3aadce42878904d8
 # 目前版本:  branch:master   submit:  e4cd0e1abc89713d7c1ac7f1f37ea8359c49d7ec
+#
 #
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/miniconda3 \

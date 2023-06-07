@@ -55,12 +55,12 @@ docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本
 docker run -it --rm sand:1.0 /bin/bash
 ---------推送本地镜像到阿里云（记得修改版本号）-------美东--------
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v68
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v68
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v69
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v69
 ---------推送本地镜像到阿里云（记得修改版本号）------新加坡--------
             docker login --username=yuanxiao@playnexx registry-intl.ap-southeast-1.aliyuncs.com  # b*****1**
-            docker tag sand:1.0 registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v68
-            docker push registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v68
+            docker tag sand:1.0 registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v69
+            docker push registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v69
 ----清理镜像
 docker images
 docker rmi -f sand:1.0
