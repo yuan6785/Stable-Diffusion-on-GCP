@@ -41,4 +41,5 @@ WORKDIR /home
 # CMD ["sh", "-c", "/home/start.sh"]  # 阿里云不支持这种写法
 # 阿里云函数---支持写在一条命令的写法---但是支持也不太好，sdwebui总启动不起来,有时候又能启动起来,卡在各种位置，感觉是阿里云函数的问题
 # CMD /bin/sh -c "echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV;echo 'yx test 1111'>/var/log/sdwebui.log;/usr/bin/supervisord -c /etc/supervisord.conf;/usr/sbin/nginx -c /etc/nginx/nginx.conf;sleep 1 && tail -f /var/log/sdwebui.log;sleep 864000"
-CMD /bin/sh -c "echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV;echo 'yx test 1111'>/var/log/sdwebui.log;/usr/bin/supervisord -c /etc/supervisord.conf;sleep 1 && tail -f /var/log/sdwebui.log;/usr/sbin/nginx -c /etc/nginx/nginx.conf -g 'daemon off;';"
+CMD /bin/sh -c "echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV;echo 'yx test 1111'>/var/log/sdwebui.log;/usr/bin/supervisord -c /etc/supervisord.conf;sleep 1 && /usr/sbin/nginx -c /etc/nginx/nginx.conf -g 'daemon off;';"
+# CMD /bin/sh -c "echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV;echo 'yx test 1111'>/var/log/sdwebui.log;/usr/bin/supervisord -c /etc/supervisord.conf;sleep 1 && /usr/sbin/nginx -c /etc/nginx/nginx.conf && tail -f /var/log/sdwebui.log;"
