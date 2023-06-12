@@ -60,7 +60,7 @@ docker run -it --rm sand:1.0 /bin/bash
 ---------推送本地镜像到阿里云（记得修改版本号）------新加坡--------
             docker login --username=yuanxiao@playnexx registry-intl.ap-southeast-1.aliyuncs.com  # b*****1**
             docker tag sand:1.0 registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v70
-            docker push registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v69
+            docker push registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v70
 ----清理镜像
 docker images
 docker rmi -f sand:1.0
