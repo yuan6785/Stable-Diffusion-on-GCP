@@ -66,5 +66,5 @@ echo "yx test 1111">/var/log/sdwebui.log && \
 /usr/bin/supervisord -c /etc/supervisord.conf; sleep 1 && \
 /usr/sbin/nginx -c /etc/nginx/nginx.conf && \
 cd /home/stable-diffusion-webui && \
-/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 9965 --listen --xformers --medvram --api 2>&1 | tee sd.log && \
+/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 9965 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log && \
 echo ---------end-------'
