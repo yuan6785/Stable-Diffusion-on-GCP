@@ -8,7 +8,7 @@ readme_minio.txt 是配置minio的文档
 u13---ubuntu打包的镜像  （皮克斯模型---启动时间18:20:23--18:21:47  84秒启动）
 v67, v69---mac打包的镜像      (anything模型---启动时间18:35:05--18:36:59  114秒启动）
 v67, v69---mac打包的镜像      (皮克斯模型---启动时间18:53:05--18:54:12  67秒启动）
-u33 --- 最后一个带superver的镜像
+u33 --- 最后一个带supervisor的镜像
 
 使用文档
 https://confluence.playnexx.net/pages/viewpage.action?pageId=82576211
