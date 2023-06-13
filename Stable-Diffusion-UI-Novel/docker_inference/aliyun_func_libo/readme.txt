@@ -1,5 +1,7 @@
 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.finally.libo.supervisor2 ------ 重要参考 
 ######
+提示：按量实例在处理完请求后会被冻结，如果一段时间内（一般为3~5分钟）不再处理请求，会自动销毁。------重要(冻结cpu的期间无法后台处理程序)----
+######
 解决云函数无法启动后台启动sd的问题, 是由于云函数只有在访问期间cpu才不会被冻结，这里通过一个技巧绕过去，就是在云函数启动一个web服务，启动一个需要120秒才能拿到结果的http接口，这期间cpu不会被冻结， 120秒期间启动sd足够了
 ######
 

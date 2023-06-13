@@ -66,7 +66,7 @@ echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && 
 sleep 10 && \
 echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV && \
 echo "yx test 1111">/var/log/sdwebui.log && \
-unlink /var/run/supervisor.sock;/usr/bin/supervisord -c /etc/supervisord.conf; sleep 1 && \
+rm -rf /var/run/supervisor.sock;/usr/bin/supervisord -c /etc/supervisord.conf; sleep 1 && \
 /usr/sbin/nginx -c /etc/nginx/nginx.conf && \
 cd /home/stable-diffusion-webui && \
 cd /home && \
