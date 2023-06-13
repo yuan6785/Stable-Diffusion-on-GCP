@@ -50,6 +50,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui
 ----本地打包镜像
 cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor  .  # 本地打包镜像--supervisor版本--有问题，启动不起来
+# docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor2  .  # 本地打包镜像--supervisor2版本--可以启动了，但是用sd生成几次图片后，实例就会被释放 ----- 重要参考
 docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash

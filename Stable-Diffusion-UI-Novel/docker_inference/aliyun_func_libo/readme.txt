@@ -1,3 +1,8 @@
+/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.finally.libo.supervisor2 ------ 重要参考 
+######
+解决云函数无法启动后台启动sd的问题, 是由于云函数只有在访问期间cpu才不会被冻结，这里通过一个技巧绕过去，就是在云函数启动一个web服务，启动一个需要120秒才能拿到结果的http接口，这期间cpu不会被冻结， 120秒期间启动sd足够了
+######
+
 readme_ubuntu.txt 是在ubuntu下的用docker安装的说明， 这个需要生成两次镜像，但是启动时间短
 
 readme_debug.txt 是直接用dockerfile生成镜像，可以在mac上面直接打包 -------- 后面用这个
