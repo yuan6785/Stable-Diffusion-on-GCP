@@ -67,7 +67,7 @@ sleep 5 && \
 echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED;echo PROJECT_ENV=$PROJECT_ENV && \
 echo "yx test 1111">/var/log/sdwebui.log && \
 cd /home && \
-nohup /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u -m uvicorn fastapi_main:app --port 9966 &; sleep 5 && \ 
+nohup /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u -m uvicorn fastapi_main:app --port 9966 >fastapi_main.log 2>&1 & sleep 5 && \
 /usr/sbin/nginx -c /etc/nginx/nginx.conf && \
 echo ---------start launch entry server-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 cd /home/stable-diffusion-webui && \
