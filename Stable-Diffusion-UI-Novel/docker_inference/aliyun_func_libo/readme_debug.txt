@@ -51,13 +51,14 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui
 cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor  .  # 本地打包镜像--supervisor版本--有问题，启动不起来
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor2  .  # 本地打包镜像--supervisor2版本--可以启动了，但是用sd生成几次图片后，实例就会被释放 ----- 重要参考
-docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本
+# docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本
+docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor3  .  # 只有sd的版本
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash
 ---------推送本地镜像到阿里云（记得修改版本号）-------美东--------
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u39
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u39
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u50
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u50
 ---------推送本地镜像到阿里云（记得修改版本号）------新加坡--------
             docker login --username=yuanxiao@playnexx registry-intl.ap-southeast-1.aliyuncs.com  # b*****1**
             docker tag sand:1.0 registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v70
