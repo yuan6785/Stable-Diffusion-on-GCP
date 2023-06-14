@@ -17,16 +17,37 @@ async def root():
 
     云函数并发度设置为： 500
     """
-    await asyncio.sleep(100) # 110秒够启动sd了
-    # 返回html
+    await asyncio.sleep(10) # 110秒够启动sd了
+    # 返回html---不断重复请求当前api----直到sdwebui启动成功
     return HTMLResponse(content="""
     <html>
-        <head>
-            <title>starting sd ....</title>
-        </head>
-        <body>
-            <h1>200,请耐心等待sdwebui服务器启动(大概2-4分钟)...刷新浏览器</h1>
-        </body>
+
+    <head>
+        <title>Starting sd ....</title>
+        <script type="text/javascript">
+            // 当页面加载完成后执行
+            window.onload = function () {
+                console.log(2222222)
+                var countdown = 3; // 倒计时的初始值
+                // 创建一个定时器，每秒减少倒计时值
+                var timer = setInterval(function () {
+                    countdown--;
+                    document.getElementsByTagName('h1')[0].innerHTML = "200，请耐心等待 sdwebui 服务器启动（大约 2-4 分钟）... 倒计时 " + countdown + " 秒，自动刷新浏览器";
+
+                    // 当倒计时为0时，清除定时器并刷新页面
+                    if (countdown == 0) {
+                        clearInterval(timer);
+                        window.location.href = window.location.href;
+                    }
+                }, 1000);
+            }
+        </script>
+    </head>
+
+    <body>
+        <h1>200，请耐心等待 sdwebui 服务器启动（大约 2-4 分钟）... 倒计时 3 秒，自动刷新浏览器</h1>
+    </body>
+
     </html>
     """, status_code=200)
 
