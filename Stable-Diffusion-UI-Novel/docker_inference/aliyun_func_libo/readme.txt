@@ -1,9 +1,21 @@
 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.finally.libo.supervisor2 ------ 重要参考 
+Dockerfile.finally.libo.supervisor3 ------ 重要参考
 ######
 提示：按量实例在处理完请求后会被冻结，如果一段时间内（一般为3~5分钟）不再处理请求，会自动销毁。------重要(冻结cpu的期间无法后台处理程序)----
 ######
 解决云函数无法启动后台启动sd的问题, 是由于云函数只有在访问期间cpu才不会被冻结，这里通过一个技巧绕过去，就是在云函数启动一个web服务，启动一个需要120秒才能拿到结果的http接口，这期间cpu不会被冻结， 120秒期间启动sd足够了
 ######
+
+
+#####
+# 注意(写在dockerfile的CMD之前的注释):
+# 1. 注意命令中不能有 (当最后一条命令还没有启动起来, nginx访问返回http请求信息的服务)----会导致最后一条命令无法启动 
+#     当云函数启动后，只有在访问云函数期间，cpu才不会被冻结。所以当第一次http请求成功后，cpu被冻结，可能导致其他需要时间的服务无法启动
+# 2. 当nignx配置多条转发路径，其中一条命令执行时间比较长(120秒左右)，会导致启动另外的实例，大于一个实例
+# 3. 下面的命令必须是幂等的，如果在同一实例重启不要报错 
+# 4. 要像云函数不释放，必须是执行dockerfile的最后一个前台服务的请求，即卡住docker的最后一条任务的请求。
+#    如果请求的非前台服务的其他服务的请求，虽然端口都是docker暴露端口，但是还是无法保活，云函数会在一段时间后释放
+#####
 
 readme_ubuntu.txt 是在ubuntu下的用docker安装的说明， 这个需要生成两次镜像，但是启动时间短
 
