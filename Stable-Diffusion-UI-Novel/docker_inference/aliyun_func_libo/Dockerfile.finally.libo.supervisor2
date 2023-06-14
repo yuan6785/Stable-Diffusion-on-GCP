@@ -36,7 +36,7 @@ ENV PROJECT_ENV prod
 #
 EXPOSE 7860
 
-WORKDIR /home
+WORKDIR /home/stable-diffusion-webui
 # --ui-settings-file /home/stable-diffusion-webui/config.json
 # CMD ./start.sh  # 阿里云函数不支持这种写法
 # CMD ["sh", "-c", "/home/start.sh"]  # 阿里云不支持这种写法
