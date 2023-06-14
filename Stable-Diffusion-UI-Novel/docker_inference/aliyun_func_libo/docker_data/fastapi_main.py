@@ -17,7 +17,7 @@ async def root():
 
     云函数并发度设置为： 500
     """
-    await asyncio.sleep(110) # 110秒够启动sd了
+    await asyncio.sleep(100) # 110秒够启动sd了
     # 返回html
     return HTMLResponse(content="""
     <html>
