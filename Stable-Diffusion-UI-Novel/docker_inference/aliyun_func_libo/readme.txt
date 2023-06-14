@@ -7,7 +7,7 @@ Dockerfile.finally.libo.supervisor3 ------ 重要参考
 ######
 
 
-#####
+#####参考Dockerfile.finally.libo.supervisor3的CMD注释
 # 注意(写在dockerfile的CMD之前的注释):
 # 1. 注意命令中不能有 (当最后一条命令还没有启动起来, nginx访问返回http请求信息的服务)----会导致最后一条命令无法启动 
 #     当云函数启动后，只有在访问云函数期间，cpu才不会被冻结。所以当第一次http请求成功后，cpu被冻结，可能导致其他需要时间的服务无法启动
