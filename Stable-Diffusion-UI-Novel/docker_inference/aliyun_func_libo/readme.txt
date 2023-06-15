@@ -29,9 +29,14 @@ Dockerfile.finally.libo.supervisor3 ------ 重要参考
 # 5. 最后确定不要将supervisord放到nginx进行转发，supervisord不要作为外部暴露，只作为内部启动sd服务器的载体，否则supervisord访问会导致云函数启动多个实例，虽然只限制了一个实例, 而且云函数没有起来之前，访问supervisor会导致cpu冻结；   除此之外, nginx要在fastapi_main启动之后启动
 
 # 记录一次测试（Dockerfile.finally.libo.supervisor2）----
-# c-64898a1e-f45d4dac86a54d42be0d   2023-06-14 17:36:34  17:55最后一张图， 然后用非卡住docker的后台任务进行保活测试  19:10都没有释放，说明非卡住docker的后台任务可以保活（但是执行时间不能太长，不能有supervisor的web访问,看日志太耗api. 和其他非卡主docker的服务器的长时间的访问，长时间的需要前端页面轮询）
-# 记录一次测试（Dockerfile.finally.libo.supervisor3）----
 # c-648a7f4e-c1bf3c5547114d589e46   2023-06-15 11:02:39  11:10最后一张图,  然后用卡住docker的后台任务进行保活测试   13:30分都没有释放 
+
+# 记录一次测试（Dockerfile.finally.libo.supervisor2）----
+# c-648ac076-79d911e2ab3742b382ef   2023-06-15 15:40:00  15:51最后一张图,  然后用插件进行保活   
+
+# 记录一次测试（Dockerfile.finally.libo.supervisor3）----
+# c-64898a1e-f45d4dac86a54d42be0d   2023-06-14 17:36:34  17:55最后一张图， 然后用非卡住docker的后台任务进行保活测试  19:10都没有释放，说明非卡住docker的后台任务可以保活（但是执行时间不能太长，不能有supervisor的web访问,看日志太耗api. 和其他非卡主docker的服务器的长时间的访问，长时间的需要前端页面轮询）
+
 #####
 
 readme_ubuntu.txt 是在ubuntu下的用docker安装的说明， 这个需要生成两次镜像，但是启动时间短
