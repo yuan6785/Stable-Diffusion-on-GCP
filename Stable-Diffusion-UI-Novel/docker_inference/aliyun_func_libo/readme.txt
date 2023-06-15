@@ -1,5 +1,15 @@
-/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.finally.libo.supervisor2 ------ 重要参考 
+Dockerfile.finally.libo ------ 正在使用的文件---这个比较好维护，当时功能性不强，无法云函数内重启sd
+对应插件: /Users/yuanxiao/workspace/0yxgithub/sd-webui-manage-yx/scripts/main.py 修改 from scripts.main_finally.py import *
+###
+Dockerfile.finally.libo.supervisor2 ------ 后期切换这个(使用的文件)----这个是最重要的(可以云函数内重启sd)----
+对应插件: /Users/yuanxiao/workspace/0yxgithub/sd-webui-manage-yx/scripts/main.py 修改 from scripts.main_supervisor2.py import *
+###
 Dockerfile.finally.libo.supervisor3 ------ 重要参考
+对应插件: /Users/yuanxiao/workspace/0yxgithub/sd-webui-manage-yx/scripts/main.py 修改 from scripts.main_supervisor3.py import *
+###
+
+
+
 ######
 提示：按量实例在处理完请求后会被冻结，如果一段时间内（一般为3~5分钟）不再处理请求，会自动销毁。------重要(冻结cpu的期间无法后台处理程序)----
 ######
