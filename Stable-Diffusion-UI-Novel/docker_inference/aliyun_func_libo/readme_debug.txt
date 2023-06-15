@@ -71,8 +71,8 @@ docker run -it --rm sand:1.0 /bin/bash
             ----
             Dockerfile.finally.libo.supervisor2
             -->
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u1
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u1
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u2
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u2
 ---------推送本地镜像到阿里云（记得修改版本号）------新加坡--------
             docker login --username=yuanxiao@playnexx registry-intl.ap-southeast-1.aliyuncs.com  # b*****1**
             docker tag sand:1.0 registry-intl.ap-southeast-1.aliyuncs.com/talefun/stable-diffusion-images:v70
