@@ -28,16 +28,18 @@ Dockerfile.finally.libo.supervisor3 ------ 重要参考
 #    这一条很可能和第二条是一个原理，如果一个请求时间太长，会导致启动多个实例，导致原实例被释放(我也只限制了1个实例 但是还是会启动多个)
 # 5. 最后确定不要将supervisord放到nginx进行转发，supervisord不要作为外部暴露，只作为内部启动sd服务器的载体，否则supervisord访问会导致云函数启动多个实例，虽然只限制了一个实例, 而且云函数没有起来之前，访问supervisor会导致cpu冻结；   除此之外, nginx要在fastapi_main启动之后启动
 
+# 记录一次测试（Dockerfile.finally.libo）----
+# c-648ad6df-656326a7801147d7838d   2023-06-15 17:18:00  17:48最后一张图,  然后用卡住docker的后台任务进行保活测试   18:05分释放, 但是保活是在18:00失效的，说明保活有效，保活失效后5分钟实例被释放
+
 # 记录一次测试（Dockerfile.finally.libo.supervisor2）----
 # c-648a7f4e-c1bf3c5547114d589e46   2023-06-15 11:02:39  11:10最后一张图,  然后用卡住docker的后台任务进行保活测试   13:30分都没有释放 
 
 # 记录一次测试（Dockerfile.finally.libo.supervisor2）----
-# c-648ac076-79d911e2ab3742b382ef   2023-06-15 15:40:00  15:56最后一张图,  然后用插件进行保活   
+# c-648ac076-79d911e2ab3742b382ef   2023-06-15 15:40:00  15:56最后一张图,  然后用插件进行保活   17:20都没有释放，说明插件可以保活
 
 # 记录一次测试（Dockerfile.finally.libo.supervisor3）----
 # c-64898a1e-f45d4dac86a54d42be0d   2023-06-14 17:36:34  17:55最后一张图， 然后用非卡住docker的后台任务进行保活测试  19:10都没有释放，说明非卡住docker的后台任务可以保活（但是执行时间不能太长，不能有supervisor的web访问,看日志太耗api. 和其他非卡主docker的服务器的长时间的访问，长时间的需要前端页面轮询）
 
-47   c-648ac6a2-26ac03f5c5e34cf3a13a  16:07
 #####
 
 readme_ubuntu.txt 是在ubuntu下的用docker安装的说明， 这个需要生成两次镜像，但是启动时间短
