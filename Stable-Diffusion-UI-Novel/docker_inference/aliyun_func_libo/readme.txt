@@ -37,6 +37,7 @@ Dockerfile.finally.libo.supervisor3 ------ 重要参考
 # 记录一次测试（Dockerfile.finally.libo.supervisor3）----
 # c-64898a1e-f45d4dac86a54d42be0d   2023-06-14 17:36:34  17:55最后一张图， 然后用非卡住docker的后台任务进行保活测试  19:10都没有释放，说明非卡住docker的后台任务可以保活（但是执行时间不能太长，不能有supervisor的web访问,看日志太耗api. 和其他非卡主docker的服务器的长时间的访问，长时间的需要前端页面轮询）
 
+47   c-648ac6a2-26ac03f5c5e34cf3a13a  16:07
 #####
 
 readme_ubuntu.txt 是在ubuntu下的用docker安装的说明， 这个需要生成两次镜像，但是启动时间短
