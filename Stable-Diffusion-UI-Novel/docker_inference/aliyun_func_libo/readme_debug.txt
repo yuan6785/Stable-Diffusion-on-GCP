@@ -66,8 +66,8 @@ docker run -it --rm sand:1.0 /bin/bash
             ----
             Dockerfile.finally.libo.supervisor2
             -->
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u3
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u3
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u5
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u5
             ----
             Dockerfile.finally.libo.supervisor3
             -->

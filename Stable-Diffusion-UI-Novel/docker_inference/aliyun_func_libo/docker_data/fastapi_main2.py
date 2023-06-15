@@ -89,4 +89,24 @@ async def root():
     </html>
     """, status_code=200)
 
+@app.get("/getlog")
+async def getlog(filename: str=None, count: int=200):
+    """
+    获取日志
+    """
+    # 读取文件内容
+    if filename is None:
+        filepath = "/var/log/sdwebui.log"
+    else:
+        filepath = f"/var/log/{filename}.log"
+    # 读取最后count行,html 换行格式化返回
+    if os.path.exists(filepath):
+        with open(filepath, "r") as f:
+            lines = f.readlines()
+            lines = lines[-count:]
+            lines = "<br/>".join(lines)
+            return HTMLResponse(content=lines)
+    else:
+        return {"message": "file not exist"}
+
 # sleep 1 &&  /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u -m uvicorn fastapi_main:app --port 9966
