@@ -36,6 +36,7 @@ ENV PROJECT_ENV prod
 #
 EXPOSE 7860
 
+# 这里如果不存在stable-diffusion-webui目录，则会创建stable-diffusion-webui目录，所以下面命令不用去判断stable-diffusion-webui是否存在
 WORKDIR /home/stable-diffusion-webui
 # --ui-settings-file /home/stable-diffusion-webui/config.json
 # CMD ./start.sh  # 阿里云函数不支持这种写法

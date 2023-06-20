@@ -19,7 +19,6 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-torch-cuda-test
 如果是非gpu的ec2，这个命令会耗尽内存，关闭窗口即可结束程序
 
-
 带gpu的ec2的启动命令--
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
 
@@ -61,8 +60,8 @@ docker run -it --rm sand:1.0 /bin/bash
             ----
             Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化
             -->
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v70
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v70
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v71
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v71
             ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->
