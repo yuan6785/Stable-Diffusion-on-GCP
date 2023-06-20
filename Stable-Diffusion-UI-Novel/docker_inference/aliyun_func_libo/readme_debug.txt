@@ -60,8 +60,8 @@ docker run -it --rm sand:1.0 /bin/bash
             ----
             Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化
             -->
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v71
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v71
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v73
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v73
             ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->

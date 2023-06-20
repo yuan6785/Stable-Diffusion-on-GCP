@@ -97,4 +97,6 @@ WORKDIR /home/stable-diffusion-webui
 # echo ---------end-------'
 # -----------
 # echo "domain 的值为：$domain"
-CMD ["./start.sh", "--domain", "unknow", "--startmodel", "unknow"]
+# CMD ["./pladayy_docker_start.sh", "--domain", "unknow", "--startmodel", "unknow"]
+CMD /bin/sh -c './pladayy_docker_start.sh -d "unknow" -s "unknow"'
+# 云函数配置命令:  /bin/sh -c './pladayy_docker_start.sh -d "46.sd.play1.net" -s "unknow"'

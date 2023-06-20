@@ -1,7 +1,5 @@
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
-echo "domain:$domain
-startmodel:$startmodel
-">/home/start_docker_params.txt
+while getopts ":d:s:" opt;do case $opt in d) echo "domain:$OPTARG" >> /home/start_docker_params.txt;; s) echo "startmodel:$OPTARG" >> /home/start_docker_params.txt;; ?) echo "未知参数" >> /home/start_docker_params.txt;; esac done
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
