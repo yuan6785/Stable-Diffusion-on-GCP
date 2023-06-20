@@ -95,8 +95,6 @@ WORKDIR /home/stable-diffusion-webui
 # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 7860 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log && \
 # # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
 # echo ---------end-------'
-# -----------
-# echo "domain 的值为：$domain"
-# CMD ["./pladayy_docker_start.sh", "--domain", "unknow", "--startmodel", "unknow"]
+# ------------------上面的命令太长了，改成下面的命令(这样就可以传参了)-----------------
 CMD /bin/sh -c './pladayy_docker_start.sh -d "unknow" -s "unknow"'
 # 云函数配置命令:  /bin/sh -c './pladayy_docker_start.sh -d "46.sd.play1.net" -s "unknow"'
