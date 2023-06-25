@@ -65,6 +65,26 @@ async def clean_nas_outputs(dur=8):
         print("clean_nas_outputs error: ", e)
         return []
 
+# def check_file_names(content):
+#     """
+#     @des: 检查文件名是否是乱码
+#     orjson.dumps("哈哈", option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME, default=str)
+#     重现报错------
+#     orjson只处理UTF-8格式的字符串，如果给orjson.dumps()方法传入一个UTF-16的字符串，会产生报错。
+#     >>> import orjson  
+#     >>> orjson.dumps('\ud800')  
+#     JSONEncodeError: str is not valid UTF-8: surrogates not allowed  
+#     -------
+#     """
+#     import orjson
+#     return orjson.dumps(
+#             content,
+#             option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME,
+#             default=str,
+#     )
+
+
+
 
 async def add_aps_tasks():
     """
