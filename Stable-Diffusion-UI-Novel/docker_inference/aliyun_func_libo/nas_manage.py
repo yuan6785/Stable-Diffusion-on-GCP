@@ -58,7 +58,7 @@ async def clean_nas_outputs(dur=8):
             if valid_name:
                 if subfolder.name <= end_date:
                     print("删除文件夹: ", subfolder)
-                    shutil.rmtree(str(subfolder), ignore_errors=True)
+                    # shutil.rmtree(str(subfolder), ignore_errors=True)
                     results.append(str(subfolder))
         return results
     except Exception as e:
