@@ -92,6 +92,23 @@ priority=1002
 superverisorctl # 看是否启动成功
 tail -f /var/log/sdwebui/minioyx.log
 
+[program:sdwebui-nas-manage]  
+command=bash -c "sleep 10 && /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u  nas_manage.py"  #  nas_manage.py的内容可以看当前文件夹下的nas_manage.py
+directory=/mnt/sdwebui_public/scripts
+user=root
+redirect_stderr=true
+autostart=true
+startsecs=1
+stdout_logfile=/var/log/sdwebui/sdwebui_nas_manage.log
+stopsignal=TERM
+stopwaitsecs=60 
+stopasgroup=true 
+priority=1002
+#####
+superverisorctl # 看是否启动成功
+tail -f /var/log/sdwebui/minioyx.log
+tail -f /var/log/sdwebui/sdwebui_nas_manage.log
+
 
 域名访问： minio.playdayy.cn
 
