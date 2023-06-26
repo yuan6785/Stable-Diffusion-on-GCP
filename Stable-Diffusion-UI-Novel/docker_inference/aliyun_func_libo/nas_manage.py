@@ -66,7 +66,7 @@ async def clean_nas_outputs(dur=8):
         return []
 
 
-async def check_file_names(isdel=False):
+async def check_nas_file_names(isdel=False):
     """
     @des: 检查文件名是否是乱码
     orjson.dumps("哈哈", option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME, default=str)
@@ -146,7 +146,7 @@ async def clean_outputs(dur: int = 8):
 @app.get("/check_file_names/", response_class=HTMLResponse)
 async def check_file_names(isdel: int = 0):
     real_isdel = True if isdel == 1 else False
-    results = await check_file_names(real_isdel)
+    results = await check_nas_file_names(real_isdel)
     # 将results根据最后的日期排序
     results = sorted(results, key=lambda x: x.split("/")[-1], reverse=True)
     # results是一个json
