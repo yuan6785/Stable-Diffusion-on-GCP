@@ -58,32 +58,49 @@ async def clean_nas_outputs(dur=8):
             if valid_name:
                 if subfolder.name <= end_date:
                     print("删除文件夹: ", subfolder)
-                    # shutil.rmtree(str(subfolder), ignore_errors=True)
+                    shutil.rmtree(str(subfolder), ignore_errors=True)
                     results.append(str(subfolder))
         return results
     except Exception as e:
         print("clean_nas_outputs error: ", e)
         return []
 
-# def check_file_names(content):
-#     """
-#     @des: 检查文件名是否是乱码
-#     orjson.dumps("哈哈", option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME, default=str)
-#     重现报错------
-#     orjson只处理UTF-8格式的字符串，如果给orjson.dumps()方法传入一个UTF-16的字符串，会产生报错。
-#     >>> import orjson  
-#     >>> orjson.dumps('\ud800')  
-#     JSONEncodeError: str is not valid UTF-8: surrogates not allowed  
-#     -------
-#     """
-#     import orjson
-#     return orjson.dumps(
-#             content,
-#             option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME,
-#             default=str,
-#     )
 
-
+async def check_file_names(isdel=False):
+    """
+    @des: 检查文件名是否是乱码
+    orjson.dumps("哈哈", option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME, default=str)
+    重现报错------
+    orjson只处理UTF-8格式的字符串，如果给orjson.dumps()方法传入一个UTF-16的字符串，会产生报错。
+    >>> import orjson  
+    >>> orjson.dumps('\ud800')  
+    JSONEncodeError: str is not valid UTF-8: surrogates not allowed  
+    -------
+    """
+    import orjson
+    dir_paths = ["/mnt/sdwebui_public/public/models"]  # 有其他文件夹往里面加即可
+    subobjs = []
+    for dir_path in dir_paths:
+        subobjs += list(pathlib.Path(dir_path).rglob("*"))
+    subfiles = [subobj for subobj in subobjs if subobj.is_dir() == False]
+    results = []
+    for subfile in subfiles:
+        try:
+            orjson.dumps(
+                subfile.name,
+                option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_PASSTHROUGH_DATETIME,
+                default=str,
+            )
+        except orjson.JSONEncodeError as e:
+            try:
+                results.append(str(subfile))
+                if isdel:
+                    os.remove(str(subfile))
+                print("乱码文件名: ", subfile)
+                print(e)
+            except:
+                pass
+    return results
 
 
 async def add_aps_tasks():
@@ -122,6 +139,24 @@ async def clean_outputs(dur: int = 8):
     html = ""
     for result in results:
         html += result + "<br>"
+    if html == "":
+        html = "没有需要清理的文件夹"
+    return html
+
+@app.get("/check_file_names/", response_class=HTMLResponse)
+async def check_file_names(isdel: int = 0):
+    real_isdel = True if isdel == 1 else False
+    results = await check_file_names(real_isdel)
+    # 将results根据最后的日期排序
+    results = sorted(results, key=lambda x: x.split("/")[-1], reverse=True)
+    # results是一个json
+    # return results
+    # 将results拼接成html返回
+    html = ""
+    for result in results:
+        html += result + "<br>"
+    if html == "":
+        html = "没有需要清理的乱码文件名"
     return html
 
 if __name__ == '__main__':
