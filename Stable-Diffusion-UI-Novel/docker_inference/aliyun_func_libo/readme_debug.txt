@@ -38,7 +38,6 @@ try:
     ssl._create_default_https_context = ssl._create_unverified_context
     print("yx--modify-ssl--")
     # end --- modify by yx
-    ssl._create_default_https_context = ssl._create_unverified_context
 except ImportError:
     _have_ssl = False
 else:
