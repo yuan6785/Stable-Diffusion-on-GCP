@@ -26,22 +26,23 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui&&/mnt/sdwebui
 
 ----解决阿里云函数无法用ssl下载模型的问题(重要---重启云函数才会生效---)------
 修改源码 vi /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/urllib/request.py
+重现错误代码
 ###############
-1346         try:
-1347             try:
-1348                 # modify by yx --disabled ssl
-1349                 import ssl
-1350                 ssl._create_default_https_context = ssl._create_unverified_context
-1351                 print("yx--modify-ssl--")
-1352                 # end --- modify by yx
-1353                 h.request(req.get_method(), req.selector, req.data, headers,
-1354                           encode_chunked=req.has_header('Transfer-encoding'))
-1355             except OSError as err: # timeout error
-1356                 raise URLError(err)
-1357             r = h.getresponse()
-1358         except:
-1359             h.close()
-1360             raise
+import urllib.request
+url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth'
+urllib.request.urlretrieve(url, 'yxtestexample.pth')
+############### 下面是修改的地方，在文件开始位置111行左右
+try:
+    import ssl
+    # modify by yx --disabled ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+    print("yx--modify-ssl--")
+    # end --- modify by yx
+    ssl._create_default_https_context = ssl._create_unverified_context
+except ImportError:
+    _have_ssl = False
+else:
+    _have_ssl = True
 ###############
 
 
