@@ -1,0 +1,31 @@
+报错一:
+
+参考:  https://github.com/encode/httpx/issues/96
+ 
+Exception in callback >
+handle:
+Traceback (most recent call last):
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_state.py", line 249, in _fire_event_triggered_transitions
+new_state = EVENT_TRIGGERED_TRANSITIONS[role][state][event_type]
+KeyError:
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+File "uvloop/cbhandles.pyx", line 253, in uvloop.loop.TimerHandle._run
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/uvicorn/protocols/http/h11_impl.py", line 383, in timeout_keep_alive_handler
+self.conn.send(event)
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_connection.py", line 468, in send
+data_list = self.send_with_data_passthrough(event)
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_connection.py", line 493, in send_with_data_passthrough
+self._process_event(self.our_role, event)
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_connection.py", line 242, in _process_event
+self._cstate.process_event(role, type(event), server_switch_event)
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_state.py", line 238, in process_event
+self._fire_event_triggered_transitions(role, event_type)
+File "/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/h11/_state.py", line 251, in _fire_event_triggered_transitions
+raise LocalProtocolError(
+h11._util.LocalProtocolError: can't handle event type ConnectionClosed when role=SERVER and state=SEND_BODY
+
+解决办法：
+从httpx 0.18.2升级到0.21.1后，我们也再次遇到这个问题。作为一种解决方法，我们将 httpx 固定到旧版本，一切似乎都工作正常。
