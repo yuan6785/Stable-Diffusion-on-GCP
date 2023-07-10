@@ -1,0 +1,2 @@
+SyntaxError: not a TIFF file (header b"b'Exif\\x" not valid)  的解决方法
+https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/11126
