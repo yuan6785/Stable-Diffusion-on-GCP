@@ -58,6 +58,7 @@ class MakePolicy(object):
 
 # 用上面的命令登录后， 就可以自由使用其他命令, 测试命令
 # ./mc.RELEASE.2022-06-10T22-29-12Z admin policy ls myminio
+# 老版本是:  ./mc.RELEASE.2022-06-10T22-29-12Z admin policy list myminio
 
 # 生成配置文件---多次执行如果存在会更新
 # ./mc.RELEASE.2022-06-10T22-29-12Z admin policy add myminio hahahaha ./project_admin.txt
