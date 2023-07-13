@@ -8,6 +8,9 @@ nvidia-smi # 查看显卡驱动是否安装成功
 我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
 实例启动模板: sdwebui-aliynfunc-nas-debug （用上面的镜像和相关机型的，直接用即可）
 如果内存不够: 最好创建一个虚拟内存----todo
+--- 激活conda环境
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
+source ~/.bashrc
 ---
 也可以直接在云函数中"登录实例"--进入docker镜像中， 进行调试
 ---调试rsync--
@@ -114,6 +117,7 @@ ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/exten
 启动(可以在home目录下自行调试，不影响云函数的运行)---
 cd /home/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python  launch.py  --listen --port 9965  --xformers  --medvram 
+
 
 
 例如调试扩展： /home/stable-diffusion-webui/extensions/sd-webui-additional-networks

@@ -1,3 +1,74 @@
 SyntaxError: not a TIFF file (header b"b'Exif\\x" not valid)  的解决方法
 https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/11126
 https://github.com/Mikubill/sd-webui-controlnet/issues/1559
+图片信息错误--将图片截图在转化就不会有问题
+
+
+
+安装gfpgan报错：
+RuntimeError: Couldn't install gfpgan.
+ERROR: Could not find a version that satisfies the requirement cython
+安装cython即可
+pip install cython==0.29.36
+
+
+----解决阿里云函数无法用ssl下载模型的问题(重要---重启云函数才会生效---)------
+修改源码 vi /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/urllib/request.py
+重现错误代码
+###############
+import urllib.request
+url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth'
+urllib.request.urlretrieve(url, 'yxtestexample.pth')
+############### 下面是修改的地方，在文件开始位置111行左右
+try:
+    import ssl
+    # modify by yx --disabled ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+    print("yx--modify-ssl--")
+    # end --- modify by yx
+except ImportError:
+    _have_ssl = False
+else:
+    _have_ssl = True
+###############
+
+
+
+vi extensions/sd-webui-additional-networks/scripts/model_util.py
+修改164行的函数为下面的(这个可以检查lora是否完整---原来的功能是不完整则不启动sd, 我改为了打印出来不完整的lora文件名，但还是启动sd，不将错误的lora显示在下拉列表):
+解决报错: 
+[AddNet] Updating model hashes... 
+Error loading script: model_util.py
+RuntimeError: self.size(-1) must be divisible by 4 to view Byte as Float (different element sizes), but got 689998
+####################
+def hash_model_file(finfo):
+    filename = finfo[0]
+    stat = finfo[1]
+    name = os.path.splitext(os.path.basename(filename))[0]
+
+    # Prevent a hypothetical "None.pt" from being listed.
+    if name != "None":
+        metadata = None
+
+        cached = cache("hashes").get(filename, None)
+        if cached is None or stat.st_mtime != cached["mtime"]:
+            if metadata is None and model_util.is_safetensors(filename):
+                try:
+                    metadata = safetensors_hack.read_metadata(filename)
+                except Exception as ex:
+                    return {"error": ex, "filename": filename}
+            model_hash = get_model_hash(metadata, filename)
+            # modify by yx
+            # legacy_hash = get_legacy_hash(metadata, filename)
+            try:
+                legacy_hash = get_legacy_hash(metadata, filename)
+            except Exception as ex:
+                print(111111, 'yx print----', filename)
+                return {"error": ex, "filename": filename}
+            # end-modify by yx
+        else:
+            model_hash = cached["model"]
+            legacy_hash = cached["legacy"]
+
+    return {"model": model_hash, "legacy": legacy_hash, "fileinfo": finfo}
+####################
