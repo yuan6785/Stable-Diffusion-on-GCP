@@ -35,7 +35,7 @@ RUN set -ex \
     && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout -b develop  b6911354f7641c49296b37a2b939c3c472624abc && cd .. \
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout -b develop 2.6.0 && cd .. \
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout -b develop  722bca6fb9b062815d13b950e7040589abaec797 && cd .. \
-    && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 07f2585bad215a6d70582012d03eb29fd0133fb2 && cd .. \
+    && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 292f92d5068046f988fe002eb0a43b8841ad449e && cd .. \
     && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout -b develop v0.5.0 && cd .. \
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout -b develop  efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout -b develop c99f382b31509b87b4d512e70e9caf08ae7a079f && cd .. 

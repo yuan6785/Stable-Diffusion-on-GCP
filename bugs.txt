@@ -74,8 +74,40 @@ def hash_model_file(finfo):
 ####################
 
 
+解决gradio使用queue前端无限等待的情况, 等待秒数无限增长 （做保活的时候发现的）
+参考: https://github.com/gradio-app/gradio/issues/3794
+修改代码/Users/yuanxiao/.pyenv/versions/3.11.1/envs/py3.11_virtualenv_test/lib/python3.11/site-packages/gradio/routes.py
+服务器在: /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/gradio/routes.py
+join_queue这个方法
+#####
+            if 0: # modify by yx
+                # 原来的代码--3.23.0是设置的timout=1,容易在海外出现这个bug（sdwebui用的这个版本）; 本地的3.32.0已经默认是timeout=5了
+                try:
+                    session_info = await asyncio.wait_for(
+                        websocket.receive_json(), timeout=5  # timeout设置成0.0001本地必现无限等待这个bug
+                    )
+                except AsyncTimeOutError:
+                    return
+            else:
+                # modify by yx
+                retry_receive_count = 3
+                for i in range(retry_receive_count):
+                    try:
+                        session_info = await asyncio.wait_for(
+                            websocket.receive_json(), timeout=5
+                        )
+                        break
+                    except AsyncTimeOutError:
+                        if i == retry_receive_count - 1: 
+                            raise HTTPException("no data") # 这里不要return，否则会出现前端无限等待的情况，抛出错误可以让前端继续执行
+                            break
+                        else:
+                            await asyncio.sleep(1)
+                            continue
+#####
+
+
 
 插件posex不起作用 （需要降低gradio的版本，很麻烦，不安装这个插件了）-----新版本的sdwebui，目前只有等作者修复------
 https://github.com/hnmr293/posex/issues/39
 事实上，posex 由于新版本的 gradio（3.31）而崩溃，而旧的 canvas-zoom 在 gradio 版本（3.28.1）上工作。所以安装旧版本后，posex就起作用了。
-目前的解决办法是只用更低的版本: v0.4  对应commit为: 07f2585bad215a6d70582012d03eb29fd0133fb2
