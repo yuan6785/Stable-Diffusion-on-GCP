@@ -44,8 +44,15 @@ RUN set -ex \
 
 重要步骤: 原版调试--------------------------
 调试: 先到原来的版本调试生产必要的目录(models下的目录比如GFPGAN等)和安装对应版本的xformers
+# 重要参数 --skip-prepare-environment  可以跳过prepare_environment()函数,包含插件(插件目录的install.py文件)的的第三方安装都不会运行-我已经测试过了,不然会重新安装一些东西，耗时较长
+# 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
+# 有预安装的命令--有新插件第一次运行这个 
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram
+# 无预安装的命令--无新插件后面都运行这个，更快
+cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --skip-prepare-environment  --listen --port 9965  --xformers  --medvram
+
 
 
 
