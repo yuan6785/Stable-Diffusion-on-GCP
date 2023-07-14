@@ -24,12 +24,13 @@
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/miniconda3 \
     && /home/miniconda3/bin/conda init \
-    && /home/miniconda3/bin/conda create -y --name sd_python310 python=3.10 \
-    && /home/miniconda3/bin/conda install -y -n sd_python310 virtualenv \
+    && /home/miniconda3/bin/conda create -y --name stable-diffusion-webui-20230713 python=3.10 \
+    && /home/miniconda3/bin/conda install -y -n stable-diffusion-webui-20230713 virtualenv \
     && git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui \
     && cd stable-diffusion-webui \
     && git checkout -b develop f865d3e11647dfd6c7b2cdf90dde24680e58acd8 \
-    && /home/miniconda3/envs/sd_python310/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
+    && /home/miniconda3/envs/stable-diffusion-webui-20230713/bin/python -m pip install cython==0.29.36 \
+    && /home/miniconda3/envs/stable-diffusion-webui-20230713/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 07bed6ccf8a468a45b2833cfdadc749927cbd575 && cd .. \
     && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout -b develop  b6911354f7641c49296b37a2b939c3c472624abc && cd .. \
