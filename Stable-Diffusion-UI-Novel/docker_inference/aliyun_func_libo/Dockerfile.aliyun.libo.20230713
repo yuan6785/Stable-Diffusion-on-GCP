@@ -56,6 +56,10 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 # 无预安装的命令--无新插件后面都运行这个，更快
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --skip-prepare-environment  --listen --port 9965  --xformers  --medvram
+# sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # -- 其实32G就可以了--sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c
+# -- 可以选择我下的vae
+cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram 
 
 
 
