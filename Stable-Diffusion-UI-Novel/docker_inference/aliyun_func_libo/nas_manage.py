@@ -71,9 +71,10 @@ async def chmod_nas_outputs_777():
     因为云函数的outputs输出用户是root， 阿里云的ecs是sd3， 会导致权限混乱，导致ecs有时候没有权限访问云函数创建的outputs文件夹
     """
     try:
-        print("将nas的outputs文件夹权限设置为777")
+        print(f"将nas的outputs文件夹权限设置为777-start-{arrow.now().format('YYYY-MM-DD HH:mm:ss')}")
         outputs_path = "/mnt/sdwebui_public/public/outputs"
         os.system(f"chmod -Rf 777 {outputs_path}")
+        print(f"将nas的outputs文件夹权限设置为777-end-{arrow.now().format('YYYY-MM-DD HH:mm:ss')}")
     except Exception as e:
         print("chmod_nas_outputs_777 error: ", e)
 
