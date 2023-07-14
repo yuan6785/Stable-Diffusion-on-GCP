@@ -41,6 +41,9 @@ RUN set -ex \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout -b develop c99f382b31509b87b4d512e70e9caf08ae7a079f && cd .. 
 
 
+--- 激活conda环境
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
+source ~/.bashrc
 
 重要步骤: 原版调试--------------------------
 调试: 先到原来的版本调试生产必要的目录(models下的目录比如GFPGAN等)和安装对应版本的xformers
