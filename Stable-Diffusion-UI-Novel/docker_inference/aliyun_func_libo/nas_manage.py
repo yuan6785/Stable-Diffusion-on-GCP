@@ -65,6 +65,17 @@ async def clean_nas_outputs(dur=8):
         print("clean_nas_outputs error: ", e)
         return []
 
+async def chmod_nas_outputs_777():
+    """
+    @des: 将nas的outputs文件夹权限设置为777
+    """
+    try:
+        print("将nas的outputs文件夹权限设置为777")
+        outputs_path = "/mnt/sdwebui_public/public/outputs"
+        os.system(f"chmod -Rf 777 {outputs_path}")
+    except Exception as e:
+        print("chmod_nas_outputs_777 error: ", e)
+
 
 async def check_nas_file_names(isdel=False):
     """
@@ -112,6 +123,9 @@ async def add_aps_tasks():
     #               id="api_server_loop")
     sched.add_job(clean_nas_outputs, CronTrigger.from_crontab('51 15 * * *'), timezone=pytz.timezone(display_zone),
                   id="api_server_loop")
+    # 每5分钟执行一次
+    sched.add_job(chmod_nas_outputs_777, CronTrigger.from_crontab('*/5 * * * *'), timezone=pytz.timezone(display_zone),
+                  id="api_server_loop1")
     sched.start()
 
 
