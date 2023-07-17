@@ -139,27 +139,54 @@ def save_styles(self, path: str) -> None:
 ########################################################################
 修改为下面的代码---支持软连接的代码
 ########################################################################
-def save_styles(self, path: str) -> None:
-    def copy_file(path):
-        target_path = os.path.realpath(path)
-        shutil.copy(target_path, f"{target_path}.bak")
-    
-    if os.path.islink(path):
-        copy_file(path)
-        realpath = os.path.realpath(path)
-    elif os.path.exists(path):
-        shutil.copy(path, f"{path}.bak")
-        realpath = path
-    
-    path = realpath
-    fd = os.open(path, os.O_RDWR|os.O_CREAT)
-    with os.fdopen(fd, "w", encoding="utf-8-sig", newline='') as file:
-        # _fields is actually part of the public API: typing.NamedTuple is a replacement for collections.NamedTuple,
-        # and collections.NamedTuple has explicit documentation for accessing _fields. Same goes for _asdict()
-        writer = csv.DictWriter(file, fieldnames=PromptStyle._fields)
-        writer.writeheader()
-        writer.writerows(style._asdict() for k,     style in self.styles.items())
-    
+    def save_styles(self, path: str) -> None:
+        # Always keep a backup file around
+        # def copy_file_with_metadata(source_path, target_path):
+        #     source_fd = os.open(source_path, os.O_RDONLY)
+        #     target_fd = os.open(target_path, os.O_WRONLY | os.O_CREAT)
+
+        #     source_file_obj = os.fdopen(source_fd, 'rb')
+        #     target_file_obj = os.fdopen(target_fd, 'wb')
+
+        #     buffer_size = 1024
+        #     while True:
+        #         buffer = source_file_obj.read(buffer_size)
+        #         if not buffer:
+        #             break
+        #         target_file_obj.write(buffer)
+
+        #     source_file_obj.close()
+        #     target_file_obj.close()
+
+        def copy_file(path):
+            target_path = os.path.realpath(path)
+            try:
+                # bug_sjid: 这一句本来可以不加，但是由于云函数和ecs的执行用户和组不一样，导致ecs的用户无法修改云函数的写入文件，虽然文件权限已经是777了，但是还是无法用shutil.copy会报错Operation not permitted; 但是删除是没有问题的,只是不能修改文件内容;
+                os.remove(f"{target_path}.bak")  
+                pass
+            except:
+                pass
+            try:
+                shutil.copy(target_path, f"{target_path}.bak")
+                # copy_file_with_metadata(target_path, f"{target_path}.bak")  # 这个方法可以修复bug_sjid
+            except:
+                pass
+        
+        if os.path.exists(path):
+            copy_file(path) 
+            realpath = os.path.realpath(path)
+        else:
+            realpath = path
+        
+        path = realpath
+        fd = os.open(path, os.O_RDWR|os.O_CREAT)
+        with os.fdopen(fd, "w", encoding="utf-8-sig", newline='') as file:
+            # _fields is actually part of the public API: typing.NamedTuple is a replacement for collections.NamedTuple,
+            # and collections.NamedTuple has explicit documentation for accessing _fields. Same goes for _asdict()
+            writer = csv.DictWriter(file, fieldnames=PromptStyle._fields)
+            writer.writeheader()
+            writer.writerows(style._asdict() for k,     style in self.styles.items())
+        
 ########################################################################
 
 
