@@ -5,7 +5,7 @@ https://github.com/Mikubill/sd-webui-controlnet/issues/1559
 
 
 
-安装gfpgan报错：
+安装gfpgan报错（安装时候解决）：
 RuntimeError: Couldn't install gfpgan.
 ERROR: Could not find a version that satisfies the requirement cython
 安装cython即可
@@ -120,8 +120,54 @@ https://github.com/hnmr293/posex/issues/39
 
 
 
+修改styles的提示词保存的时候，需要修改源码
+/Users/yuanxiao/workspace/0yxgithub/stable-diffusion-webui/modules/styles.py
+修改save_styles这个方法:
+########################################################################
+def save_styles(self, path: str) -> None:
+    # Always keep a backup file around
+    if os.path.exists(path):
+        shutil.copy(path, f"{path}.bak")
 
-如果要修改styles的提示词搜索，保存需要修改这里：
+    fd = os.open(path, os.O_RDWR|os.O_CREAT)
+    with os.fdopen(fd, "w", encoding="utf-8-sig", newline='') as file:
+        # _fields is actually part of the public API: typing.NamedTuple is a replacement for collections.NamedTuple,
+        # and collections.NamedTuple has explicit documentation for accessing _fields. Same goes for _asdict()
+        writer = csv.DictWriter(file, fieldnames=PromptStyle._fields)
+        writer.writeheader()
+        writer.writerows(style._asdict() for k,     style in self.styles.items())
+########################################################################
+修改为下面的代码---支持软连接的代码
+########################################################################
+def save_styles(self, path: str) -> None:
+    def copy_file(path):
+        target_path = os.path.realpath(path)
+        shutil.copy(target_path, f"{target_path}.bak")
+    
+    if os.path.islink(path):
+        copy_file(path)
+        realpath = os.path.realpath(path)
+    elif os.path.exists(path):
+        shutil.copy(path, f"{path}.bak")
+        realpath = path
+    
+    path = realpath
+    fd = os.open(path, os.O_RDWR|os.O_CREAT)
+    with os.fdopen(fd, "w", encoding="utf-8-sig", newline='') as file:
+        # _fields is actually part of the public API: typing.NamedTuple is a replacement for collections.NamedTuple,
+        # and collections.NamedTuple has explicit documentation for accessing _fields. Same goes for _asdict()
+        writer = csv.DictWriter(file, fieldnames=PromptStyle._fields)
+        writer.writeheader()
+        writer.writerows(style._asdict() for k,     style in self.styles.items())
+    
+########################################################################
+
+
+
+
+
+
+如果要修改styles的提示词搜索调用api，保存需要修改这里（todo---可选）：
 /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-webui/modules/ui.py
 搜索: ask_for_style_name
 搜索: apply_styles, add_style
