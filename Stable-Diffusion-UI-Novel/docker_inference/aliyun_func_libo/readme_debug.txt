@@ -59,14 +59,14 @@ docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本----�
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash
 ---------推送本地镜像到阿里云-------美东--------
-            ----版本号:  线上版本v70, 下个线上版本v76----
+            ----版本号:  线上版本v70, 下个线上版本v77----
             ---- 登录 ---
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
             ----
             Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化
             --> 
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v76
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v76
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v77
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v77
             ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->
