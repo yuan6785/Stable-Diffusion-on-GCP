@@ -14,9 +14,12 @@ for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/*
 ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
-echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")---------------
+echo ---------start launch pre-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 echo "yx test 1111">/var/log/sdwebui.log
 sleep 10
+rm -rf /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/styles.csv
+ln -s /mnt/sdwebui_public/public/styles/styles.csv /home/stable-diffusion-webui/styles.csv
+echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 cd /home/stable-diffusion-webui
 /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 7860 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log
 # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
