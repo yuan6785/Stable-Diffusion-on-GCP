@@ -117,3 +117,11 @@ https://github.com/hnmr293/posex/issues/39
 下面的错误在sdwebui打开web页面时候，在浏览器f12的console中出现，但是不影响使用
 /openpose_editor_index openpose_editor.js 404 notfound
 是sd-webui-controlnet这个插件爆出来的，但是好像没有什么影响
+
+
+
+
+如果要修改styles的提示词搜索，保存需要修改这里：
+/Users/yuanxiao/workspace/0yxgithub/stable-diffusion-webui/modules/ui.py
+搜索: ask_for_style_name
+搜索: apply_styles, add_style
