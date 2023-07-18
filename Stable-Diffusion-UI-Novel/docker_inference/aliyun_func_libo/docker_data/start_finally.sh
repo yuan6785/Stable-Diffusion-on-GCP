@@ -1,5 +1,14 @@
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 while getopts ":d:s:" opt;do case $opt in d) echo "domain:$OPTARG" >> /home/start_docker_params.txt;; s) echo "startmodel:$OPTARG" >> /home/start_docker_params.txt;; ?) echo "未知参数" >> /home/start_docker_params.txt;; esac done
+echo ----------start read fc env-------$(date +"%Y-%m-%d %H:%M:%S")---------------
+if [ -n "${FC_FUNCTION_NAME+x}" ] && [ -n "${FC_SERVICE_NAME+x}" ]; then
+  VAR_FC_FUNCTION_NAME="$FC_FUNCTION_NAME";
+  VAR_FC_SERVICE_NAME="$FC_SERVICE_NAME";
+  echo $VAR_FC_FUNCTION_NAME;
+  echo $VAR_FC_SERVICE_NAME;
+else
+  echo "not fc env";
+fi
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
