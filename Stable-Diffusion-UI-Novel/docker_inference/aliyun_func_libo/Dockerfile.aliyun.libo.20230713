@@ -61,10 +61,18 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram 
-# dreambooth训练的模型(第一次运行不要用--skip-prepare-environment，因为有新插件需要安装)
+# dreambooth训练的模型(第一次运行不要用--skip-prepare-environment，因为有新插件需要安装)---该版本的sd安装太爽了，没有各种报错，也不用降级torch了-------
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
+# 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
+# conda install cudatoolkit==11.8.0
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  --skip-prepare-environment
+后台运行---
+cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
+nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram  --skip-prepare-environment > nohup.out 2>&1 &
+tail -f nohup.out
+杀死服务---
+kill -9 $(ps -ef|grep launch.py|grep -v grep|awk '{print $2}')
 
 
 
