@@ -1,0 +1,100 @@
+# 这个dockerfile的阿里云函数版本的内存需要16个G
+FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
+
+RUN set -ex && \
+    apt update && \
+    apt install -y wget git rsync libglib2.0-dev libcairo2-dev libgl1-mesa-glx && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64
+RUN ln -s /usr/local/cuda/lib64/libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so
+
+# /share是李波挂载到nfs的目录，需要和李波确认
+#
+# ARG CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+# ARG TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+# 上面的环境变量有问题(build镜像的时候share目录是不存在的)---用下面的-----
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/nvidia/cudnn:/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/lib/python3.10/site-packages/tensorrt
+
+#
+# WORKDIR /home
+# 同步命令不能写在这里，因为share目录是在容器运行时挂载上的，build镜像的时候share目录是不存在的
+# RUN rsync -azP --no-perms --no-owner --no-group --exclude '/models' --exclude '/embeddings' --exclude '/scripts' --exclude '/samples' --exclude '/localizations' --exclude '/outputs'  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui
+# RUN chmod -Rf 777 /home/stable-diffusion-webui
+# RUN ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/embeddings  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/scripts  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/samples  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/localizations  /home/stable-diffusion-webui/ && \
+#     ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/outputs  /home/stable-diffusion-webui/
+#
+
+# WORKDIR /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui
+# --ui-settings-file /home/stable-diffusion-webui/config.json
+# CMD ["/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python", "launch.py", "--listen", "--xformers",  "--medvram"]
+#
+# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m http.server 7860  测试命令
+
+
+# 关键命令----
+# 设置环境变量命令
+# CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import nvidia.cudnn;print(nvidia.cudnn.__file__)')) && \
+# TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c 'import tensorrt;print(tensorrt.__file__)')) && echo $CUDNN_PATH && echo $TENSORRT_PATH && \
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+# echo $LD_LIBRARY_PATH 
+
+# # 创建models目录
+# if [ ! -d '/home/stable-diffusion-webui/models' ]; then mkdir /home/stable-diffusion-webui/models; fi && \
+# # 非公共模型
+# for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done
+# # 公共模型
+# for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done
+# # 非模型公共目录
+# for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done
+# # additional的lora模型软连接
+# rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
+# ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
+
+# debug命令-----
+# 如果以字符串的形式执行，注意$dir前面必须有反斜杠, 双引号前面也必须有反斜杠
+# 双引号方式----后面不要用这种方式(需要很多转义，而且echo $date是进入命令的日期，后面不会变)-----
+# bash -c "for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L \"/home/test/\$dir\" ]; then ln -s /mnt/sdwebui_public/public/\$dir  /home/test/; fi; done"
+# 单引号方式----后面这种方式(重要)------
+# bash -c 'for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/test/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/test/; fi; done'
+# 简单的httpserver进行测试
+# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860
+RUN mkdir /home/stable-diffusion-webui
+COPY docker_data/start_finally_20230713.sh /home/stable-diffusion-webui/pladayy_docker_start.sh
+RUN chmod +x /home/stable-diffusion-webui/pladayy_docker_start.sh
+
+EXPOSE 7860
+# 这里如果不存在stable-diffusion-webui目录，则会创建stable-diffusion-webui目录，所以下面命令不用去判断stable-diffusion-webui是否存在
+WORKDIR /home/stable-diffusion-webui
+
+# /bin/sh -c必须用单引号，否则echo $(date)是一样的时间
+# CMD /bin/sh -c 'echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) && \
+# TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)")) && \
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+# echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
+# echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi && \
+# for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+# for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+# for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
+# echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
+# ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
+# echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# echo "yx test 1111">/var/log/sdwebui.log && \
+# sleep 10 && \
+# cd /home/stable-diffusion-webui && \
+# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 7860 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log && \
+# # /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
+# echo ---------end-------'
+# ------------------上面的命令太长了，改成下面的命令(这样就可以传参了)-----------------
+CMD /bin/sh -c './pladayy_docker_start.sh -d "unknow" -s "unknow"'
+# 云函数配置命令:  /bin/sh -c './pladayy_docker_start.sh -d "46.sd.play1.net" -s "unknow"'
