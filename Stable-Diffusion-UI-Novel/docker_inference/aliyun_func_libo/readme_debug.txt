@@ -54,7 +54,6 @@ cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor  .  # 本地打包镜像--supervisor版本--有问题，启动不起来
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor3  .  # 本地打包镜像--supervisor2版本--可以启动了，但是用sd生成
 几次图片后，实例就会被释放 ----- 重要参考
-docker build -t sand:1.0 -f Dockerfile.finally.libo  .  # 只有sd的版本----目前用这个，后期再升级supervisor2进行优化
 # docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor2  .  # 本地打包镜像--supervisor2版本--可以启动了，还可以函数内重启
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash
@@ -63,18 +62,27 @@ docker run -it --rm sand:1.0 /bin/bash
             ---- 登录 ---
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
             ----
-            Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化
+            Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化，目前用这个，后期再升级supervisor2进行优化
             --> 
+            docker build -t sand:1.0 -f Dockerfile.finally.libo  .  
             docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v78
             docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v78
             ----
+            Dockerfile.finally.libo.20230713 --  新版本测试
+            --> 
+            docker build -t sand:1.0 -f Dockerfile.finally.libo.20230713  .  
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n1
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n1
+            ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->
+            docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor2  . 
             docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u5
             docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:2u5
             ----
             Dockerfile.finally.libo.supervisor3 -- 只作为重要参考, 实际上线不用这个
             -->
+            docker build -t sand:1.0 -f Dockerfile.finally.libo.supervisor3  . 
             docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u58
             docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:u58
 ---------推送本地镜像到阿里云（记得修改版本号）------新加坡--------

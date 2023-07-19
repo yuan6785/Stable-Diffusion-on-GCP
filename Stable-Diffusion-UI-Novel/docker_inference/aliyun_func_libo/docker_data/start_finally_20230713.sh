@@ -10,8 +10,8 @@ else
   echo "not fc env";
 fi
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")---------------
-CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
-TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+CUDNN_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui/ /home/stable-diffusion-webui; fi
@@ -30,5 +30,5 @@ rm -rf /home/stable-diffusion-webui/styles.csv
 ln -s /share/sdwebui_public/public/styles/styles.csv /home/stable-diffusion-webui/styles.csv
 echo ---------start launch-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 cd /home/stable-diffusion-webui
-/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -u launch.py --port 7860 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log
-# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310/bin/python -m  http.server 7860 && \
+/share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -u launch.py --port 7860 --listen --xformers --medvram --api 2>&1 | tee /var/log/sdwebui.log
+# /share/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -m  http.server 7860 && \
