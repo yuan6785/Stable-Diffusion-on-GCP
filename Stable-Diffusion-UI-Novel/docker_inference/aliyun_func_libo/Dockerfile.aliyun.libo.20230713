@@ -32,7 +32,7 @@ RUN set -ex \
     && /home/miniconda3/envs/stable-diffusion-webui-20230713/bin/python -m pip install cython==0.29.36 \
     && /home/miniconda3/envs/stable-diffusion-webui-20230713/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
-    && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 07bed6ccf8a468a45b2833cfdadc749927cbd575 && cd .. \
+    && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 098f6cd887ac5f6f5f0e7cc9d81460095d2be012 && cd .. \
     && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout -b develop  b6911354f7641c49296b37a2b939c3c472624abc && cd .. \
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout -b develop 2.6.0 && cd .. \
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout -b develop  722bca6fb9b062815d13b950e7040589abaec797 && cd .. \
@@ -56,7 +56,8 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 # 无预安装的命令--无新插件后面都运行这个，更快
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --skip-prepare-environment  --listen --port 9965  --xformers  --medvram
-# sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c
+# sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
+# sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram 
