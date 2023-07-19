@@ -74,6 +74,7 @@ nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_2023
 tail -f nohup.out
 杀死服务---
 kill -9 $(ps -ef|grep launch.py|grep -v grep|awk '{print $2}')
+ps -ef|grep launch.py
 
 
 
