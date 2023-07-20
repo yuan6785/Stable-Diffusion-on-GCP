@@ -147,8 +147,15 @@ def save_styles(self, path: str) -> None:
         file_lock_name = os.path.join(file_lock_path, "yx_sytles.csv.lock")
         lock = FileLock(file_lock_name, timeout=10)
         try:
-            lock.acquire()  # 加文件锁，防止多个进程同时写入文件
-            os.chmod(file_lock_name, 0o777)  # 修改文件权限, 使云函数和ecs的用户都能用同一个nas的文件锁
+            try:
+                # 加文件锁，防止多个进程同时写入文件， ecs还是由于权限问题无法获取root用户的文件锁，所以这里不加文件锁了
+                # 所以这里报错也继续执行吧，后期改到数据库里(或者ecs也用root用户执行)，就不用ecs和云函数共用文件锁了，一个root用户，一个sd3用户，确实难搞
+                lock.acquire()  
+                os.chown(file_lock_name, 1001, 1001) # 修改用户组兼容云函数和ecs, 1001是sd3这个用户, 后面看情况修改这个数字
+                os.chmod(file_lock_name, 0o777) # 修改文件权限, 使云函数和ecs的用户都能用同一个nas的文件锁
+            except Exception as ex:
+                print("filelock yx lock.acquire error ---", ex)
+                pass 
             #
             def copy_file(real_path):
                 try:
@@ -166,7 +173,11 @@ def save_styles(self, path: str) -> None:
                 # 使用pandas生成一个空的csv文件, 并且生成文件权限为777
                 os.makedirs(os.path.dirname(real_path), exist_ok=True)
                 pd.DataFrame(columns=PromptStyle._fields).to_csv(real_path, index=False, encoding="utf-8-sig")
-                os.chmod(real_path, 0o777)
+                try:
+                    os.chown(real_path, 1001, 1001) # 修改用户组兼容云函数和ecs, 1001是sd3这个用户, 后面看情况修改这个数字
+                    os.chmod(real_path, 0o777)
+                except:
+                    pass
             # 将原来的csv文件读入到dataframe里面
             df_old = pd.read_csv(real_path, encoding="utf-8-sig", header=0)
             df_old = df_old.fillna("")
@@ -182,8 +193,16 @@ def save_styles(self, path: str) -> None:
                 df_old = pd.concat([df_old, df_styles.iloc[-1:]], ignore_index=True)
             df_old = df_old.drop_duplicates(subset=['name'], keep='last')
             # 将df_old保存到csv文件
+            try:
+                os.remove(real_path)
+            except:
+                pass
             df_old.to_csv(real_path, index=False, encoding="utf-8-sig")
-            os.chmod(real_path, 0o777)
+            try:
+                os.chown(real_path, 1001, 1001) # 修改用户组兼容云函数和ecs, 1001是sd3这个用户, 后面看情况修改这个数字
+                os.chmod(real_path, 0o777)
+            except:
+                pass
             # fd = os.open(real_path, os.O_RDWR|os.O_CREAT)
             # with os.fdopen(fd, "w", encoding="utf-8-sig", newline='') as file:
             #     # _fields is actually part of the public API: typing.NamedTuple is a replacement for collections.NamedTuple,
