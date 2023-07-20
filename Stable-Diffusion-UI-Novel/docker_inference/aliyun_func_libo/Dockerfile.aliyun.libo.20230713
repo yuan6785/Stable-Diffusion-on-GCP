@@ -49,21 +49,29 @@ source ~/.bashrc
 --- 重要版本修改(因为a1111-sd-webui-locon不维护了)
 https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc480be1ab4dae5399b35ef 代替原来的 https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git@b6911354f7641c49296b37a2b939c3c472624abc
 
-重要步骤: 原版调试--------------------------
-调试: 先到原来的版本调试生产必要的目录(models下的目录比如GFPGAN等)和安装对应版本的xformers
+重要步骤: 调试
+--------------------------------------------------------------------------------------------------
+# 调试:
+# 调试: 先到原来的版本调试生产必要的目录(models下的目录比如GFPGAN等)和安装对应版本的xformers
 # 重要参数 --skip-prepare-environment  可以跳过prepare_environment()函数,包含插件(插件目录的install.py文件)的的第三方安装都不会运行-我已经测试过了,不然会重新安装一些东西，耗时较长
 # 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
 # 有预安装的命令--有新插件第一次运行这个 
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram
+--------------------------------------------------------------------------------------------------
+# 调试:
 # 无预安装的命令--无新插件后面都运行这个，更快
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --skip-prepare-environment  --listen --port 9965  --xformers  --medvram
+--------------------------------------------------------------------------------------------------
+# 调试:
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram 
+--------------------------------------------------------------------------------------------------
+# 调试:
 # dreambooth训练的模型(第一次运行不要用--skip-prepare-environment，因为有新插件需要安装)---
 # 该版本的sd安装太爽了，没有各种报错，也不用降级torch了---sd version: v1.4.1  •  python: 3.10.12  •  torch: 2.0.1+cu118  •  xformers: 0.0.20  •  gradio: 3.32.0-------按上面dockerfile的版本安装即可----
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
@@ -78,6 +86,7 @@ tail -f nohup.out
 杀死服务---
 kill -9 $(ps -ef|grep launch.py|grep -v grep|awk '{print $2}')
 ps -ef|grep launch.py
+--------------------------------------------------------------------------------------------------
 
 
 
