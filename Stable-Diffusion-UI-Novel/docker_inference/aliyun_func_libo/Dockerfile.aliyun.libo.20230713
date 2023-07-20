@@ -88,7 +88,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
 --skip-prepare-environment
-后台运行---
+后台运行(记得加-u，否则日志无法输出)---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
