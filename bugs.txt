@@ -166,6 +166,11 @@ def save_styles(self, path: str) -> None:
                     shutil.copy(real_path, f"{real_path}.bak")
                 except:
                     pass
+                try:
+                    os.chown(f"{real_path}.bak", 1001, 1001)
+                    os.chmod(f"{real_path}.bak", 0o777)
+                except:
+                    pass
             # 如果文件存在，先备份一下
             if os.path.exists(real_path):
                 copy_file(real_path) 
