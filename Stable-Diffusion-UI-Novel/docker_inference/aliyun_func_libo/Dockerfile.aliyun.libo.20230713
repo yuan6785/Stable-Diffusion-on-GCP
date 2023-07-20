@@ -33,7 +33,7 @@ RUN set -ex \
     && /home/miniconda3/envs/stable-diffusion-webui-20230713/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 098f6cd887ac5f6f5f0e7cc9d81460095d2be012 && cd .. \
-    && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git && cd a1111-sd-webui-locon && git checkout -b develop  b6911354f7641c49296b37a2b939c3c472624abc && cd .. \
+    && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git && cd a1111-sd-webui-lycoris && git checkout -b develop  8e97bf54867c25d00fc480be1ab4dae5399b35ef && cd .. \
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout -b develop 2.6.0 && cd .. \
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout -b develop  722bca6fb9b062815d13b950e7040589abaec797 && cd .. \
     && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 292f92d5068046f988fe002eb0a43b8841ad449e && cd .. \
@@ -45,6 +45,9 @@ RUN set -ex \
 --- 激活conda环境
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
 source ~/.bashrc
+
+--- 重要版本修改(因为a1111-sd-webui-locon不维护了)
+https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc480be1ab4dae5399b35ef 代替原来的 https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git@b6911354f7641c49296b37a2b939c3c472624abc
 
 重要步骤: 原版调试--------------------------
 调试: 先到原来的版本调试生产必要的目录(models下的目录比如GFPGAN等)和安装对应版本的xformers
