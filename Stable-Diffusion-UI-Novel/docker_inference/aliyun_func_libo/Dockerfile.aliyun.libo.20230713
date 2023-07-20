@@ -46,8 +46,10 @@ RUN set -ex \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
 source ~/.bashrc
 
---- 重要版本修改(因为a1111-sd-webui-locon不维护了)
+--- 重要版本修改(因为a1111-sd-webui-locon不维护了) 
+--现在命令行启动参数(--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora), 这样启动就可以替换原来的a1111-sd-webui-locon插件了，连提示词都不用改
 https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc480be1ab4dae5399b35ef 代替原来的 https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git@b6911354f7641c49296b37a2b939c3c472624abc
+
 
 重要步骤: 调试
 --------------------------------------------------------------------------------------------------
@@ -57,19 +59,24 @@ https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc
 # 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
 # 有预安装的命令--有新插件第一次运行这个 
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram \
+--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora
 --------------------------------------------------------------------------------------------------
 # 调试:
 # 无预安装的命令--无新插件后面都运行这个，更快
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --skip-prepare-environment  --listen --port 9965  --xformers  --medvram
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --listen --port 9965  --xformers  --medvram \
+--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
+--skip-prepare-environment  
 --------------------------------------------------------------------------------------------------
 # 调试:
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram 
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sdxl_python310_20230715/bin/python launch.py  --listen --port 9965 --no-half-vae  --medvram \
+--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
+--skip-prepare-environment
 --------------------------------------------------------------------------------------------------
 # 调试:
 # dreambooth训练的模型(第一次运行不要用--skip-prepare-environment，因为有新插件需要安装)---
@@ -78,10 +85,14 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
 # conda install cudatoolkit==11.8.0
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
+--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
+--skip-prepare-environment
 后台运行---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
-nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram  --skip-prepare-environment > nohup.out 2>&1 &
+nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram \
+--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
+--skip-prepare-environment > nohup.out 2>&1 &
 tail -f nohup.out
 杀死服务---
 kill -9 $(ps -ef|grep launch.py|grep -v grep|awk '{print $2}')
