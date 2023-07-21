@@ -84,6 +84,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
 # conda install cudatoolkit==11.8.0  每复制一次都需要执行一下，估计有些东西是安装在物理机上面的
+# 另外的解决办法: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH --- 参考最下面的命令 ---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
@@ -148,13 +149,14 @@ cd /home/stable-diffusion-webui
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) && \
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)")) && \
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi && \
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
-for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in ControlNet  hypernetworks  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+mkdir /home/stable-diffusion-webui/models/Lora && \
 for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
