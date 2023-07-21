@@ -84,7 +84,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
 # conda install cudatoolkit==11.8.0  # 执行的时候需要进入conda环境才行，就算python路径带有conda环境也不行，必须是activate的环境
-# 解决方法：加下面这句即可
+# 解决方法：加下面这句即可----重要-----
 # /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"'
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
