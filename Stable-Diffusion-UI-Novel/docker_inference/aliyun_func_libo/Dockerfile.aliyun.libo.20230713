@@ -83,7 +83,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 该版本的sd安装太爽了，没有各种报错，也不用降级torch了---sd version: v1.4.1  •  python: 3.10.12  •  torch: 2.0.1+cu118  •  xformers: 0.0.20  •  gradio: 3.32.0-------按上面dockerfile的版本安装即可----
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
-# conda install cudatoolkit==11.8.0
+# conda install cudatoolkit==11.8.0  每复制一次都需要执行一下，估计有些东西是安装在物理机上面的
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
