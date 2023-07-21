@@ -156,15 +156,20 @@ echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- &&
 if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi && \
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 for dir in ControlNet  hypernetworks  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
-mkdir /home/stable-diffusion-webui/models/Lora && \
+if [ ! -d "/home/stable-diffusion-webui/models/Lora" ]; then mkdir /home/stable-diffusion-webui/models/Lora; fi && \
 for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
-ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
+echo ---------start copy dreambooth example 后面可以取消这段-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+if [ ! -d "/home/stable-diffusion-webui/models/dreambooth" ]; then cp -rf /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui/models/dreambooth /home/stable-diffusion-webui/models/; fi && \
+echo ---------finally env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+echo $LD_LIBRARY_PATH
 '
 
-启动(可以在home目录下自行调试，不影响云函数的运行)---
+启动(可以在home目录下自行调试，不影响云函数的运行)---LD_LIBRARY_PATH的值是上面命令行最后一行的值,不然训练会报错，后面下面的命令加上上面的命令里面即可---------
 cd /home/stable-diffusion-webui
+LD_LIBRARY_PATH=:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/lib64:/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/lib/python3.10/site-packages/nvidia/cudnn:/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/lib/python3.10/site-packages/tensorrt \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
 调试完成后: 删除/home/stable-diffusion-webui即可
