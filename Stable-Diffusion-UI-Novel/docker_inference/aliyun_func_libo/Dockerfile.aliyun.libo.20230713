@@ -84,11 +84,15 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
 # conda install cudatoolkit==11.8.0  # 执行的时候需要进入conda环境才行，就算python路径带有conda环境也不行，必须是activate的环境
+# 解决方法：加下面这句即可
+# /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"'
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
 --skip-prepare-environment
 后台运行(记得加-u，否则日志无法输出)---
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
@@ -160,11 +164,14 @@ for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
-echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 '
 
 启动(可以在home目录下自行调试，不影响云函数的运行)---LD_LIBRARY_PATH的值是上面命令行最后一行的值,不然训练会报错，后面下面的命令加上上面的命令里面即可---------
-cd /home/stable-diffusion-webui
+
+/bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)" && \
+cd /home/stable-diffusion-webui && \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
+'
 
 调试完成后: 删除/home/stable-diffusion-webui即可
