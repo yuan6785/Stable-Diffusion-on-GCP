@@ -83,8 +83,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 该版本的sd安装太爽了，没有各种报错，也不用降级torch了---sd version: v1.4.1  •  python: 3.10.12  •  torch: 2.0.1+cu118  •  xformers: 0.0.20  •  gradio: 3.32.0-------按上面dockerfile的版本安装即可----
 # 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20230713_train环境下:
-# conda install cudatoolkit==11.8.0  每复制一次都需要执行一下，估计有些东西是安装在物理机上面的
-# 另外的解决办法: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH --- 参考最下面的命令 ---
+# conda install cudatoolkit==11.8.0  # 执行的时候需要进入conda环境才行，就算python路径带有conda环境也不行，必须是activate的环境
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
@@ -161,13 +160,11 @@ for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
-echo ---------finally env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-echo $LD_LIBRARY_PATH
+echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 '
 
 启动(可以在home目录下自行调试，不影响云函数的运行)---LD_LIBRARY_PATH的值是上面命令行最后一行的值,不然训练会报错，后面下面的命令加上上面的命令里面即可---------
 cd /home/stable-diffusion-webui
-LD_LIBRARY_PATH=:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/lib64:/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/lib/python3.10/site-packages/nvidia/cudnn:/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/lib/python3.10/site-packages/tensorrt \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
 调试完成后: 删除/home/stable-diffusion-webui即可
