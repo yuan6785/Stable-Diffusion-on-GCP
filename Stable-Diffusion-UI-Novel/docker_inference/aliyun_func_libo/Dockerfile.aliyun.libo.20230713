@@ -161,8 +161,6 @@ for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/
 echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
 ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
-echo ---------start copy dreambooth example 后面可以取消这段-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-if [ ! -d "/home/stable-diffusion-webui/models/dreambooth" ]; then cp -rf /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui/models/dreambooth /home/stable-diffusion-webui/models/; fi && \
 echo ---------finally env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 echo $LD_LIBRARY_PATH
 '
