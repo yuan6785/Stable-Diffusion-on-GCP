@@ -128,7 +128,7 @@ ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/exten
 
 启动(可以在home目录下自行调试，不影响云函数的运行)---
 cd /home/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram  --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
 调试完成后: 删除/home/stable-diffusion-webui即可
 
@@ -163,6 +163,6 @@ ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/exten
 
 启动(可以在home目录下自行调试，不影响云函数的运行)---
 cd /home/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram  --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
 调试完成后: 删除/home/stable-diffusion-webui即可
