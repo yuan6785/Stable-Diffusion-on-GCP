@@ -17,9 +17,13 @@
 #
 # 成功版本记录: 
 # https://github.com/yuan6785/stable-diffusion-webui.git
-# 上一个成功版本 ： branch:20230515 submit:   b791502f18b0de3e9eb93fca3aadce42878904d8
-# 目前版本:  branch:master   submit:  e4cd0e1abc89713d7c1ac7f1f37ea8359c49d7ec
+
 #
+# 升级到最新版本的命令:-------重要
+# cd stable-diffusion-webui; git checkout develop; git add .; git commit  -am "1"; git checkout master; git pull; git checkout develop; git merge v1.5.0  # 这里的v1.5.0也可以其他的commit号a3ddf464a2ed24c999f67ddfef7969f8291567be
+
+# 上一个成功版本 ： branch:20230515 submit:   e4cd0e1abc89713d7c1ac7f1f37ea8359c49d7ec
+# 目前版本:  branch:master   submit:  a3ddf464a2ed24c999f67ddfef7969f8291567be
 #
 RUN set -ex \
     && bash Miniconda3-py38_23.1.0-1-Linux-x86_64.sh -b -p /home/miniconda3 \
