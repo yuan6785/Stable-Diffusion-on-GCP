@@ -83,6 +83,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 --skip-prepare-environment  
 --------------------------------------------------------------------------------------------------
 # 调试(----废弃---已经合并到主分支，主分支v1.5.0已经支持sdxl， 虽然废弃，但下面的注释也是很好的参考):
+# 参考: https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/11757
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
