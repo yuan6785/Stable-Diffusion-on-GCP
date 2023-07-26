@@ -20,9 +20,9 @@ if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffu
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done
 for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done
 for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done
-echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")---------------
-rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/*
-ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+# echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")---------------
+# rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/*
+# ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
 echo ---------start launch pre-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 echo "yx test 1111">/var/log/sdwebui.log
 sleep 10

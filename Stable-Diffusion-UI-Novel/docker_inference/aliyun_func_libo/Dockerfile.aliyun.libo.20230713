@@ -15,12 +15,19 @@
 # /Users/yuanxiao/workspace/0yxgithub/Auto-Photoshop-StableDiffusion-Plugin/install.py
 # auto_update=False # 否则会自动更新
 #
+# 一些插件需要用到的命令
+# sd-webui-additional-networks ----- 暂时不安装 -----
+# echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
+# rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
+# ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+#
 # 成功版本记录: 
 # https://github.com/yuan6785/stable-diffusion-webui.git
 
 #
 # 升级到最新版本的命令:-------重要
 # cd stable-diffusion-webui; git checkout develop; git add .; git commit  -am "1"; git checkout master; git pull; git checkout develop; git merge v1.5.0  # 这里的v1.5.0也可以其他的commit号a3ddf464a2ed24c999f67ddfef7969f8291567be
+# python -c "import launch;launch.prepare_environment();"  安装第三方包
 
 # 上一个成功版本 ： branch:20230515 submit:   e4cd0e1abc89713d7c1ac7f1f37ea8359c49d7ec
 # 目前版本:  branch:master   submit:  a3ddf464a2ed24c999f67ddfef7969f8291567be
@@ -45,7 +52,7 @@ RUN set -ex \
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout -b develop  efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout -b develop c99f382b31509b87b4d512e70e9caf08ae7a079f && cd .. 
 
-
+####################################################################################################################################
 --- 激活conda环境
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
 source ~/.bashrc
@@ -53,8 +60,10 @@ source ~/.bashrc
 --- 重要版本修改(因为a1111-sd-webui-locon不维护了) 
 --现在命令行启动参数(--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora), 这样启动就可以替换原来的a1111-sd-webui-locon插件了，连提示词都不用改
 https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc480be1ab4dae5399b35ef 代替原来的 https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git@b6911354f7641c49296b37a2b939c3c472624abc
+####################################################################################################################################
 
 
+####################################################################################################################################
 重要步骤: 调试
 --------------------------------------------------------------------------------------------------
 # 调试:  (部署到云函数参考 readme_debug.txt)
@@ -73,7 +82,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
 --skip-prepare-environment  
 --------------------------------------------------------------------------------------------------
-# 调试:
+# 调试(废弃---已经合并到主分支，主分支v1.5.0已经支持sdxl， 虽然废弃，但下面的注释也是很好的参考):
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
@@ -106,11 +115,11 @@ tail -f nohup.out
 kill -9 $(ps -ef|grep launch.py|grep -v grep|awk '{print $2}')
 ps -ef|grep launch.py
 --------------------------------------------------------------------------------------------------
+####################################################################################################################################
 
 
 
-
-
+####################################################################################################################################
 模拟云函数环境进行调试--------------------------sd_python310_20230713-----------------------
 另外一种调试方法(带GPU的)--------复制到home目录模拟云函数环境进行调试---------
 我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
@@ -129,16 +138,14 @@ if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffu
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
-echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
-ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
+echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 '
-
 启动(可以在home目录下自行调试，不影响云函数的运行)---
 cd /home/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
 调试完成后: 删除/home/stable-diffusion-webui即可
+####################################################################################################################################
 
 
 
@@ -146,6 +153,7 @@ cd /home/stable-diffusion-webui
 
 
 
+####################################################################################################################################
 模拟ecs环境进行调试--------------------------sd_python310_20230713_train-----------------------
 另外一种调试方法(带GPU的)--------复制到home目录模拟云函数环境进行调试---------
 我的调试镜像打包好的:  sdwebui-aliynfunc-nas-debug（含GPU的）。
@@ -165,9 +173,6 @@ for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do 
 for dir in ControlNet  hypernetworks  Stable-diffusion  VAE; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 if [ ! -d "/home/stable-diffusion-webui/models/Lora" ]; then mkdir /home/stable-diffusion-webui/models/Lora; fi && \
 for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
-echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/* && \
-ln -s /mnt/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/ && \
 echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 '
 
@@ -179,3 +184,5 @@ cd /home/stable-diffusion-webui && \
 '
 
 调试完成后: 删除/home/stable-diffusion-webui即可
+
+####################################################################################################################################
