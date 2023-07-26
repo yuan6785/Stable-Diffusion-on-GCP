@@ -90,4 +90,3 @@ mv mc.RELEASE.2022-06-10T22-29-12Z mc
 用其他配置启动:
 export MINIO_CONFIG_ENV_FILE=/etc/default/minio
 minio server --console-address :9090
-
