@@ -1,3 +1,6 @@
+----
+https://github.com/VinsonLaro/stable-diffusion-webui-chinese/tree/main/localizations   sd 汉化工程
+----
 登录挂载nfs的ubuntu的ec2， ubuntu22.04. 不需要gpu(如果想要完全测试，就买含gpu的ec2即可)，只是用来编译python环境
 ----
 apt-get install nvidia-driver-460  # 安装显卡驱动
