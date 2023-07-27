@@ -100,7 +100,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
 # 有预安装的命令--有新插件第一次运行这个 
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-latest/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_lastest/bin/python  launch.py  --listen --port 9001  --xformers  --medvram \
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_lastest/bin/python  launch.py  --listen --port 9002  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
 --skip-prepare-environment
 --------------------------------------------------------------------------------------------------
