@@ -74,8 +74,8 @@ docker run -it --rm sand:1.0 /bin/bash
             Dockerfile.finally.libo.20230713 --  新版本测试
             -->
             docker build -t sand:1.0 -f Dockerfile.finally.libo.20230713  .  
-            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n6
-            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n6
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n7
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n7
             ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->
