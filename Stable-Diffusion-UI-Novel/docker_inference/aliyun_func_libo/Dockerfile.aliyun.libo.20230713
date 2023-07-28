@@ -62,6 +62,12 @@ RUN set -ex \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
 source ~/.bashrc
 
+-- 安装了插件后需要
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init
+source ~/.bashrc
+conda activate xxxxx
+python -c "import launch;launch.prepare_environment();" 
+
 --- 重要版本修改(因为a1111-sd-webui-locon不维护了) 
 --现在命令行启动参数(--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora), 这样启动就可以替换原来的a1111-sd-webui-locon插件了，连提示词都不用改
 https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc480be1ab4dae5399b35ef 代替原来的 https://github.com/KohakuBlueleaf/a1111-sd-webui-locon.git@b6911354f7641c49296b37a2b939c3c472624abc
