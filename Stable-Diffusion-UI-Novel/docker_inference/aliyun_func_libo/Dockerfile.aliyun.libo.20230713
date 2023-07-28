@@ -68,7 +68,7 @@ https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc
 ####################################################################################################################################
 
 
---- 训练和tagger反推需要的环境变量
+--- 训练和tagger反推需要的环境变量---安装了stable-diffusion-webui-wd14-tagger和sd_dreambooth_extension需要用这个环境变量-----
 ARG CUDNN_PATH=$(dirname $(/home/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
 ARG TENSORRT_PATH=$(dirname $(/home/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
@@ -132,6 +132,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
 --skip-prepare-environment
+
 后台运行(记得加-u，否则日志无法输出)---
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
