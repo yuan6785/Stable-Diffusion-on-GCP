@@ -54,7 +54,7 @@ RUN set -ex \
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout -b develop  efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     && git clone https://github.com/thomasasfk/sd-webui-aspect-ratio-helper.git && cd sd-webui-aspect-ratio-helper && git checkout -b develop  99fcf9b0a4e3f8c8cac07b12d17b66f12297b828 && cd .. \
     && git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui-rembg.git && cd stable-diffusion-webui-rembg && git checkout -b develop  3d9eedbbf0d585207f97d5b21e42f32c0042df70 && cd .. \
-    && git clone https://github.com/toriato/stable-diffusion-webui-wd14-tagger.git && cd stable-diffusion-webui-wd14-tagger && git checkout -b develop  99bf7d8132cb757edbcdfaad654f31f32f3500a5 && cd .. \
+    && git clone https://github.com/picobyte/stable-diffusion-webui-wd14-tagger.git && cd stable-diffusion-webui-wd14-tagger && git checkout -b develop  v1.1.1 && cd .. \
     && git clone https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git && cd ultimate-upscale-for-automatic1111 && git checkout -b develop c99f382b31509b87b4d512e70e9caf08ae7a079f && cd .. 
 
 ####################################################################################################################################
@@ -68,6 +68,12 @@ https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc
 ####################################################################################################################################
 
 
+--- 训练和tagger反推需要的环境变量
+ARG CUDNN_PATH=$(dirname $(/home/miniconda3/envs/sd_python310/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+ARG TENSORRT_PATH=$(dirname $(/home/miniconda3/envs/sd_python310/bin/python -c "import tensorrt;print(tensorrt.__file__)"))
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+
+
 ####################################################################################################################################
 重要步骤: 调试
 --------------------------------------------------------------------------------------------------
@@ -76,14 +82,11 @@ https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git@8e97bf54867c25d00fc
 # 重要参数 --skip-prepare-environment  可以跳过prepare_environment()函数,包含插件(插件目录的install.py文件)的的第三方安装都不会运行-我已经测试过了,不然会重新安装一些东西，耗时较长
 # 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
 # 有预安装的命令--有新插件第一次运行这个 
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py  --listen --port 9965  --xformers  --medvram \
---lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora
---------------------------------------------------------------------------------------------------
-# 调试:  (部署到云函数参考 readme_debug.txt)
-# 无预安装的命令--无新插件后面都运行这个，更快
-cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stable-diffusion-webui
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713/bin/python  launch.py --listen --port 9965  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
 --skip-prepare-environment  
 --------------------------------------------------------------------------------------------------
@@ -104,6 +107,10 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715
 # 重要参数 --skip-prepare-environment  可以跳过prepare_environment()函数,包含插件(插件目录的install.py文件)的的第三方安装都不会运行-我已经测试过了,不然会重新安装一些东西，耗时较长
 # 如果有新插件需要安装，则不能要这个参数，因为插件也有第三方包需要安装
 # 有预安装的命令--有新插件第一次运行这个 
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_lastest;python -c "import sys; print(sys.executable)"
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_lastest/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_lastest/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-latest/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_lastest/bin/python  launch.py  --listen --port 9002  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
@@ -118,12 +125,18 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-latest/stable
 # 解决方法：加下面这句即可----重要-----
 # /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"'
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py   --listen --port 9965  --xformers  --medvram  \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora \
 --skip-prepare-environment
 后台运行(记得加-u，否则日志无法输出)---
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)"
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-dreambooth-20230724/stable-diffusion-webui
 nohup /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -u launch.py   --listen --port 9965  --xformers  --medvram \
 --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  \
@@ -197,6 +210,9 @@ echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 启动(可以在home目录下自行调试，不影响云函数的运行)---LD_LIBRARY_PATH的值是上面命令行最后一行的值,不然训练会报错，后面下面的命令加上上面的命令里面即可---------
 
 /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)" && \
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))  && \
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)"))  && \
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 cd /home/stable-diffusion-webui && \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 '
