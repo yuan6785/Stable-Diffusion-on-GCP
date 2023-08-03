@@ -102,8 +102,8 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
 # sdxl的支持webui的vae下载： https://huggingface.co/stabilityai/sdxl-vae/tree/main
 # --- 参考 https://www.reddit.com/r/StableDiffusion/comments/15agaqa/how_do_i_use_the_base_refiner_in_sdxl_10/ ---
-# sdxl在webui的基本用法: 
-# 1.用sd_xl_base_1.0.safetensors模型在1024*1024用文生图。2.将第一步得到的图用sd_xl_refiner_1.0.safetensors模型进行图生图，保持和第一步一样的prompt
+# sdxl在webui的基本用法(下面是原理， 但是后面用这个插件解决-但感觉没有下面两步用的效果好，不用再切换模型了 https://github.com/wcde/sd-webui-refiner): 
+# 1.用sd_xl_base_1.0.safetensors模型在1024*1024用文生图。2.将第一步得到的图用sd_xl_refiner_1.0.safetensors模型进行图生图，保持和第一步一样的prompt和seed，这样就可以得到更好的图了。
 # ---
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
