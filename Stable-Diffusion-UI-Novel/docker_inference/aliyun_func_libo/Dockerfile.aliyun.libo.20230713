@@ -100,6 +100,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20230713/stab
 # 参考: https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/11757
 # sdxl模型下载: https://github.com/Stability-AI/generative-models
 # sdxl的分支需要--no-half-vae (sdxl是1024*1024的默认分辨率--这个分辨率才能出非常好的效果，否则的话生成的图很乱,效果也不好)---阿里云需要开ecs.gn6i-c16g1.4xlarge 64GB内存以上的机器 # --
+# sdxl的支持webui的vae下载： https://huggingface.co/stabilityai/sdxl-vae/tree/main
 # sdxl的分支的commit号: dc3906185656dae75fcefe96625b1dcd0d31579c 14cf434bc36d0ef31f31d4c6cd2bd15d7857d5c8
 # -- 可以选择我下的vae(改变vae需要重启sd)--好像vae无效---
 cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-sdxl-20230715/stable-diffusion-webui
@@ -222,7 +223,7 @@ CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)"))  && \
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 cd /home/stable-diffusion-webui && \
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers --no-half-vae  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 ' > nohup.out 2>&1 &
 tail -f nohup.out
 调试完成后: 删除/home/stable-diffusion-webui即可
