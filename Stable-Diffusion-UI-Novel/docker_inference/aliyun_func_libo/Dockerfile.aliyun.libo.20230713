@@ -217,14 +217,14 @@ echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 
 启动(可以在home目录下自行调试，不影响云函数的运行)---LD_LIBRARY_PATH的值是上面命令行最后一行的值,不然训练会报错，后面下面的命令加上上面的命令里面即可---------
 
-/bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)" && \
+nohup /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20230713_train;python -c "import sys; print(sys.executable)" && \
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))  && \
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)"))  && \
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 cd /home/stable-diffusion-webui && \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
-'
-
+' > nohup.out 2>&1 &
+tail -f nohup.out
 调试完成后: 删除/home/stable-diffusion-webui即可
 
 ####################################################################################################################################
