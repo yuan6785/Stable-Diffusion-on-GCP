@@ -61,7 +61,7 @@ cd /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-
 ---进入容器调试
 docker run -it --rm sand:1.0 /bin/bash
 ---------推送本地镜像到阿里云-------美东--------
-            ----版本号:  线上版本v77----
+            ----版本号:  上一个线上版本v77；目前线上版本n7----
             ---- 登录 ---
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
             ----
