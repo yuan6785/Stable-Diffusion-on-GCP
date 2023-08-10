@@ -1,0 +1,102 @@
+https://github.com/GoogleCloudPlatform/stable-diffusion-on-gcp   最新的版本: 7e9bf448e6d7698f4d50a70083a07d1cf43269cf
+这个版本我clone在0noyxgithub里面了
+参考: /Users/yuanxiao/workspace/0noyxgithub/stable-diffusion-on-gcp
+
+
+主要是 非 agones版本 和 agones 版本
+
+两个版本都是跑在GKE上面的
+非agones版本是不带认证的 和之前测试的类似 创建好容器之后使用LB来访问
+
+agones版本是有认证的 
+获得授权后用户完成iap验证就可以访问stable diffusion webui 
+模型和插件都是共享目录挂载过去的 
+agones版本有两个子版本 一个是带用户插件配置保留的 一个是不带用户插件配置保留的 
+
+
+
+
+大概流程:
+1. 用一台ecs来部署(安装特定版本的的gcloud和terraform)
+    https://cloud.google.com/sdk/docs/install#linux
+    https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+    ecs的ssh可以进入控制台，复制gcloud的命令进行ssh即可(输入谷歌账号的密码即可)：
+    gcloud compute ssh --zone "us-central1-c" "sd-terraform-manage" --project "happyaigc"
+    gcloud config set project happyaigc (输入谷歌账号的密码即可)
+
+2. 用terraform-provision-infra/README_zh.md 的Agones 版本进行部署 （其实一步步来的话这里也有 Stable-Diffusion-UI-Agones/README_cn.md）
+
+3. 准备域名sd.agones.playdayy.cn，覆盖上面terraform-provision-infra/main.tf的配置
+    oauth_client_id 和 oauth_client_secret 看 Stable-Diffusion-UI-Agones/README_cn.md   “部署 IAP（identity awared proxy身份感知代理）”的部分
+    -----main.tf----
+    locals {
+        project_id          = "happyaigc"
+        oauth_client_id     = "972449351989-7nnen6jqnrd8im4ejcbj1p64fltpsurj.apps.googleusercontent.com"
+        oauth_client_secret = "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"
+        sd_webui_domain     = "sd.agones.playdayy.cn"
+        region              = "us-central1"
+        filestore_zone      = "us-central1-f" # Filestore location must be same region or zone with gke
+        cluster_location    = "us-central1" # GKE Cluster location
+        node_machine_type   = "custom-12-49152-ext"
+        accelerator_type    = "nvidia-tesla-t4" # Available accelerator_type from gcloud compute accelerator-types list --format='csv(zone,name)'
+        gke_num_nodes       = 1
+    }
+    -----main.tf----
+
+4. 完成后通过https://console.cloud.google.com/security/iap?referrer=search&hl=zh-cn&project=happyaigc  添加用户
+
+5. gcloud config set project happyaigc  (输入谷歌账号的密码即可)
+   kubectl get fleet
+   kubectl get fleet -o yaml # 修改这个yaml，然后apply -f即可修改sd的镜像挂载等配置
+   #####---参考terraform-provision-infra/modules/agones/cloud-build/variables.tf-----
+   Stable-Diffusion-UI-Agones/agones-sidecar  yaml的第一个镜像就是这里build的
+   Stable-Diffusion-UI-Agones/sd-webui/  yaml的第二个镜像是这里build的
+   ####
+
+
+后期清理： 一台ecs和静态ip， gke用destroy resource来清理即可, filestore的清理， artifacts的清理
+
+
+
+
+
+其他----------------------------------------------------
+
+
+kubectl get fleet -o yaml
+
+chatgpt
+
+这段YAML文件描述了一个Kubernetes资源清单，其中包含一个名为"sd-agones-fleet"的Fleet对象。Fleet是Agones项目的一个概念，用于管理游戏服务器实例。
+
+在这个Fleet对象的spec部分中，有一个replicas字段指定了实例数量为3。这意味着该Fleet将创建3个游戏服务器实例。scheduling字段设置为"Packed"，表示这些实例将尽可能地被打包在一起。
+
+Fleet对象的template部分描述了每个游戏服务器实例的模板。这个模板包含两个容器：simple-game-server和stable-diffusion-webui。
+
+simple-game-server容器使用了名为"us-central1-docker.pkg.dev/happyaigc/sd-repository-2b6bae98/game-server:tf"的镜像。
+
+stable-diffusion-webui容器使用了名为"us-central1-docker.pkg.dev/happyaigc/sd-repository-2b6bae98/sd-webui:tf"的镜像。此容器还指定了一个名为"stable-diffusion-storage"的持久化卷，并将其挂载到"/stable-diffusion-webui/models"和"/result"路径下。
+
+这个清单还包含了一些其他的元数据信息和状态信息，但是给出的部分不足以完整理解整个资源的状态和属性。
+
+
+其他----------------------------------------------------
+
+kubectl get fleet -o yaml  
+
+gpt4
+
+这段YAML文件是Kubernetes的资源配置文件，用于描述一个名为sd-agones-fleet的Fleet资源。Fleet是Agones项目中的一个资源类型，用于管理游戏服务器的集群。
+
+在这个配置文件中，有两个image字段，它们分别对应两个不同的容器：
+
+simple-game-server：这个容器的镜像是us-central1-docker.pkg.dev/happyaigc/sd-repository-2b6bae98/game-server:tf，它可能是一个游戏服务器的主程序。
+
+stable-diffusion-webui：这个容器的镜像是us-central1-docker.pkg.dev/happyaigc/sd-repository-2b6bae98/sd-webui:tf，它可能是一个提供Web界面的服务。
+
+这两个容器在同一个Pod中运行，它们可以共享网络和存储资源。这种模式通常用于将相关的服务组合在一起，例如一个Web服务和它的后端数据库。
+
+在这个配置中，simple-game-server容器监听7654端口，stable-diffusion-webui容器监听7860端口。stable-diffusion-webui容器还挂载了一个名为stable-diffusion-storage的持久卷，用于存储模型和结果数据。
+
+Fleet资源的spec.replicas字段设置为3，表示这个Fleet会管理3个这样的Pod。spec.scheduling字段设置为Packed，表示Agones会尽量将游戏服务器集中在尽可能少的节点上。spec.strategy字段设置为RollingUpdate，表示更新游戏服务器时会使用滚动更新策略，每次最多增加25%的Pod，最多停止25%的Pod。
+
