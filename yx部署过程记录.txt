@@ -1,4 +1,5 @@
 参考:    github repo
+另外一个分支的部署参考(fork_Stable-Diffusion-on-GCP-X, 这个分支关联到远程upstream 被fork的地址的fork_Stable-Diffusion-on-GCP-X分支)
 -------
 目前采用第一种方式测试:
     https://github.com/nonokangwei/gcp-stable-diffusion-build-deploy
