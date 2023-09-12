@@ -1,5 +1,6 @@
 #!/bin/bash
 # 用法参考有道搜索 [linux有用的fg命令]  ---- 阿里云函数不支持sh命令，可以用cmd一条命令即可
+# /usr/sbin/nginx -c /etc/nginx/nginx.conf -g 'daemon off;
 set -m
 echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED
 echo PROJECT_ENV=$PROJECT_ENV
