@@ -85,7 +85,7 @@ wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06
 mv mc.RELEASE.2022-06-10T22-29-12Z mc
 ./mc -h 即可
 
-
+客户端访问参考: /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/miniopers/make_policy.py
 
 用其他配置启动:
 export MINIO_CONFIG_ENV_FILE=/etc/default/minio
