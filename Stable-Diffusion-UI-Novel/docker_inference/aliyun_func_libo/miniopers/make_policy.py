@@ -49,6 +49,9 @@ class MakePolicy(object):
                 f"./mc.RELEASE.2022-06-10T22-29-12Z admin policy add myminio {admin_email} ./tmppolicys/{admin_email}.txt")
             os.system(f"rm -rf ./tmppolicys/{admin_email}.txt")
 
+# minio客户端下载地址
+# wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z  # 对应历史版本下载,linux版本
+# wget https://dl.min.io/client/mc/release/darwin-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z  # mac版本下载
 # 下面两条都是在本地生成配置文件 普通客户端和admin客户端都用这种方式认证（ACCESS_KEY和SECRET_KEY可以在web页面获取，hostname是必须--address的地址和端口，不是--console-address;
 # 例如启动命令是 command=bash -c "sleep 10 &&  minio server  --anonymous --address 0.0.0.0:9001 --console-address 0.0.0.0:9002 /mnt/sdwebui_public/public"
 # 那么hostname就是 http://xxxxxxx:9001, 不是9002
