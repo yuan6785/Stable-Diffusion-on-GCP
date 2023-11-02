@@ -144,8 +144,10 @@ server {
 
 -----启动minio客户端------
 https://dl.min.io/client/mc/release   历史版本下载
-wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z
+wget  https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z  # linux版本
+wget https://dl.min.io/client/mc/release/darwin-amd64/archive/mc.RELEASE.2022-06-10T22-29-12Z  # mac版本下载
 mv mc.RELEASE.2022-06-10T22-29-12Z mc
+chomd +x mc
 ./mc -h 即可
 
 
