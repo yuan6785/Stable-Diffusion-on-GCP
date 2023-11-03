@@ -75,6 +75,7 @@ pip install xformers==0.0.20
 # 下面两个是dreambooth需要的，但是不安装训练报错也不要紧-----
 conda install cudatoolkit==11.8.0  # 这个只能用conda安装, 否则新版的dreambooth会报一大堆bug report
 pip install tensorrt==8.6.0 # 可装可不装，用于dreambooth训练加速的，不装也不影响
+pip arrow==1.3.0  # 我的自定义插件要用
 
 -- 汉化地址
 https://github.com/VinsonLaro/stable-diffusion-webui-chinese/tree/main/localizations
@@ -283,3 +284,8 @@ kill $(echo $(pgrep -f "sd_python310_20231102/bin/python launch.py")) && rm nohu
 调试完成后: 删除/home/stable-diffusion-webui即可
 
 ####################################################################################################################################
+
+后续安装插件，修改style等等;参考 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/bugs.txt
+搜索笔记【新版本nas版本】配置各个服务即可， 可以根据ecs启动的入口命令启动不同的版本
+
+###########
