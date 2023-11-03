@@ -285,7 +285,7 @@ kill $(echo $(pgrep -f "sd_python310_20231102/bin/python launch.py")) && rm nohu
 
 ####################################################################################################################################
 
-后续安装插件，修改style等等;参考 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/bugs.txt
+后续安装插件(云函数需要自定义ui插件, ecs不需要； 都需要noui插件)，修改style等等;参考 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/bugs.txt
 搜索笔记【新版本nas版本】配置各个服务即可， 可以根据ecs启动的入口命令启动不同的版本
 
 ###########
