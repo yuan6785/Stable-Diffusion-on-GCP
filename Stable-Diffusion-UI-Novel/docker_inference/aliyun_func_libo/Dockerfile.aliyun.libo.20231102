@@ -297,4 +297,4 @@ todo:
 2. controlnet支持sdxl
 
 ----
-sdxl在sdwebui-v1.6版本已经没有内存泄漏了
+sdxl在sdwebui-v1.6版本已经没有内存泄漏了(生成图片还是有轻微的内存泄漏，比以前好了)
