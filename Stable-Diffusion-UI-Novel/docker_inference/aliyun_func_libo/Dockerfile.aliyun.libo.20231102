@@ -46,8 +46,10 @@ RUN set -ex \
     && /home/miniconda3/envs/sd_python310_20231102/bin/python -c "import launch;launch.prepare_environment();" --skip-torch-cuda-test \
     && cd extensions \
     && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 098f6cd887ac5f6f5f0e7cc9d81460095d2be012 && cd .. \
-    && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git && cd a1111-sd-webui-lycoris && git checkout -b develop  df9c0093bc9e079487302d3ed3f5db4337d6f19a && cd .. \
+    # && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git && cd a1111-sd-webui-lycoris && git checkout -b develop  df9c0093bc9e079487302d3ed3f5db4337d6f19a && cd .. \   废弃
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout -b develop 2.10.6 && cd .. \
+
+    git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  1a1d1621086a4725fda1200256f319c845dc7a8a  && cd .. \ # 20230928的版本测试一下
 
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout -b develop  722bca6fb9b062815d13b950e7040589abaec797 && cd .. \
     && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 292f92d5068046f988fe002eb0a43b8841ad449e && cd .. \
@@ -101,6 +103,18 @@ nohup bash -c 'cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webu
 --skip-prepare-environment'  > nohup.out 2>&1 &
 tail -f nohup.out 
 kill $(echo $(pgrep -f "sd_python310_20231102/bin/python launch.py")) && rm nohup.out 
+
+bash -c 'cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram \
+--skip-prepare-environment'
+
+bash -c '
+CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
+TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
+cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram \
+--skip-prepare-environment'
 --------------------------------------------------------------------------------------------------
 # 调试(----废弃---已经合并到主分支，主分支v1.5.0已经支持sdxl， 虽然废弃，但下面的注释也是很好的参考):
 # 参考: https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/11757
@@ -137,7 +151,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-latest/stable
 # 调试: （部署到ecs参考笔记[stablediffusionwebui安装过程之阿里云dreambooth-新版本nas版本]）
 # dreambooth训练的模型(第一次运行不要用--skip-prepare-environment，因为有新插件需要安装)---
 # 该版本的sd安装太爽了，没有各种报错，也不用降级torch了---sd version: version: v1.6.0  •  python: 3.10.0  •  torch: 2.0.1+cu118  •  xformers: 0.0.20  •  gradio: 3.41.2  •-------按上面dockerfile的版本安装即可----
-# 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  d8e01e1fd13dd4b6afadbb0382875f905ee5f429 && cd ..
+# 安装：git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  1a1d1621086a4725fda1200256f319c845dc7a8a && cd ..  # 9.28的版本
 # 解决undefined symbol: cudaRuntimeGetVersion的报错需要到conda activate sd_python310_20231102环境下:
 # conda install cudatoolkit==11.8.0  # 只能用conda安装，不要用pip； 执行的时候需要进入conda环境才行，就算python路径带有conda环境也不行，必须是activate的环境
 # 解决方法：加下面这句即可----重要(必须安装这个cudatoolkit==11.8.0, tensorrt==8.6.0都可以不安装)-----  
