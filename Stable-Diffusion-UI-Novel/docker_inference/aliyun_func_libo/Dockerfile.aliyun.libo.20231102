@@ -295,3 +295,6 @@ todo:
 如果简单粗暴的替换版本，就直接覆盖1_4_1/ecs_pre_start.sh  1_4_1/ecs_looptask.sh  1_4_1/ecs_minio.sh即可
 注意: 拿到版本和内存等用户信息，可以等判断/var/lib/cloud/instance/user-data.txt的数据是否存在，不存在则等待存在为止
 2. controlnet支持sdxl
+
+----
+sdxl在sdwebui-v1.6版本已经没有内存泄漏了
