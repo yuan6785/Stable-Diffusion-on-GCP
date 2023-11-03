@@ -289,3 +289,5 @@ kill $(echo $(pgrep -f "sd_python310_20231102/bin/python launch.py")) && rm nohu
 搜索笔记【新版本nas版本】配置各个服务即可， 可以根据ecs启动的入口命令启动不同的版本
 
 ###########
+todo: 创建ecs传递内存信息; ulimit -v 内存;
+版本分辨信息放在: 1_4_1/ecs_pre_start.sh  和 1_4_1/ecs_looptask.sh  1_4_1/ecs_minio.sh
