@@ -75,7 +75,7 @@ pip install xformers==0.0.20
 # 下面两个是dreambooth需要的，但是不安装训练报错也不要紧-----
 conda install cudatoolkit==11.8.0  # 这个只能用conda安装, 否则新版的dreambooth会报一大堆bug report
 pip install tensorrt==8.6.0 # 可装可不装，用于dreambooth训练加速的，不装也不影响
-pip arrow==1.3.0  # 我的自定义插件要用
+pip install arrow==1.3.0  xpinyin==0.7.6 # 我的自定义插件要用
 
 -- 汉化地址
 https://github.com/VinsonLaro/stable-diffusion-webui-chinese/tree/main/localizations
