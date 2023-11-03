@@ -35,6 +35,7 @@ else:
 
 
 vi extensions/sd-webui-additional-networks/scripts/model_util.py
+入口参考: /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-webui/modules/ui_prompt_styles.py (目前支持删除)， 我这个代码对系统的删除功能也是健壮的，不会删除掉别人已经添加的style
 修改164行的函数为下面的(这个可以检查lora是否完整---原来的功能是不完整则不启动sd, 我改为了打印出来不完整的lora文件名，但还是启动sd，不将错误的lora显示在下拉列表):
 解决报错: 
 [AddNet] Updating model hashes... 

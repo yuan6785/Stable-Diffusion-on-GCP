@@ -279,6 +279,7 @@ cd /home/stable-diffusion-webui && \
 ' > nohup.out 2>&1 &
 
 tail -f nohup.out
+kill $(echo $(pgrep -f "sd_python310_20231102/bin/python launch.py")) && rm nohup.out
 调试完成后: 删除/home/stable-diffusion-webui即可
 
 ####################################################################################################################################
