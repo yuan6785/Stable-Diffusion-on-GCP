@@ -38,7 +38,7 @@ systemctl enable nginx
 python的sd环境构建参考(这一步需要预先在nas或者公共云盘上面构建好)
 fork_main分支
 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.aliyun.libo.20230713
-/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.aliyun.libo.20231102  最近的版本
+/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.aliyun.libo.20231102  最近的版本--重要调试构建(下一次在这个基础上更新)---
 或者
 /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-on-gcp-no-aliyun/Stable-Diffusion-UI-Agones/sd-webui-yx/Dockerfile.supervisor2
 调试ecs:
