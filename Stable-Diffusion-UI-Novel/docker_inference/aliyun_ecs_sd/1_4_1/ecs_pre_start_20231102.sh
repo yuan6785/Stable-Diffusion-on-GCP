@@ -1,3 +1,4 @@
+#!bin/bash
 # /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh  #记得 chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 sleep 1 && \
