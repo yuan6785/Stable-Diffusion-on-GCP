@@ -57,9 +57,10 @@ for (( i=1; i<=max_attempts; i++ )); do
     echo "尝试 #$i: user-data.txt 不存在或未找到版本信息，正在重试...";
     sleep 5
 done
-# 判断ecs_version是否为null，如果是设置一个默认值
+# 判断ecs_version是否为null，如果是设置一个默认值---防止ecs没有用脚本启动，用的镜像启动，则没有user_data数据---
 if [ "$ecs_version" == "null" ]; then
-    ecs_version="ecs_pre_start_20230713.sh"
+    # ecs_version="ecs_pre_start_20230713.sh"
+    ecs_version="ecs_pre_start_20231102.sh"
 fi
 echo "操作完成，ecs_version 值为: $ecs_version"
 echo ---------outter run real server-------$(date +"%Y-%m-%d %H:%M:%S")-------------
