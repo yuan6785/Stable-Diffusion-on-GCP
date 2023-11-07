@@ -48,7 +48,7 @@ RUN set -ex \
     # && git clone https://github.com/KohakuBlueleaf/a1111-sd-webui-lycoris.git && cd a1111-sd-webui-lycoris && git checkout -b develop  df9c0093bc9e079487302d3ed3f5db4337d6f19a && cd .. \   可用可不用，默认的sdwebui已经支持这个了
     && git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git && cd a1111-sd-webui-tagcomplete && git checkout -b develop 2.10.6 && cd .. \
     git clone  https://github.com/d8ahazard/sd_dreambooth_extension && cd sd_dreambooth_extension && git checkout -b develop  c2a5617c587b812b5a408143ddfb18fc49234edf && cd ..   # 这个不升级和以前的版本一样，因为最新版本有很多bug，生成的lora不能用
-    && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 3011ff6e706d3fdd0cc7d2ac8ff0d59020b8f767 && cd .. \
+    && git clone https://github.com/Mikubill/sd-webui-controlnet.git && cd sd-webui-controlnet && git checkout -b develop 05ef0b1cd1374cf285dd8d5ccd7db9997549893c && cd .. \
     && git clone https://github.com/fkunn1326/openpose-editor && cd openpose-editor && git checkout -b develop  c935771507f57201e26f4ed507aa47f3812ca491 && cd .. \
     # && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 292f92d5068046f988fe002eb0a43b8841ad449e && cd .. \     废弃，新版本无法生效
     # && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout -b develop v0.5.0 && cd .. \       废弃，感觉没有人用
@@ -246,7 +246,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/local/cud
 echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models/ControlNet" --exclude "/models/hypernetworks" --exclude "/models/Stable-diffusion" --exclude "/models/VAE" --exclude "/models/dreambooth" --exclude "/models/Lora" --exclude "/models/lora" --exclude "/models/BLIP" --exclude "/models/torch_deepdanbooru"  --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102/stable-diffusion-webui/ /home/stable-diffusion-webui; fi && \
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-for dir in ControlNet  hypernetworks  Stable-diffusion BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in  hypernetworks  Stable-diffusion BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
+for dir in  ControlNetXL; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/ControlNet; fi; done && \
 for dir in VAE; do if [ ! -d "/home/stable-diffusion-webui/models/$dir" ]; then cp -rf /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 if [ ! -d "/home/stable-diffusion-webui/models/Lora" ]; then mkdir /home/stable-diffusion-webui/models/Lora; fi && \
 for dir in  outputs; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
