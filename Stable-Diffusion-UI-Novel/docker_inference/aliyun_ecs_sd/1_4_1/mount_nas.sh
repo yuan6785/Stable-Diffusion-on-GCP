@@ -1,6 +1,6 @@
 #!bin/bash
 # 写一个启动服务, 用于绑定nas盘和superver的启动命令-------这个必须写在ecs里面，其他命令可以通过mount到nas后，启动存在nas的命令，所以第一个命令非常重要，其他命令都可以随时修改，不用打镜像
-/root/mount_nas.sh  # 记得chmod +x /root/mount_nas.sh 
+# /root/mount_nas.sh  # 记得chmod +x /root/mount_nas.sh 
 # 挂载nas盘---脚本生成ecs的时候，会第一次挂载； 后面重启机器，重启supervisor都是已经挂载的状态
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 echo "mount nas start"

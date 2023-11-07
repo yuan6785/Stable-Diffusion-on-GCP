@@ -1,7 +1,7 @@
 #!bin/bash
 # /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh  #记得 chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-sleep 10 && \
+# sleep 10 && \
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) && \
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20230713_train/bin/python -c "import tensorrt;print(tensorrt.__file__)")) && \
