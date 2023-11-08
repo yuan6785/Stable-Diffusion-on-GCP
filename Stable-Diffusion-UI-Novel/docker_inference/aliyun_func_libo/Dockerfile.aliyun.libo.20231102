@@ -251,7 +251,7 @@ for dir in  ControlNetXL; do if [ ! -L "/home/stable-diffusion-webui/models/Cont
 for dir in VAE; do if [ ! -d "/home/stable-diffusion-webui/models/$dir" ]; then cp -rf /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 if [ ! -d "/home/stable-diffusion-webui/models/Lora" ]; then mkdir /home/stable-diffusion-webui/models/Lora; fi && \
 for dir in  outputs; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
-for dir in localizations20231102; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/localizations; fi; done && \
+for dir in localizations20231102; do if [ ! -L "/home/stable-diffusion-webui/localizations" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/localizations; fi; done && \
 for dir in embeddings  samples  scripts; do if [ ! -d "/home/stable-diffusion-webui/$dir" ]; then cp -rf /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
 echo ---------end pre-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 echo ---------start launch pre-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
