@@ -42,7 +42,7 @@ echo ---------outter memory limit-------$(date +"%Y-%m-%d %H:%M:%S")------------
 # 获取本机内存大小
 all_memory=$(free -m | awk '/Mem/ {print $2}')
 ecs_limit_memory=$((all_memory * 1024 * 9 / 10)) # 限制内存为本机内存的90%
-ulimit -v $ecs_limit_memory
+# ulimit -v $ecs_limit_memory  # 暂时不限制内存
 echo ---------outter version control-------$(date +"%Y-%m-%d %H:%M:%S")-------------
 max_attempts=10 # 最多重试10次
 ecs_version=null # 预设为null
