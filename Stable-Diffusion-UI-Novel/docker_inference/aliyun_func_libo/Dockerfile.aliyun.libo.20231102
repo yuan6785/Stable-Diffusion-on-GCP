@@ -114,6 +114,7 @@ cd /mnt/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102/stab
 
 # 新的调试命令，如果没有lyco插件，则去掉--lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora即可
 # pytorch2.0其实可以去掉--xformers
+# 参考sd1.6的显存优化命令:  https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimum-SDXL-Usage
 nohup bash -c '
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) 
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import tensorrt;print(tensorrt.__file__)")) 
