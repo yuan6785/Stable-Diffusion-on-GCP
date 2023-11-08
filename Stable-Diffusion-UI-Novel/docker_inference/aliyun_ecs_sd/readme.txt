@@ -49,7 +49,7 @@ fork_main分支
 --------------------------
  写一个启动服务, 用于启动sd (保存在/Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_ecs_sd)
 /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh  #记得 chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh
-这个shell脚本用于版本分发  
+这个shell脚本用于版本分发, 主要服务构建在ecs_pre_start_xxxxxx.sh里面
 
 
 
