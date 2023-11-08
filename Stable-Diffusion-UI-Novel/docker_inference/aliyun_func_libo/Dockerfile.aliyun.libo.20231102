@@ -271,13 +271,13 @@ cd /home/stable-diffusion-webui && \
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 ' > nohup.out 2>&1 &
 
-新的调试命令，如果没有lyco插件，则去掉--lyco-*,  pytorch2.0其实可以去掉--xformers
+新的调试命令，如果没有lyco插件，则去掉--lyco-*,  pytorch2.0其实可以去掉--xformers, 但是去掉xformers，图生图有问题，会爆精度错误
 nohup /bin/sh -c '/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20231102;python -c "import sys; print(sys.executable)" && \
 CUDNN_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))  && \
 TENSORRT_PATH=$(dirname $(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python -c "import tensorrt;print(tensorrt.__file__)"))  && \
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH && \
 cd /home/stable-diffusion-webui && \
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965   --medvram  --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965   --xformers --medvram  --skip-prepare-environment
 ' > nohup.out 2>&1 &
 
 tail -f nohup.out

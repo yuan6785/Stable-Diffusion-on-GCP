@@ -25,5 +25,5 @@ echo ---------start sd server-------$(date +"%Y-%m-%d %H:%M:%S")--------------- 
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20231102;python -c "import sys; print(sys.executable)" && \
 cd /home/stable-diffusion-webui && \
 echo "end rsync">yx_end_rsync.txt && \
-/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --medvram --skip-prepare-environment
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-prepare-environment
 echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
