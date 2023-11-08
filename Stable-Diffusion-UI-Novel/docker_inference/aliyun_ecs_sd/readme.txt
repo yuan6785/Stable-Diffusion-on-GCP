@@ -2,7 +2,10 @@
 
 搜索笔记 [stablediffusionwebui安装过程之阿里云dreambooth-新版本nas版本]
 
-
+重要: 打镜像之前记得 
+1. supervisorctl stop all
+2. rm -rf /home/stable-diffusion-webui
+3. rm -rf /var/lib/cloud/instance/user-data.txt   # 这个很重要，否则镜像里面有这个数据，ecs的创建挂载的用户数据会被镜像的覆盖
 
 
 
