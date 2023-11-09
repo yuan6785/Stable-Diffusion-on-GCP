@@ -222,6 +222,20 @@ echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 cd /home/stable-diffusion-webui
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --lyco-debug --lyco-patch-lora --lyco-dir ./models/Lora  --skip-prepare-environment
 
+新版调试命令
+bash -c 'cd /home/stable-diffusion-webui
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram \
+--skip-prepare-environment
+'
+
+# Nvidia (12gb+) --xformers
+# Nvidia (8gb) --medvram-sdxl --xformers
+# Nvidia (4gb) --lowvram --xformers
+# AMD (4gb) --lowvram --opt-sub-quad-attention + TAESD in settings
+# 详细信息
+# Both rocm and directml will generate at least 1024x1024 pictures at fp16. If your AMD card needs --no-half, try enabling --upcast-sampling instead, as full precision sdxl is too large to fit on 4gb.
+
+
 调试完成后: 删除/home/stable-diffusion-webui即可
 ####################################################################################################################################
 
