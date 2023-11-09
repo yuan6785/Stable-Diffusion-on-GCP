@@ -65,17 +65,23 @@ docker run -it --rm sand:1.0 /bin/bash
             ---- 登录 ---
             docker login --username=yuanxiao@playnexx registry-intl.us-east-1.aliyuncs.com  # b*****1**
             ----
-            Dockerfile.finally.libo -- 目前先用这个, 后期再升级supervisor2进行优化，目前用这个，后期再升级supervisor2进行优化
+            Dockerfile.finally.libo -- 老版本, 后期再升级supervisor2进行优化，目前用这个，后期再升级supervisor2进行优化
             --> 
             docker build -t sand:1.0 -f Dockerfile.finally.libo  .  
             docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v78
             docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:v78
             ----
-            Dockerfile.finally.libo.20230713 --  新版本测试
+            Dockerfile.finally.libo.20230713 -- 老版本  ---现在用---
             -->
             docker build -t sand:1.0 -f Dockerfile.finally.libo.20230713  .  
             docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n7
             docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n7
+            ----
+            Dockerfile.finally.libo.20231102 --  新版本测试 --正在测试--
+            -->
+            docker build -t sand:1.0 -f Dockerfile.finally.libo.20231102  .  
+            docker tag sand:1.0 registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n8
+            docker push registry-intl.us-east-1.aliyuncs.com/talefun/stable-diffusion-images:n8
             ----
             Dockerfile.finally.libo.supervisor2 -- 后期升级这个镜像
             -->
