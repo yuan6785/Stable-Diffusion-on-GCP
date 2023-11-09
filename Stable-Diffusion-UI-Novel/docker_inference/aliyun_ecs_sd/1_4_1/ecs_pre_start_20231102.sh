@@ -11,8 +11,7 @@ if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms -
 echo ---------start update extensions-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 cd /home/stable-diffusion-webui/extensions/sd-webui-manage-yx; git checkout aliyun_ecs && \
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
-for dir in  hypernetworks  Stable-diffusion BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
-for dir in  ControlNetXL; do if [ ! -L "/home/stable-diffusion-webui/models/ControlNet" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/ControlNet; fi; done && \
+for dir in ControlNet hypernetworks  Stable-diffusion BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 for dir in VAE; do if [ ! -d "/home/stable-diffusion-webui/models/$dir" ]; then cp -rf /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done && \
 if [ ! -d "/home/stable-diffusion-webui/models/Lora" ]; then mkdir /home/stable-diffusion-webui/models/Lora; fi && \
 for dir in  outputs; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done && \
