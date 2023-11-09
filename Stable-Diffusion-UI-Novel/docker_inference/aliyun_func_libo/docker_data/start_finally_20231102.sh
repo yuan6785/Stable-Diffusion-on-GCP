@@ -18,8 +18,10 @@ if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms -
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102-copy/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done
-for dir in ControlNet  hypernetworks  Lora  Stable-diffusion  VAE BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done
-for dir in embeddings  localizations  outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done
+for dir in hypernetworks  Lora  Stable-diffusion  VAE BLIP torch_deepdanbooru; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/; fi; done
+for dir in  ControlNetXL; do if [ ! -L "/home/stable-diffusion-webui/models/ControlNet" ]; then ln -s /mnt/sdwebui_public/public/models/$dir  /home/stable-diffusion-webui/models/ControlNet; fi; done
+for dir in embeddings   outputs  samples  scripts; do if [ ! -L "/home/stable-diffusion-webui/$dir" ]; then ln -s /share/sdwebui_public/public/$dir  /home/stable-diffusion-webui/; fi; done
+for dir in localizations20231102; do if [ ! -L "/home/stable-diffusion-webui/localizations" ]; then ln -s /mnt/sdwebui_public/public/$dir  /home/stable-diffusion-webui/localizations; fi; done
 # echo ---------start ln additional networks-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 # rm -rf /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/*
 # ln -s /share/sdwebui_public/public/models/Lora  /home/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/
