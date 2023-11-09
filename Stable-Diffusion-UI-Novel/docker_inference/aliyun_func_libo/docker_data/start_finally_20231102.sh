@@ -15,6 +15,10 @@ TENSORRT_PATH=$(dirname $(/share/sdwebui_public/versions/sdwebui_env/miniconda3/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:$CUDNN_PATH:$TENSORRT_PATH
 echo ---------start rsync-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 if [ ! -d "/home/stable-diffusion-webui/modules" ]; then rsync -azP --no-perms --no-owner --no-group --exclude "/models" --exclude "/embeddings" --exclude "/scripts" --exclude "/samples" --exclude "/localizations" --exclude "/outputs"  /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102-copy/stable-diffusion-webui/ /home/stable-diffusion-webui; fi
+echo ---------start update extensions-------$(date +"%Y-%m-%d %H:%M:%S")---------------
+cd /home/stable-diffusion-webui/extensions/sd-webui-manage-yx; git checkout aliyun_func
+rm -rf /home/stable-diffusion-webui/extensions/sd-webui-noui-yx
+rm -rf /home/stable-diffusion-webui/extensions/sd_dreambooth_extension
 echo ---------start ln base-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 if [ ! -d "/home/stable-diffusion-webui/models" ]; then mkdir /home/stable-diffusion-webui/models; fi
 for dir in Codeformer deepbooru ESRGAN GFPGAN  karlo LDSR SwinIR VAE-approx; do if [ ! -L "/home/stable-diffusion-webui/models/$dir" ]; then ln -s /share/sdwebui_public/versions/sdwebui_env/stable-diffusion-webui-20231102-copy/stable-diffusion-webui/models/$dir  /home/stable-diffusion-webui/models/; fi; done
