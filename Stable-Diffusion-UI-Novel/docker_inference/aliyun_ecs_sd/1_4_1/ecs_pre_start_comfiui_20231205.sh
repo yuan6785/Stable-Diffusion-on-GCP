@@ -20,8 +20,8 @@ chmod +x ~/.bashrc
 . ~/.bashrc
 eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)"
 conda activate comfyui_python310_20231205
-python -c "import sys; print(sys.executable)" &&
-    cd /home/ComfyUI &&
-    echo "end rsync" >yx_end_rsync.txt &&
-    /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/comfyui_python310_20231205/bin/python main.py --listen 0.0.0.0 --port 9965
+python -c "import sys; print(sys.executable)"
+cd /home/ComfyUI
+echo "end rsync" >yx_end_rsync.txt
+/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/comfyui_python310_20231205/bin/python main.py --listen 0.0.0.0 --port 9965
 echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
