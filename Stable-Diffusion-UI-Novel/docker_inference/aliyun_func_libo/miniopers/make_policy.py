@@ -1,4 +1,11 @@
 # coding=utf-8
+"""
+参考: ../readme_minio.txt
+
+重要(批量上传policy文件的脚本):
+pyenv activate py3.10_virtualenv_test
+python ./miniopers/make_policy.py  即可更新权限文件
+"""
 import json
 import copy
 import pprint
