@@ -31,7 +31,9 @@ fi
 if [ ! -L "/home/ComfyUI/models/clip_vision/clip_vision" ]; then
     ln -s /mnt/sdwebui_public/public/models/clip_vision  /home/ComfyUI/models/clip_vision
 fi
-clip_vision
+if [ ! -L "/home/ComfyUI/models/upscale_models/upscale_models" ]; then
+    ln -s /mnt/sdwebui_public/public/models/upscale_models  /home/ComfyUI/models/upscale_models/
+fi
 if [ ! -L "/home/ComfyUI/models/loras/Lora" ]; then
     ln -s /mnt/sdwebui_public/public/models/Lora  /home/ComfyUI/models/loras/
 fi
