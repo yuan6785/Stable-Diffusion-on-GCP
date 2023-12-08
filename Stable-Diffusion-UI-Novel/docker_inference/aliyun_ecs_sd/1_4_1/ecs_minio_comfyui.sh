@@ -8,5 +8,3 @@ while [ ! -f "/home/ComfyUI/yx_end_rsync.txt" ]; do sleep 1; done
 echo ---------real start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 rm -rf  /home/ComfyUI/.minio.sys && cp -rf /mnt/bak/ecs141_minio_comfyui.sys /home/ComfyUI/.minio.sys
 export MINIO_ROOT_USER=playdayy && export MINIO_ROOT_PASSWORD=bbqbbq123 &&  minio server  --anonymous --address 0.0.0.0:9002 --console-address 0.0.0.0:9003 /home/ComfyUI
-
-export MINIO_ROOT_USER=playdayy && export MINIO_ROOT_PASSWORD=bbqbbq123 &&  minio server  --anonymous --address 0.0.0.0:9004 --console-address 0.0.0.0:9005 /home/ComfyUI
