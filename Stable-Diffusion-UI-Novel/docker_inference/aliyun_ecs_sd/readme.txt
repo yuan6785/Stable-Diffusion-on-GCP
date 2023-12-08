@@ -56,13 +56,15 @@ fork_main分支
 
 
 
------------- minio的启动命令----------
+------------ minio的启动命令(分发)----------
 /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_minio.sh  文件实例,  chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_minio.sh
+这个shell脚本用于版本分发, 主要服务构建在ecs_minio_xxxxxx.sh里面
 # 我测试是成功的----管理员playdayy  bbqbbq123  ; 普通用户: ecsuser   ecsuserqwe
 # 策略文件和minio安装搜索 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/readme_minio.txt // 这个是不分用户的----阿里云训练机版本
 # 判断/home/stable-diffusion-webui/yx_end_rsync.txt这个文件是否存在，如果存在则开始执行下面的，不存在则等待1秒
-# .minio.sys文件夹保存在 /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-on-gcp-no-aliyun/Stable-Diffusion-UI-Agones/sd-webui-yx/dockerdata/ecs141_minio.sys  
-------------
+# sd版本的:  .minio.sys文件夹保存在 /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-on-gcp-no-aliyun/Stable-Diffusion-UI-Agones/sd-webui-yx/dockerdata/ecs141_minio.sys  
+# comfyui版本的: .minio.sys文件夹保存在 /Users/yuanxiao/workspace/0yxgithub/stable-diffusion-on-gcp-no-aliyun/Stable-Diffusion-UI-Agones/sd-webui-yx/dockerdata/ecs141_minio_comfyui.sys  
+
 
 
 ------------ loop任务的例子----------
