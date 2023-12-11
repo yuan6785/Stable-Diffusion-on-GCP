@@ -10,7 +10,7 @@ while [ ! -f "/home/ComfyUI/yx_end_rsync.txt" ]; do
 done
 echo ---------create cm folder by minio s3 policy-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 # 将上面代码改为for循环
-for ndir in lors vae upscale_models embeddings clip unet; do
+for ndir in loras vae upscale_models embeddings clip unet; do
     mkdir -p /home/ComfyUI/models/$ndir/cm
 done
 echo ---------real start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
