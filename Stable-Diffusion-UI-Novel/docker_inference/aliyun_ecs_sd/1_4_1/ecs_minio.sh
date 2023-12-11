@@ -4,7 +4,9 @@
 # 判断/home/stable-diffusion-webui/yx_end_rsync.txt这个文件是否存在，如果存在则开始执行下面的，不存在则等待1秒
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 sleep 10
-while [ ! -f "/home/stable-diffusion-webui/yx_end_rsync.txt" ]; do sleep 1; done
+while [ ! -f "/home/stable-diffusion-webui/yx_end_rsync.txt" ]; do 
+    sleep 1; 
+done
 echo ---------real start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
-rm -rf  /home/stable-diffusion-webui/.minio.sys && cp -rf /mnt/bak/ecs141_minio.sys /home/stable-diffusion-webui/.minio.sys
-export MINIO_ROOT_USER=playdayy && export MINIO_ROOT_PASSWORD=bbqbbq123 &&  minio server  --anonymous --address 0.0.0.0:9002 --console-address 0.0.0.0:9003 /home/stable-diffusion-webui
+rm -rf /home/stable-diffusion-webui/.minio.sys && cp -rf /mnt/bak/ecs141_minio.sys /home/stable-diffusion-webui/.minio.sys
+export MINIO_ROOT_USER=playdayy && export MINIO_ROOT_PASSWORD=bbqbbq123 && minio server --anonymous --address 0.0.0.0:9002 --console-address 0.0.0.0:9003 /home/stable-diffusion-webui
