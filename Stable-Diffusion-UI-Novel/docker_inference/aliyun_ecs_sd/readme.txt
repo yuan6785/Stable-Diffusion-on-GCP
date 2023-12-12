@@ -4,7 +4,7 @@
 
 重要: 打镜像之前记得 
 1. supervisorctl stop all
-2. rm -rf /home/stable-diffusion-webui
+2. rm -rf /home/stable-diffusion-webui   /home/Comfyui
 3. rm -rf /var/lib/cloud/instance/user-data.txt   # 这个很重要，否则镜像里面有这个数据，ecs的创建挂载的用户数据会被镜像的覆盖
 
 
