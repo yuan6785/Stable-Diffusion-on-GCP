@@ -4,6 +4,7 @@ fastapi==0.95.2
 @des: 
 服务器批量下载文件，带进度条显示
 在什么文件夹启动这个脚本，就会在这个文件夹下进行下载内容
+参考: 0yxgithub/userful_scripts/gradio_test/test_download_file_server_progress_fastapi_one.py
 """
 import gradio as gr
 import requests
@@ -240,9 +241,11 @@ fastapi的支持
 app, local_url, share_url = demo.launch(
     share=False,  # 如果一直得到到公共连接，并由此而卡住，可以设置为False
     prevent_thread_lock=True,  # 非阻塞方式运行gradio,最后用while 1: time.sleep(0.5)来阻塞即可
+    server_name="0.0.0.0",
+    server_port = 9005,
     # root_path='/haha',  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到;---目前会报错 theme.css文件找不到，所以用上面的tiaozhuan_js先绕过去
     # allowed_paths=["/haha"],  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到
-    inbrowser=True,
+    # inbrowser=True,
 )
 
 

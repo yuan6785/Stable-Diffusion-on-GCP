@@ -6,9 +6,9 @@ echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 echo "mount nas start"
 if ! mountpoint -q /mnt;then mount -t nfs -o vers=3,noacl,nolock,proto=tcp,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport 1386f52d-h9fi.us-east-1.extreme.nas.aliyuncs.com:/share /mnt;fi
 echo "mount nas end"
-while [ ! -f "/mnt/sdwebui_public/ecs_versions/ecs_init.sh" ]; do sleep 1; done
+while [ ! -f "/mnt/sdwebui_public/ecs_versions/1_4_1/ecs_init.sh" ]; do sleep 1; done
 echo "ecs init start"
-chmod +x /mnt/sdwebui_public/ecs_versions/ecs_init.sh;
-. /mnt/sdwebui_public/ecs_versions/ecs_init.sh;
+chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_init.sh;
+. /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_init.sh;
 echo "ecs init end"
 while true;do date;sleep 86400;echo "loop--";done
