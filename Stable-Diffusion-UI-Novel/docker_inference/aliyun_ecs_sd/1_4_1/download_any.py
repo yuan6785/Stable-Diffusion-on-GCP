@@ -1,10 +1,10 @@
 """
-gradio==3.35.2  
-fastapi==0.95.2
+gradio==3.35.2 
+fastapi==0.95.2 
 @des: 
 服务器批量下载文件，带进度条显示
 在什么文件夹启动这个脚本，就会在这个文件夹下进行下载内容
-参考: 0yxgithub/userful_scripts/gradio_test/test_download_file_server_progress_fastapi_one.py
+参考: 0yxgithub/userful_scripts/gradio_test/test_download_file_server_progress_fastapi_one_gr3352.py
 """
 import gradio as gr
 import requests
@@ -245,7 +245,7 @@ app, local_url, share_url = demo.launch(
     server_port = 9005,
     # root_path='/haha',  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到;---目前会报错 theme.css文件找不到，所以用上面的tiaozhuan_js先绕过去
     # allowed_paths=["/haha"],  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到
-    # inbrowser=True,
+    # inbrowser=True
 )
 
 
@@ -256,7 +256,7 @@ async def progress(request: Request):
     # 生成html--table
     if yx_process:
         table_html = "下载进度显示:<br/><table>"
-         # 倒序取10个
+        # 倒序取10个
         for item in yx_process[-10:][::-1]:
             table_html += f"<tr><td>{item[0]}</td><td>{item[2]}</td></tr>"
         table_html += "</table>"
@@ -264,9 +264,8 @@ async def progress(request: Request):
         table_html = ""
     response = HTMLResponse(table_html)
     # 解决跨域问题，js中的fetch请求会被拦截
-    # response.headers["x-content-type-options"] = "nosniff"
+    response.headers["x-content-type-options"] = "nosniff"
     return response
-
 
 
 async def main():
