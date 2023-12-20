@@ -264,7 +264,7 @@ async def progress(request: Request):
         table_html = ""
     response = HTMLResponse(table_html)
     # 解决跨域问题，js中的fetch请求会被拦截
-    response.headers["x-content-type-options"] = "nosniff"
+    # response.headers["x-content-type-options"] = "nosniff"
     return response
 
 
