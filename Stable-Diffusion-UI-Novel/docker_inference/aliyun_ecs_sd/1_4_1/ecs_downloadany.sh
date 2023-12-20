@@ -29,10 +29,10 @@ echo ---------outter run real server-------$(date +"%Y-%m-%d %H:%M:%S")---------
 if [[ $ecs_version =~ "comfyui" ]]; then    # sh命令不支持, bash才支持
 # if echo "$ecs_version" | grep -q "comfyui"; then  # sh和bash都支持
     echo "启动comfyui的download-any"
-    # bash /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_downloadany_comfyui.sh
-    sleep 86400000
+    bash /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_downloadany_comfyui.sh
+    # sleep 86400000
 else
     echo "启动sd的download-any"
-    # bash /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_downloadany_sd.sh
-    sleep 86400000
+    bash /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_downloadany_sd.sh
+    # sleep 86400000
 fi
