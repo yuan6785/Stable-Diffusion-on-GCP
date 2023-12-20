@@ -268,7 +268,7 @@ app, local_url, share_url = demo.launch(
     share=False,  # 如果一直得到到公共连接，并由此而卡住，可以设置为False
     prevent_thread_lock=True,  # 非阻塞方式运行gradio,最后用while 1: time.sleep(0.5)来阻塞即可
     server_name="0.0.0.0",
-    server_port = 9005,
+    server_port = 9905,
     # root_path='/haha',  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到;---目前会报错 theme.css文件找不到，所以用上面的tiaozhuan_js先绕过去
     # allowed_paths=["/haha"],  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到
     # inbrowser=True,
@@ -315,25 +315,29 @@ def get_directory_structure(path):
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
             # 取xdlj的第一个目录
             first_dir = xdlj.split("/")[0]
-            if first_dir in ["test", "models", "custom_nodes", "embeddings"]:
-                sub_data = {
-                    'name': entry.name,
-                    # 计算相对于当前工作目录的相对路径
-                    'path': xdlj,
-                    'children': get_directory_structure(entry),
-                    'is_file': False
-                }
-                data.append(sub_data)
+            if first_dir not in ["test", "models", "custom_nodes", "embeddings"]:
+                continue
+            if entry.name in ["__pycache__"]:
+                continue
+            sub_data = {
+                'name': entry.name,
+                # 计算相对于当前工作目录的相对路径
+                'path': xdlj,
+                'children': get_directory_structure(entry),
+                'is_file': False
+            }
+            data.append(sub_data)
         # 不展示文件--文件可能太多了则注释elif----
         elif entry.is_file() and not entry.name.startswith('.') and not entry.is_symlink():
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
             # 只展示.ckpt .bin .safetensors; 转为小写匹配
-            if entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
-                data.append({
-                    'name': entry.name,
-                    'path': xdlj,
-                    'is_file': True
-                })
+            if  not entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
+                continue
+            data.append({
+                'name': entry.name,
+                'path': xdlj,
+                'is_file': True
+            })
     return data
 
 
