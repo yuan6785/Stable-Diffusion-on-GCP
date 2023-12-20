@@ -420,12 +420,16 @@ def show_directory():
             }
         }
                          
-        function copyToClipboard(event) {
-            const path = event.currentTarget.getAttribute('data-path');
+        function copyToClipboardBak(event) {
+            const textToCopy = event.currentTarget.getAttribute('data-path');
+            console.log(1111, textToCopy)
             // navigator clipboard 需要https等安全上下文
             if (navigator.clipboard && window.isSecureContext) {
+                         console.log(2222, textToCopy)
                 // navigator clipboard 向剪贴板写文本
-                return navigator.clipboard.writeText(textToCopy);
+                alert('复制路径到剪贴板!')
+                navigator.clipboard.writeText(textToCopy);
+                return 
             } else {
                 // 创建text area
                 let textArea = document.createElement("textarea");
@@ -442,12 +446,14 @@ def show_directory():
                     // 执行复制命令并移除文本框
                     document.execCommand('copy') ? res() : rej();
                     textArea.remove();
+                         console.log(33333, textToCopy)
+                    alert('复制路径到剪贴板!')
                 });
             }
-            alert('复制路径到剪贴板!'))
+            
         }
 
-        function copyToClipboardBak(event) {
+        function copyToClipboard(event) {
             const path = event.currentTarget.getAttribute('data-path');
             navigator.clipboard.writeText(path)
                 .then(() => alert('复制路径到剪贴板!'))
