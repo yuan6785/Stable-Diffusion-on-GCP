@@ -6,6 +6,8 @@
 1. supervisorctl stop all
 2. rm -rf /home/stable-diffusion-webui   /home/ComfyUI
 3. rm -rf /var/lib/cloud/instance/user-data.txt   # 这个很重要，否则镜像里面有这个数据，ecs的创建挂载的用户数据会被镜像的覆盖
+4. 检查mount_nas.sh脚本是否改变，如果改变，需要修改ecs的/root/mount_nas.sh脚本,再打镜像
+5. 检查supervisor.conf是否改变，如果改变，需要修改ecs的/etc/supervisor/supervisord.conf脚本,再打镜像
 
 
 
