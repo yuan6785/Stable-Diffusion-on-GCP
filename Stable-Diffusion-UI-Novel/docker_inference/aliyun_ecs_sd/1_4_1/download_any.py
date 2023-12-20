@@ -1,14 +1,16 @@
 """
-gradio==3.35.2 
-fastapi==0.95.2 
+gradio==3.35.2  
+fastapi==0.95.2
 @des: 
 服务器批量下载文件，带进度条显示
 在什么文件夹启动这个脚本，就会在这个文件夹下进行下载内容
+
 参考: 0yxgithub/userful_scripts/gradio_test/test_download_file_server_progress_fastapi_one_gr3352.py
 """
 import gradio as gr
 import requests
 from tqdm import tqdm
+import re
 
 #
 from fastapi import FastAPI, Request
@@ -47,6 +49,8 @@ def has_symlink_in_path(path, is_all=True):
             if p.is_symlink():
                 return True
     return False
+
+
 
 
 """
@@ -173,7 +177,17 @@ def pd_clear(info_o1, info_i1):
         return None  # 清理
     else:
         return info_i1  # 不清理
-
+    
+def get_tree_iframe():
+    """
+    @des: 目录树
+    """
+    # 随机数
+    return f"""
+    <div style="height: 2000px;">
+        <iframe src="/showdirectory?randomid={time.time()}" style="width:100%; height:100%; border:none;"></iframe>
+    </div>
+    """
 
 tiaozhuan_js = """
     async function(){
@@ -228,11 +242,23 @@ with gr.Blocks() as demo:
         pd_clear, inputs=[o1, i1], outputs=[i1], queue=False
     )
     # btn.click(fn=lambda x: None, inputs=None, outputs=[i1], queue=False)  # 和上面的then效果一样，但是then可以保证比click后执行
-    #
+    """
+    在html示目录树,可以点+进行展开,点复制进行路径复制
+    """
+    o2_blank = gr.HTML(value="""<br/><br/>""")
+    btn2 = gr.Button(value="刷新目录树", size="sm")
+    o2 = gr.HTML(label="目录树", value="""""", height="1000vw",)
+    btn2.click(
+        fn=get_tree_iframe, inputs=None, outputs=[o2], queue=False
+    )
+    """
+    加载应用执行的js
+    """
     demo.load(fn=None, inputs=[], outputs=[], _js=tiaozhuan_js)  # 直接跳转到下载页面
+    demo.load(fn=get_tree_iframe, inputs=[], outputs=[o2], queue=False)  # 直接跳转到下载页面
+    # demo.load(fn=None, inputs=[], outputs=[], js=tiaozhuan_js)  # 4.10.0版本的gradio用js不要用_js
     #
     demo.queue(concurrency_count=3)  # 支持进度条显示
-
 
 """
 fastapi的支持
@@ -245,7 +271,8 @@ app, local_url, share_url = demo.launch(
     server_port = 9005,
     # root_path='/haha',  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到;---目前会报错 theme.css文件找不到，所以用上面的tiaozhuan_js先绕过去
     # allowed_paths=["/haha"],  # 指定一个路径，否则会默认为根路径，根路径另外有用，下面的fastapi的api需要用到
-    # inbrowser=True
+    # inbrowser=True,
+    max_threads=5,  # gr.__version__ >= "4.10.0"才支持
 )
 
 
@@ -266,6 +293,162 @@ async def progress(request: Request):
     # 解决跨域问题，js中的fetch请求会被拦截
     # response.headers["x-content-type-options"] = "nosniff"
     return response
+
+
+import pathlib
+import os
+
+def get_directory_structure(path):
+    """
+    构建目录树
+    """
+    data = []
+    # 确保 path 是绝对路径
+    base_path = pathlib.Path(path).resolve()
+    #
+    #
+    # find_re = r'((test)|(^models$))'
+    # res = [f for f in base_path.glob('*') if re.search(find_re, str(f.name))]
+    # for entry in res:
+    for entry in base_path.glob('*'):
+        if entry.is_dir() and not entry.name.startswith('.') and not entry.is_symlink():
+            xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
+            # 取xdlj的第一个目录
+            first_dir = xdlj.split("/")[0]
+            if first_dir in ["test", "models", "custom_nodes", "embeddings"]:
+                sub_data = {
+                    'name': entry.name,
+                    # 计算相对于当前工作目录的相对路径
+                    'path': xdlj,
+                    'children': get_directory_structure(entry),
+                    'is_file': False
+                }
+                data.append(sub_data)
+        # 不展示文件--文件可能太多了则注释elif----
+        elif entry.is_file() and not entry.name.startswith('.') and not entry.is_symlink():
+            xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
+            # 只展示.ckpt .bin .safetensors; 转为小写匹配
+            if entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
+                data.append({
+                    'name': entry.name,
+                    'path': xdlj,
+                    'is_file': True
+                })
+    return data
+
+
+@app.get("/showdirectory", response_class=HTMLResponse)
+def show_directory():
+    """
+    渲染前端页面
+    """
+    def render_item(item):
+        item_type = 'file' if item.get('is_file') else 'folder'
+        html = f"<li class='{item_type}'><span class='toggle-icon'></span><span data-path='{item['path']}' class='name'>{item['name']}</span>"
+        if 'children' in item:
+            html += "<ul>"
+            for child in item['children']:
+                html += render_item(child)
+            html += "</ul>"
+        html += "</li>"
+        return html
+    #
+    root_path = './'  # 替换为你的后端目录路径
+    data = get_directory_structure(root_path)
+    template =  Template('''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* CSS 样式 */
+        .directory-tree ul {
+            list-style-type: none;
+        }
+
+        .directory-tree li {
+            cursor: default;
+            position: relative;
+        }
+
+        .directory-tree li span {
+            cursor: pointer;
+        }
+
+        .toggle-icon {
+            cursor: pointer;
+            position: absolute;
+            left: -1em;
+        }
+
+        .directory-tree li.file .toggle-icon {
+            visibility: hidden;
+        }
+
+        .directory-tree li.folder .toggle-icon {
+            visibility: visible;
+        }
+
+        .directory-tree li.folder .toggle-icon:before {
+            content: '+';
+        }
+
+        .directory-tree li.folder.collapsed .toggle-icon:before {
+            content: '-';
+        }
+
+        .directory-tree li ul {
+            display: none;
+            margin-left: 1em;
+        }
+
+        .directory-tree li.folder.collapsed ul {
+            display: block;
+        }
+    </style>
+    <script>
+        function toggleDirectory(event) {
+            event.stopPropagation();
+            const li = event.currentTarget.closest('li');
+            if (li.classList.contains('folder')) {
+                li.classList.toggle('collapsed');
+            }
+        }
+
+        function copyToClipboard(event) {
+            const path = event.currentTarget.getAttribute('data-path');
+            navigator.clipboard.writeText(path)
+                .then(() => alert('复制路径到剪贴板!'))
+                .catch(err => console.error('Error in copying text: ', err));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleIcons = document.querySelectorAll('.toggle-icon');
+            toggleIcons.forEach(icon => {
+                icon.addEventListener('click', toggleDirectory);
+            });
+
+            const names = document.querySelectorAll('.directory-tree li span.name');
+            names.forEach(name => {
+                name.addEventListener('click', copyToClipboard);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="directory-tree">
+        <ul>
+            {% for item in data %}
+                {{ render_item(item) }}
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+    ''')
+    content = template.render(data=data, render_item=render_item)
+    return HTMLResponse(content)
 
 
 async def main():
