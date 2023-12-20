@@ -315,7 +315,7 @@ def get_directory_structure(path):
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
             # 取xdlj的第一个目录
             first_dir = xdlj.split("/")[0]
-            if first_dir not in ["test", "models",  "embeddings"]:  # "custom_nodes",
+            if first_dir not in ["test", "embeddings"]:  # "custom_nodes",
                 continue
             if entry.name in ["__pycache__"]:
                 continue
