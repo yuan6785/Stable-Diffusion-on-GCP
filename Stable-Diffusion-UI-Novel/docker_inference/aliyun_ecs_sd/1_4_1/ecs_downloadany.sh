@@ -1,4 +1,5 @@
 #!/bin/bash
+# 离线下载
 # 版本控制脚本，启动sd还是minio的版本
 echo ---------outter start-------$(date +"%Y-%m-%d %H:%M:%S")---------------
 sleep 10
