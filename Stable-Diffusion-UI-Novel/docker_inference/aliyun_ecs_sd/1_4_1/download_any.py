@@ -315,7 +315,7 @@ def get_directory_structure(path):
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
             # 取xdlj的第一个目录
             first_dir = xdlj.split("/")[0]
-            if first_dir not in ["test", "embeddings"]:  # "custom_nodes",
+            if first_dir not in ["test", "models",  "embeddings"]:  # "custom_nodes",
                 continue
             if entry.name in ["__pycache__"]:
                 continue
@@ -328,16 +328,16 @@ def get_directory_structure(path):
             }
             data.append(sub_data)
         # 不展示文件--文件可能太多了则注释elif----
-        # elif entry.is_file() and not entry.name.startswith('.') and not entry.is_symlink():
-        #     xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
-        #     # 只展示.ckpt .bin .safetensors; 转为小写匹配
-        #     if  not entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
-        #         continue
-        #     data.append({
-        #         'name': entry.name,
-        #         'path': xdlj,
-        #         'is_file': True
-        #     })
+        elif entry.is_file() and not entry.name.startswith('.') and not entry.is_symlink():
+            xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
+            # 只展示.ckpt .bin .safetensors; 转为小写匹配
+            if  not entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
+                continue
+            data.append({
+                'name': entry.name,
+                'path': xdlj,
+                'is_file': True
+            })
     return data
 
 
