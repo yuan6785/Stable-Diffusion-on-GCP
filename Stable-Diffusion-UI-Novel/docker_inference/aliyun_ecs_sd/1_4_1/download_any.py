@@ -420,17 +420,16 @@ def show_directory():
             }
         }
                          
-        function copyToClipboardBak(event) {
+        function copyToClipboard(event) {
             const textToCopy = event.currentTarget.getAttribute('data-path');
-            console.log(1111, textToCopy)
+            // console.log(1111, textToCopy)
             // navigator clipboard 需要https等安全上下文
             if (navigator.clipboard && window.isSecureContext) {
-                         console.log(2222, textToCopy)
                 // navigator clipboard 向剪贴板写文本
-                alert('复制路径到剪贴板!')
-                navigator.clipboard.writeText(textToCopy);
-                return 
-            } else {
+                navigator.clipboard.writeText(textToCopy)
+                .then(() => alert('复制路径到剪贴板1!'))
+                .catch(err => console.error('Error in copying text: ', err));
+            } else {  // 解决非127.0.0.1访问不了剪贴板的问题
                 // 创建text area
                 let textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
@@ -442,22 +441,13 @@ def show_directory():
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
-                return new Promise((res, rej) => {
+                new Promise((res, rej) => {
                     // 执行复制命令并移除文本框
                     document.execCommand('copy') ? res() : rej();
                     textArea.remove();
-                         console.log(33333, textToCopy)
-                    alert('复制路径到剪贴板!')
+                    alert('复制路径到剪贴板2!')
                 });
             }
-            
-        }
-
-        function copyToClipboard(event) {
-            const path = event.currentTarget.getAttribute('data-path');
-            navigator.clipboard.writeText(path)
-                .then(() => alert('复制路径到剪贴板!'))
-                .catch(err => console.error('Error in copying text: ', err));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
