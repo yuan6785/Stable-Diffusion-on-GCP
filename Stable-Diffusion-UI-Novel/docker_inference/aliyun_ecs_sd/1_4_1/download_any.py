@@ -298,57 +298,60 @@ async def progress(request: Request):
 import pathlib
 import os
 
-def get_directory_structure(path):
+import os
+import pathlib
+
+def get_directory_structure(path, current_depth=0, max_depth=3):
     """
     构建目录树
     """
+    if current_depth > max_depth:
+        return []
+
     data = []
-    # 确保 path 是绝对路径
     base_path = pathlib.Path(path).resolve()
-    #
-    #
-    # find_re = r'((test)|(^models$))'
-    # res = [f for f in base_path.glob('*') if re.search(find_re, str(f.name))]
-    # for entry in res:
+
     for entry in base_path.glob('*'):
         if entry.is_dir() and not entry.name.startswith('.') and not entry.is_symlink():
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
             # 取xdlj的第一个目录
             first_dir = xdlj.split("/")[0]
-            if first_dir not in ["test", "models",  "embeddings"]:  # "custom_nodes",
+            if first_dir not in ["test", "models",  "embeddings", "custom_nodes"]: 
                 continue
             if entry.name in ["__pycache__"]:
                 continue
             sub_data = {
                 'name': entry.name,
-                # 计算相对于当前工作目录的相对路径
                 'path': xdlj,
-                'children': get_directory_structure(entry),
+                'children': get_directory_structure(entry, current_depth + 1, max_depth),
                 'is_file': False
             }
             data.append(sub_data)
-        # 不展示文件--文件可能太多了则注释elif----
+
         elif entry.is_file() and not entry.name.startswith('.') and not entry.is_symlink():
             xdlj = os.path.relpath(entry.resolve(), pathlib.Path.cwd())
-            # 只展示.ckpt .bin .safetensors; 转为小写匹配
-            if  not entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
+            if not entry.name.lower().endswith(('.ckpt', '.bin', '.safetensors', '.kpt', '.cpt', '.pt', '.pth')):
                 continue
             data.append({
                 'name': entry.name,
                 'path': xdlj,
                 'is_file': True
             })
+
     return data
 
 
 @app.get("/showdirectory", response_class=HTMLResponse)
 def show_directory():
-    """
-    渲染前端页面
-    """
+    # 这里省略了获取目录结构的函数 get_directory_structure
+    # 你需要定义这个函数，以获取目录数据
+    root_path = './'  # 替换为你的后端目录路径
+    data = get_directory_structure(root_path)
+
     def render_item(item):
         item_type = 'file' if item.get('is_file') else 'folder'
-        html = f"<li class='{item_type}'><span class='toggle-icon'></span><span data-path='{item['path']}' class='name'>{item['name']}</span>"
+        collapsed = 'collapsed' if 'children' in item else ''
+        html = f"<li class='{item_type} {collapsed}'><span class='toggle-icon'></span><span data-path='{item['path']}' class='name'>{item['name']}</span>"
         if 'children' in item:
             html += "<ul>"
             for child in item['children']:
@@ -356,10 +359,8 @@ def show_directory():
             html += "</ul>"
         html += "</li>"
         return html
-    #
-    root_path = './'  # 替换为你的后端目录路径
-    data = get_directory_structure(root_path)
-    template =  Template('''
+
+    template = Template('''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -394,21 +395,29 @@ def show_directory():
             visibility: visible;
         }
 
-        .directory-tree li.folder .toggle-icon:before {
-            content: '+';
-        }
-
-        .directory-tree li.folder.collapsed .toggle-icon:before {
-            content: '-';
-        }
-
         .directory-tree li ul {
             display: none;
             margin-left: 1em;
         }
 
-        .directory-tree li.folder.collapsed ul {
+        .directory-tree li.folder:not(.collapsed) > ul {
             display: block;
+        }
+                        
+        .directory-tree li.folder .toggle-icon:before {
+            content: '-';
+        }
+
+        .directory-tree li.folder.collapsed .toggle-icon:before {
+            content: '+';
+        }
+        
+        .directory-tree li.folder > span.name {
+            color: blue; /* 文件夹颜色 */
+        }
+
+        .directory-tree li.file > span.name {
+            color: green; /* 文件颜色 */
         }
     </style>
     <script>
@@ -419,21 +428,16 @@ def show_directory():
                 li.classList.toggle('collapsed');
             }
         }
-                         
+
         function copyToClipboard(event) {
             const textToCopy = event.currentTarget.getAttribute('data-path');
-            // console.log(1111, textToCopy)
-            // navigator clipboard 需要https等安全上下文
             if (navigator.clipboard && window.isSecureContext) {
-                // navigator clipboard 向剪贴板写文本
                 navigator.clipboard.writeText(textToCopy)
-                .then(() => alert('复制路径到剪贴板1!'))
+                .then(() => alert('复制路径到剪贴板!'))
                 .catch(err => console.error('Error in copying text: ', err));
-            } else {  // 解决非127.0.0.1访问不了剪贴板的问题
-                // 创建text area
+            } else {
                 let textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
-                // 使text area不在viewport，同时设置不可见
                 textArea.style.position = "absolute";
                 textArea.style.opacity = 0;
                 textArea.style.left = "-999999px";
@@ -442,10 +446,9 @@ def show_directory():
                 textArea.focus();
                 textArea.select();
                 new Promise((res, rej) => {
-                    // 执行复制命令并移除文本框
                     document.execCommand('copy') ? res() : rej();
                     textArea.remove();
-                    alert('复制路径到剪贴板2!')
+                    alert('复制路径到剪贴板!')
                 });
             }
         }
@@ -465,6 +468,7 @@ def show_directory():
 </head>
 <body>
     <div class="directory-tree">
+        注: 点击目录或文件名可以复制路径 <br/>
         <ul>
             {% for item in data %}
                 {{ render_item(item) }}
