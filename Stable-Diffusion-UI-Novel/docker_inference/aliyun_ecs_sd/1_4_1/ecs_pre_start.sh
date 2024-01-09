@@ -46,7 +46,7 @@ ecs_limit_memory=$((all_memory * 1024 * 9 / 10)) # 限制内存为本机内存�
 if [ $all_memory -gt 60000 ]; then
     # ulimit -v $ecs_limit_memory  # 暂时不限制内存
     # ulimit -v $ecs_limit_memory
-    echo "内存限制为 $ecs_limit_memory"
+    echo "1内存限制为 $ecs_limit_memory"
 else
     echo "内存不限制"
 fi
