@@ -44,9 +44,9 @@ all_memory=$(free -m | awk '/Mem/ {print $2}')
 ecs_limit_memory=$((all_memory * 1024 * 9 / 10)) # 限制内存为本机内存的90%
 # 当all_memory大于60000,即60G时候，进行内存限制干预，也这个必定是sdxl
 if [ $all_memory -gt 60000 ]; then
-    # ulimit -v $ecs_limit_memory  # 暂时不限制内存
+    # ulimit -v $ecs_limit_memory  # 暂时不限制内存--限制内存comfyui会报错
     # ulimit -v $ecs_limit_memory
-    echo "1内存限制为 $ecs_limit_memory"
+    echo "(未限制)内存限制为 $ecs_limit_memory"
 else
     echo "内存不限制"
 fi
