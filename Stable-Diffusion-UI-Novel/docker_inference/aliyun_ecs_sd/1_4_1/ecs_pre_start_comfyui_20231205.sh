@@ -31,6 +31,14 @@ fi
 if [ ! -L "/home/ComfyUI/models/clip_vision/clip_vision" ]; then
     ln -s /mnt/sdwebui_public/public/models/clip_vision /home/ComfyUI/models/clip_vision
 fi
+# add by yx 20240205---判断/home/ComfyUI/models/ipadapter是否存在不存在则创建
+if [ ! -d "/home/ComfyUI/models/ipadapter" ]; then
+    mkdir /home/ComfyUI/models/ipadapter
+fi
+if [ ! -L "/home/ComfyUI/models/ipadapter/ipadapter" ]; then
+    ln -s /mnt/sdwebui_public/public/models/ipadapter /home/ComfyUI/models/ipadapter
+fi
+# end add by yx 20240205
 if [ ! -L "/home/ComfyUI/models/upscale_models/upscale_models" ]; then
     ln -s /mnt/sdwebui_public/public/models/upscale_models /home/ComfyUI/models/upscale_models/
 fi
