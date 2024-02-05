@@ -32,6 +32,7 @@ if [ ! -L "/home/ComfyUI/models/clip_vision/clip_vision" ]; then
     ln -s /mnt/sdwebui_public/public/models/clip_vision /home/ComfyUI/models/clip_vision
 fi
 # add by yx 20240205---判断/home/ComfyUI/models/ipadapter是否存在不存在则创建
+# 参考 https://github.com/cubiq/ComfyUI_IPAdapter_plus
 if [ ! -d "/home/ComfyUI/models/ipadapter" ]; then
     mkdir /home/ComfyUI/models/ipadapter
 fi
