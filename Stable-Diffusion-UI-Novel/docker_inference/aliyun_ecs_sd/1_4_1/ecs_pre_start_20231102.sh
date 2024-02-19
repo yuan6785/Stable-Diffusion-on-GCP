@@ -27,7 +27,9 @@ echo ---------start sd server-------$(date +"%Y-%m-%d %H:%M:%S")--------------- 
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda init;chmod +x ~/.bashrc;. ~/.bashrc;eval "$(/mnt/sdwebui_public/versions/sdwebui_env/miniconda3/bin/conda shell.bash hook)";conda activate sd_python310_20231102;python -c "import sys; print(sys.executable)" && \
 cd /home/stable-diffusion-webui && \
 echo "end rsync">yx_end_rsync.txt && \
-# 支持sadtalker的环境变量
+# 支持sadtalker的安装包和环境变量--start
+DEBIAN_FRONTEND=noninteractive apt-get install ffmpeg -y && \
 export SADTALKER_CHECKPOINTS=/home/stable-diffusion-webui/models/OpenTalker && \
+# 支持sadtalker的安装包和环境变量--end
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-prepare-environment
 echo ---------end-------$(date +"%Y-%m-%d %H:%M:%S")---------------
