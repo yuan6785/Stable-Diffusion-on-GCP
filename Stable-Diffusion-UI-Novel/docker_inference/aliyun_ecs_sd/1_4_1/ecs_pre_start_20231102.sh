@@ -28,6 +28,7 @@ echo ---------start sd server-------$(date +"%Y-%m-%d %H:%M:%S")--------------- 
 cd /home/stable-diffusion-webui && \
 echo "end rsync">yx_end_rsync.txt && \
 # 支持sadtalker的安装包和环境变量--start--参考Dockerfile.aliyun.libo.20231102里面还有其他设置
+apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install ffmpeg -y && \
 export SADTALKER_CHECKPOINTS=/home/stable-diffusion-webui/models/OpenTalker && \
 # 支持sadtalker的安装包和环境变量--end
