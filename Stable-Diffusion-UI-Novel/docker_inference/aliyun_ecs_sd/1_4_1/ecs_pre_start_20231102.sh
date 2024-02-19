@@ -1,5 +1,6 @@
 #!bin/bash
 # /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh  #记得 chmod +x /mnt/sdwebui_public/ecs_versions/1_4_1/ecs_pre_start.sh
+# 安装版本参考 /Users/yuanxiao/workspace/0yxgithub/Stable-Diffusion-on-GCP/Stable-Diffusion-UI-Novel/docker_inference/aliyun_func_libo/Dockerfile.aliyun.libo.20231102
 echo ---------start-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \
 # sleep 10 && \
 echo ---------start set env-------$(date +"%Y-%m-%d %H:%M:%S")--------------- && \

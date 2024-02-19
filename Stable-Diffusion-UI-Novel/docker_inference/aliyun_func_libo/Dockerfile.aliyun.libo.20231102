@@ -53,6 +53,7 @@ RUN set -ex \
     # && git clone https://github.com/hnmr293/posex && cd posex && git checkout -b develop 292f92d5068046f988fe002eb0a43b8841ad449e && cd .. \     废弃，新版本无法生效
     # && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout -b develop v0.5.0 && cd .. \       废弃，感觉没有人用
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout -b develop  efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
+    && git clone https://github.com/OpenTalker/SadTalker && cd SadTalker && git checkout -b develop cd4c0465ae0b54a6f85af57f5c65fec9fe23e7f8  && cd .. \
     && git clone https://github.com/thomasasfk/sd-webui-aspect-ratio-helper.git && cd sd-webui-aspect-ratio-helper && git checkout -b develop  99fcf9b0a4e3f8c8cac07b12d17b66f12297b828 && cd .. \
     && git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui-rembg.git && cd stable-diffusion-webui-rembg && git checkout -b develop  3d9eedbbf0d585207f97d5b21e42f32c0042df70 && cd .. \
     && git clone https://github.com/picobyte/stable-diffusion-webui-wd14-tagger.git && cd stable-diffusion-webui-wd14-tagger && git checkout -b develop  v1.2.0 && cd .. \
