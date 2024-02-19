@@ -54,6 +54,7 @@ RUN set -ex \
     # && git clone https://github.com/kohya-ss/sd-webui-additional-networks && cd sd-webui-additional-networks && git checkout -b develop v0.5.0 && cd .. \       废弃，感觉没有人用
     && git clone https://github.com/jexom/sd-webui-depth-lib.git && cd sd-webui-depth-lib && git checkout -b develop  efa9f616b30ea0f27e5dadf40ab41815012d1d78 && cd .. \
     # sadtalker需要的
+    # 老模型下载 https://github.com/OpenTalker/SadTalker/releases 新版本的教程不太对，要把一些老模型下载下来才能用
     && git clone https://github.com/OpenTalker/SadTalker && cd SadTalker && git checkout -b develop v0.0.2-rc  && cd .. \
     && git clone https://github.com/thomasasfk/sd-webui-aspect-ratio-helper.git && cd sd-webui-aspect-ratio-helper && git checkout -b develop  99fcf9b0a4e3f8c8cac07b12d17b66f12297b828 && cd .. \
     && git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui-rembg.git && cd stable-diffusion-webui-rembg && git checkout -b develop  3d9eedbbf0d585207f97d5b21e42f32c0042df70 && cd .. \
