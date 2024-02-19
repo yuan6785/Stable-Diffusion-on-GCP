@@ -28,8 +28,14 @@ echo ---------start sd server-------$(date +"%Y-%m-%d %H:%M:%S")--------------- 
 cd /home/stable-diffusion-webui && \
 echo "end rsync">yx_end_rsync.txt && \
 # 支持sadtalker的安装包和环境变量--start--参考Dockerfile.aliyun.libo.20231102里面还有其他设置--后期可以考虑打包到镜像---
-apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install ffmpeg -y && \
+while ! which ffmpeg &> /dev/null;
+do
+    echo "ffmpeg 未安装，正在安装..."; 
+    apt-get update;
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg;
+    sleep 1;
+done
+echo "ffmpeg 已安装"; 
 export SADTALKER_CHECKPOINTS=/home/stable-diffusion-webui/models/OpenTalker && \
 # 支持sadtalker的安装包和环境变量--end
 /mnt/sdwebui_public/versions/sdwebui_env/miniconda3/envs/sd_python310_20231102/bin/python  launch.py  --listen --port 9965  --xformers  --medvram --skip-prepare-environment
