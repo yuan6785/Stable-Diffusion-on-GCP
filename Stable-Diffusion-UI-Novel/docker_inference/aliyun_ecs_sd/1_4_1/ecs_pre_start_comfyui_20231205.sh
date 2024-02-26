@@ -40,6 +40,15 @@ if [ ! -L "/home/ComfyUI/models/ipadapter/ipadapter" ]; then
     ln -s /mnt/sdwebui_public/public/models/ipadapter /home/ComfyUI/models/ipadapter
 fi
 # end add by yx 20240205
+# add by yx 20240226---判断/home/ComfyUI/models/svd是否存在不存在则创建
+# 参考 https://github.com/thecooltechguy/ComfyUI-Stable-Video-Diffusion
+if [ ! -d "/home/ComfyUI/models/svd" ]; then
+    mkdir /home/ComfyUI/models/svd
+fi
+if [ ! -L "/home/ComfyUI/models/svd/svd" ]; then
+    ln -s /mnt/sdwebui_public/public/models/svd /home/ComfyUI/models/svd
+fi
+# end add by yx 20240205
 if [ ! -L "/home/ComfyUI/models/upscale_models/upscale_models" ]; then
     ln -s /mnt/sdwebui_public/public/models/upscale_models /home/ComfyUI/models/upscale_models/
 fi
