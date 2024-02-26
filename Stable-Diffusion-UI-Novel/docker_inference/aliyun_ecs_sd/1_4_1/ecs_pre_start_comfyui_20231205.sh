@@ -47,7 +47,7 @@ if [ ! -d "/home/ComfyUI/models/svd" ]; then
 fi
 # 将/mnt/sdwebui_public/public/models/svd下面所有文件作为软连接放到/home/ComfyUI/models/svd下面
 for file in /mnt/sdwebui_public/public/models/svd/*; do
-    if [ ! -L "/home/ComfyUI/models/svd/$(basename $file)" ]; then
+    if [ ! -e "/home/ComfyUI/models/svd/$(basename $file)" ] && [ ! -L "/home/ComfyUI/models/svd/$(basename $file)" ]; then
         ln -s $file /home/ComfyUI/models/svd/$(basename $file)
     fi
 done
