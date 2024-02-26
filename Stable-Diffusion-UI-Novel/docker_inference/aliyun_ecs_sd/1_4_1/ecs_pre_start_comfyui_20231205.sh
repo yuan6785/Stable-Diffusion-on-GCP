@@ -45,9 +45,12 @@ fi
 if [ ! -d "/home/ComfyUI/models/svd" ]; then
     mkdir /home/ComfyUI/models/svd
 fi
-if [ ! -L "/home/ComfyUI/models/svd/svd" ]; then
-    ln -s /mnt/sdwebui_public/public/models/svd /home/ComfyUI/models/svd
-fi
+# 将/mnt/sdwebui_public/public/models/svd下面所有文件作为软连接放到/home/ComfyUI/models/svd下面
+for file in /mnt/sdwebui_public/public/models/svd/*; do
+    if [ ! -L "/home/ComfyUI/models/svd/$(basename $file)" ]; then
+        ln -s $file /home/ComfyUI/models/svd/$(basename $file)
+    fi
+done
 # end add by yx 20240205
 if [ ! -L "/home/ComfyUI/models/upscale_models/upscale_models" ]; then
     ln -s /mnt/sdwebui_public/public/models/upscale_models /home/ComfyUI/models/upscale_models/
