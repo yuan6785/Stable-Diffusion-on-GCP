@@ -50,6 +50,9 @@ for file in /mnt/sdwebui_public/public/models/svd/*; do
     if [ ! -e "/home/ComfyUI/models/svd/$(basename $file)" ] && [ ! -L "/home/ComfyUI/models/svd/$(basename $file)" ]; then
         ln -s $file /home/ComfyUI/models/svd/$(basename $file)
     fi
+if [ ! -L "/home/ComfyUI/models/checkpoints/other_svd" ]; then
+    ln -s /mnt/sdwebui_public/public/models/svd /home/ComfyUI/models/checkpoints/other_svd
+fi
 done
 # end add by yx 20240205
 if [ ! -L "/home/ComfyUI/models/upscale_models/upscale_models" ]; then
